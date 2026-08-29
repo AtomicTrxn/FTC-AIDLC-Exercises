@@ -438,8 +438,9 @@ function toDocx({ meta, nodes }, outPath) {
       case "table": {
         const widths = nd.widths || (nd.head ? nd.head.map(() => Math.floor(FULL / nd.head.length)) : [FULL]);
         const rows = [];
-        if (nd.head) rows.push(new TableRow({ tableHeader: true, children: nd.head.map((h, k) => cell(h, { header: true, width: widths[k] })) }));
-        nd.rows.forEach((r) => rows.push(new TableRow({ children: r.map((c, k) => cell(c, { width: widths[k] })) })));
+        // cantSplit keeps a row whole rather than breaking it across a page
+        if (nd.head) rows.push(new TableRow({ tableHeader: true, cantSplit: true, children: nd.head.map((h, k) => cell(h, { header: true, width: widths[k] })) }));
+        nd.rows.forEach((r) => rows.push(new TableRow({ cantSplit: true, children: r.map((c, k) => cell(c, { width: widths[k] })) })));
         out.push(new Table({
           width: { size: widths.reduce((a, b) => a + b, 0), type: WidthType.DXA },
           columnWidths: widths, borders: borders(RULE, 4), rows,

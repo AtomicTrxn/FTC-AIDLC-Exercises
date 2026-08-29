@@ -188,24 +188,24 @@
 </style>
 <article>
   <header class="masthead">
-    <span class="eyebrow">AI-DLC × INTO THE DEEP  ·  TEACHER'S GUIDE  ·  2-HOUR SESSION</span>
+    <span class="eyebrow">AI-DLC × INTO THE DEEP · TEACHER'S GUIDE · 2-HOUR SESSION</span>
     <h1>Give the Arm Something New to Do</h1>
-    <p class="dek">The arm arrives already built. Students don't construct a mechanism — they decide <b>what it should be able to do that it can't do yet</b>, and carry that objective through five phases of AI-DLC. Every team chooses a different objective; every team is held to the same four engineering tenets and the same guardrails.</p>
+    <p class="dek">"The arm arrives already built. Students don't construct a mechanism — they decide <b>what it should be able to do that it can't do yet</b>, and carry that objective through five phases of AI-DLC. Every team chooses a different objective; every team is held to the same four engineering tenets and the same guardrails."</p>
     <div class="meta-row">
-      <span class="meta-chip">Session: <b>120 min</b></span>
+      <span class="meta-chip">"Session: <b>120 min</b></span>
       <span class="meta-chip">Setup: <b>+20 min</b></span>
+      <span class="meta-chip">Walkthrough: <b>20 min, live</b></span>
       <span class="meta-chip">Team: <b>3–6 students</b></span>
-      <span class="meta-chip">Codebase: <b>Into_The_Deep</b></span>
-      <span class="meta-chip">Bench OpMode: <b>TeleopWithoutDriving</b></span>
+      <span class="meta-chip">Bench OpMode: <b>TeleopWithoutDriving"</b></span>
     </div>
-    <div class="doc-switch"><span class="active">Teacher's Guide</span><span class="inactive">→ Student Worksheet — 21 steps, separate handout</span></div>
+    <div class="doc-switch"><span class="active">Teacher's Guide</span><span class="inactive">"→ Student Worksheet — 16 steps, separate handout"</span></div>
   </header>
   <nav class="quicknav">
-    <a href="#howto"><span class="num">00</span>How to use this</a>
+    <a href="#howto"><span class="num">00</span>How to use this guide</a>
     <a href="#tenets"><span class="num">00</span>The four tenets</a>
     <a href="#ai"><span class="num">00</span>AI, done well</a>
     <a href="#glance"><span class="num">00</span>Session shape</a>
-    <a href="#arm"><span class="num">00</span>What the arm is</a>
+    <a href="#walkthrough"><span class="num">00</span>The live walkthrough</a>
     <a href="#objective"><span class="num">00</span>Worked objective</a>
     <a href="#code"><span class="num">00</span>Fallback code</a>
     <a href="#prompts"><span class="num">00</span>Example prompts</a>
@@ -213,45 +213,54 @@
     <a href="#appendix"><span class="num">00</span>Review findings</a>
   </nav>
   <div class="wrap">
+    <section>
+      <span class="eyebrow">AI-DLC × INTO THE DEEP · TEACHER'S GUIDE · 2-HOUR SESSION</span>
+      <h2>Give the Arm Something New to Do</h2>
+      <p>The arm arrives already built. Students don't construct a mechanism — they decide <b>what it should be able to do that it can't do yet</b>, and carry that objective through five phases of AI-DLC. Every team chooses a different objective; every team is held to the same four engineering tenets and the same guardrails.</p>
       <div class="table-scroll">
       <table class="agenda">
         <tr><th>Session</th><th>Setup</th><th>Team</th><th>Codebase</th><th>Bench OpMode</th></tr>
         <tr><td>120 min</td><td>+20 min</td><td>3–6 students</td><td><code>Into_The_Deep</code></td><td><code>TeleopWithoutDriving</code></td></tr>
       </table>
       </div>
-      <div class="callout"><span class="label">Paired handout</span><b>Student Worksheet — Give the Arm Something New to Do.</b> Twenty-one numbered steps. Steps 1–4 are setup and deliberately prescriptive; everything after that gives them a lens and questions rather than instructions. Steps 9–10 are where they choose an objective and pressure-test it against fixed guardrails.</div>
-    <section id="howto">
+      <div class="callout"><span class="label">Paired handout</span><b>Student Worksheet — Give the Arm Something New to Do.</b> Sixteen numbered steps. Steps 1–3 are setup and deliberately prescriptive. Between Step 3 and Step 4 sits a <b>capture sheet, not a step</b> — the page they fill in while someone walks the codebase from the front. Everything from Step 4 on gives them a lens and questions rather than instructions, and Steps 4–5 are where they choose an objective and pressure-test it against fixed guardrails.</div>
+    </section>
+    <section>
       <span class="eyebrow">Read this first</span>
       <h2>How to use this guide</h2>
       <p>This is one fully worked objective, carried through all five phases, so you have something rehearsed to demo and a fallback if a team stalls. <b>It is not the objective students should produce.</b> Pick something else to demo if you like — what matters is that they see the shape of the work, not this particular answer.</p>
       <p>The worksheet deliberately withholds the specificity you have here. Where you have a state table, they have four blank rows and a rule that column three must name a real method. Where you have code, they have three constraints and a question about scope. That gap is the exercise.</p>
+      <p><b>The codebase orientation is no longer theirs to do.</b> Earlier versions of the worksheet had students read the code themselves across four steps. That block is now a twenty-minute walkthrough delivered live, and the worksheet carries only a capture sheet against it. See <em>The live walkthrough</em> below for what that talk has to leave them holding — later steps depend on it, so it is a contract, not a tour.</p>
       <div class="callout warn"><span class="label">The single biggest risk to this session</span>Students working in the real competition repository can break the robot for everyone. The worksheet's one hard rule is that <b>nothing they add may change existing behaviour when their control isn't pressed</b> — additive only, on a branch. Say it out loud at kickoff, and check it at the Phase 4 gate. <code>B</code>, the right bumper and <code>start</code> are the only unbound controls on either gamepad; everything else is taken.</div>
-      <h2>Where your blocks and their steps line up</h2>
+    </section>
+    <section id="howto">
+      <span class="eyebrow">Read this first, continued</span>
+      <h3>Where your blocks and their steps line up</h3>
       <div class="table-scroll">
       <table class="agenda">
         <tr><th>Your block</th><th>Steps</th><th>What you're watching for</th></tr>
-        <tr><td>Block 0 — Setup</td><td>1 – 4</td><td>Green Gradle sync, everyone on their own branch, nobody editing <code>master</code></td></tr>
-        <tr><td>Learn the arm</td><td>5 – 8</td><td>They can name real methods, and they found the missing loop-time technique</td></tr>
-        <tr><td>Choose an objective</td><td>9 – 10</td><td>Five guardrails ticked honestly — this is where you intervene, not later</td></tr>
-        <tr><td>Phase 1 — Intent</td><td>11</td><td>A loop-time number, and a non-goals row that actually says no to something</td></tr>
-        <tr><td>Phase 2 — Elaborate</td><td>12</td><td>Criteria you could check by hand; one story about observability</td></tr>
-        <tr><td>Phase 3 — Design</td><td>13 – 14</td><td>Every arrow labelled with a boolean that exists</td></tr>
-        <tr><td>Phase 4 — Verify</td><td>15</td><td>Unticked boxes fixed or cut — and a written decision about AI use</td></tr>
-        <tr><td>Phase 5 — Bolt</td><td>16 – 19</td><td>Write, instrument, run, measure — in that order</td></tr>
-        <tr><td>Stretch</td><td>20</td><td>Only for teams already demoing</td></tr>
-        <tr><td>Wrap &amp; retro</td><td>21</td><td>A measured number, one thing the log revealed, and whether the AI split was right</td></tr>
+        <tr><td>Block 0 — Setup</td><td>1 – 3</td><td>Green Gradle sync, everyone on their own branch, nobody editing <code>master</code></td></tr>
+        <tr><td>Codebase walkthrough (live)</td><td>capture sheet</td><td>Pens moving. A blank vocabulary table now is a stalled team at Phase 3</td></tr>
+        <tr><td>Choose an objective</td><td>4 – 5</td><td>Five guardrails ticked honestly — this is where you intervene, not later</td></tr>
+        <tr><td>Phase 1 — Intent</td><td>6</td><td>A loop-time number, and a non-goals row that actually says no to something</td></tr>
+        <tr><td>Phase 2 — Elaborate</td><td>7</td><td>Criteria you could check by hand; one story about observability</td></tr>
+        <tr><td>Phase 3 — Design</td><td>8 – 9</td><td>Every arrow labelled with a boolean that exists</td></tr>
+        <tr><td>Phase 4 — Verify</td><td>10</td><td>Unticked boxes fixed or cut — and a written decision about AI use</td></tr>
+        <tr><td>Phase 5 — Bolt</td><td>11 – 14</td><td>Write, instrument, run, measure — in that order</td></tr>
+        <tr><td>Stretch</td><td>15</td><td>Only for teams already demoing</td></tr>
+        <tr><td>Wrap &amp; retro</td><td>16</td><td>A measured number, one thing the log revealed, and whether the AI split was right</td></tr>
       </table>
       </div>
     </section>
-    <section id="tenets">
+    <section>
       <span class="eyebrow">The spine of the session</span>
       <h2>The four tenets — and how to teach them</h2>
-      <p class="lede">Objectives vary by team. These don't. Each tenet appears in the worksheet marked with a ◆, and each has a moment in the session where it stops being advice and becomes something students have to do. Those moments are where your attention is worth most.</p>
+      <p style="font-size:14px;color:var(--ink-soft);">Objectives vary by team. These don't. Each tenet appears in the worksheet marked with a ◆, and each has a moment in the session where it stops being advice and becomes something students have to do. Those moments are where your attention is worth most.</p>
       <div class="panel">
         <h3>Tenet 1 · Loop time</h3>
         <ul>
           <li><b>The idea:</b> One loop, shared by every mechanism, running the whole match. Time you spend is time nobody else gets. A slow loop doesn't crash — it makes the robot feel vague, which is much harder for a student to diagnose than a failure.</li>
-          <li><b>Their moment:</b> Step 7 they find three defences already in the code and discover the fourth is missing. Step 19 they add it back with <code>System.nanoTime()</code>.</li>
+          <li><b>Their moment:</b> In the walkthrough they log three defences already in the code and mark the fourth “missing”. Step 14 they add it back with <code>System.nanoTime()</code>.</li>
           <li><b>What to watch for:</b> A team that reports “0 ms” and moves on. The existing <code>loopTimer</code> resolves to whole milliseconds and their addition costs far less than one, so a millisecond timer teaches them nothing. Push them to nanoseconds — this is the difference between a measurement and a shrug.</li>
         </ul>
       </div>
@@ -259,17 +268,20 @@
         <h3>Tenet 2 · Separation of duties</h3>
         <ul>
           <li><b>The idea:</b> One job per class, one job per method. Wrappers touch hardware; state machines decide; the OpMode runs the loop. The payoff is that you can reason about — and test — one method at a time.</li>
-          <li><b>Their moment:</b> Step 6 they read <code>ArmFSM</code> and <code>ArmMotorsWrapper</code> side by side. Step 16 they write a coordinator that gives orders through existing methods and touches no hardware at all.</li>
+          <li><b>Their moment:</b> In the walkthrough they see <code>ArmFSM</code> and <code>ArmMotorsWrapper</code> side by side. Step 11 they write a coordinator that gives orders through existing methods and touches no hardware at all.</li>
           <li><b>On globals:</b> Worth being precise with students rather than absolutist. This codebase is full of <code>public static</code> fields, and they are nearly all deliberate — tunable constants exposed for live adjustment. The rule isn't “no globals”, it's <b>“no globals you can't defend.”</b> A student who makes a field global because passing it was tedious has made a different decision than the one this code made, and should be able to say why.</li>
         </ul>
       </div>
+    </section>
+    <section id="tenets">
+      <span class="eyebrow">The spine of the session, continued</span>
       <div class="panel">
         <h3>Tenet 3 · Data and logging</h3>
         <ul>
           <li><b>The idea:</b> Watching tells you <b>that</b> something is wrong. Only data tells you <b>why</b>. Students are writing comparisons, tolerances and ordering — and every one of those failure modes looks identical from across the room.</li>
-          <li><b>Their moment:</b> Step 8 they read <code>Logger</code> and its three levels. Step 17 — placed before the first run on purpose — they instrument their own code. Step 18 says read the log before changing any code.</li>
+          <li><b>Their moment:</b> In the walkthrough they meet <code>Logger</code> and its three levels. Step 12 — placed before the first run on purpose — they instrument their own code. Step 13 says read the log before changing any code.</li>
           <li><b>What to watch for:</b> The instinct to debug by changing something and running it again. When a team is on their fourth guess, ask them what's on the screen. If the answer is “the state”, ask what value the failing comparison was made from. That question usually ends the guessing.</li>
-          <li><b>Why the ordering matters:</b> Step 17 comes before Step 18 on purpose. Instrumenting after something breaks costs the same five minutes but under time pressure, and by then they've usually already changed three things.</li>
+          <li><b>Why the ordering matters:</b> Step 12 comes before Step 13 on purpose. Instrumenting after something breaks costs the same five minutes but under time pressure, and by then they've usually already changed three things.</li>
         </ul>
       </div>
       <div class="panel">
@@ -278,13 +290,13 @@
           <li><b>The idea:</b> AI is a tool that accelerates the work. It does not replace the thinking. Point at the shape of the session when you teach this: <b>four of the five phases happen before anyone writes code</b>, and that is not nostalgia — it is what makes the fifth phase fast instead of expensive.</li>
           <li><b>Say this plainly:</b> Design and planning matter exactly as much when AI writes the code as when they write it by hand. Arguably more, because AI will produce a large amount of confident, plausible, wrong code very quickly — and fastest of all when nobody has told it what they actually want.</li>
           <li><b>The failure mode:</b> Code that compiles, looks reasonable, and nobody understands or intended. It comes from skipping the design and asking for the answer. It isn't fast; it moves the debugging to later, when there is less time and more of it to unpick.</li>
-          <li><b>Their moment:</b> Step 15, at the Verify gate — design already done — they choose how much of the typing to hand over, and write down why. At the retro they say whether it was right.</li>
+          <li><b>Their moment:</b> Step 10, at the Verify gate — design already done — they choose how much of the typing to hand over, and write down why. At the retro they say whether it was right.</li>
           <li><b>What to watch for:</b> Not which position they picked. Whether they can explain the code they shipped. That is the only signal that separates using AI well from generating something nobody owns.</li>
         </ul>
       </div>
       <div class="callout"><span class="label">Teach the conflict, not just the rules</span>Logging costs loop time. Separation costs indirection. Students will hit a moment where two tenets pull opposite ways, and the useful lesson is that engineering is the trade rather than the absence of one. The codebase already models the good answer: <code>Logger</code> buffers all loop and flushes once, so rich diagnostics cost almost nothing — and the level switches from a gamepad button so debug output can ship without ever reaching the driver.</div>
     </section>
-    <section id="ai">
+    <section>
       <span class="eyebrow">Tenet 4, in detail</span>
       <h2>AI accelerates the work. It doesn't replace the thinking.</h2>
       <p>Worth walking through at kickoff, and worth being explicit about <b>why the session is shaped the way it is</b>: four phases of deciding before one phase of building. In each phase there is something AI does well and something that stays theirs, and the boundary is the interesting part.</p>
@@ -298,7 +310,10 @@
         <tr><td><b>5 · Bolt</b></td><td>Anything from answering questions to writing whole classes — the dial.</td><td>Understanding every line that ships.</td></tr>
       </table>
       </div>
-      <h2>Where they spend the speed</h2>
+    </section>
+    <section id="ai">
+      <span class="eyebrow">Tenet 4, continued</span>
+      <h3>Where they spend the speed</h3>
       <p>Once the design is done, students choose how much of the typing to hand over. All three positions are used in industry by good engineers on real code. Your job is not to push them toward a position — it is to make the choice conscious, and to be clear that this is a choice about <b>typing, not about thinking</b>. Every position below assumes a state table they believe in.</p>
       <div class="table-scroll">
       <table class="agenda">
@@ -310,14 +325,15 @@
       </div>
       <div class="callout warn"><span class="label">The line that doesn't move</span><b>They have to be able to explain every line they ship.</b> “The AI wrote it” is not an explanation, and it is not an answer they can give a teammate at a competition when the arm does something surprising. If a team can't explain their own code at the demo, the useful response isn't a lecture — it's “turn it down a notch and do that method again.” That single question is the difference between deliberate work and slop, and it is worth asking every team at least once.</div>
     </section>
-    <section id="glance">
+    <section>
       <span class="eyebrow">Session at a glance</span>
       <h2>Ten blocks — 20 minutes of setup, then two hours</h2>
       <p><b>Block 0 is setup</b>, and it's the one to move out of the session if you possibly can. Unlike a bare SDK it's short — the project already declares FTCLib 2.1.1, JUnit 5.10.3 and Mockito 5.13.0, so students confirm rather than configure.</p>
+      <p><b>Block 1 is the live codebase walkthrough</b>, presented from the front. It is the only block students don't drive themselves, and the only one where their worksheet is a capture sheet rather than a set of steps.</p>
     </section>
     <div class="wide"><div class="timeline">
       <div class="seg c4" style="flex-grow:20"><span class="t">20 min</span><span class="n">0 · Setup</span></div>
-      <div class="seg c1" style="flex-grow:20"><span class="t">20 min</span><span class="n">Learn arm</span></div>
+      <div class="seg c1" style="flex-grow:20"><span class="t">20 min</span><span class="n">Walkthrough</span></div>
       <div class="seg c3" style="flex-grow:10"><span class="t">10 min</span><span class="n">Choose</span></div>
       <div class="seg c2" style="flex-grow:10"><span class="t">10 min</span><span class="n">1 · Intent</span></div>
       <div class="seg c3" style="flex-grow:10"><span class="t">10 min</span><span class="n">2 · Elab</span></div>
@@ -331,33 +347,51 @@
       <div class="table-scroll">
       <table class="agenda">
         <tr><th>Time</th><th>Block</th><th>Steps</th><th>Deliverable</th></tr>
-        <tr><td>−0:20</td><td>Block 0 — Setup (ideally before the session)</td><td>1–4</td><td>Green sync, everyone on a branch</td></tr>
-        <tr><td>0:00–0:20</td><td>Learn the arm — vocabulary, structure, the tenets in the wild</td><td>5–8</td><td>A list of real methods; the missing technique found</td></tr>
-        <tr><td>0:20–0:30</td><td>Choose an objective and check the guardrails</td><td>9–10</td><td>One sentence, five boxes ticked</td></tr>
-        <tr><td>0:30–0:40</td><td>Phase 1 — Plan Intent</td><td>11</td><td>Intent with a loop-time number</td></tr>
-        <tr><td>0:40–0:50</td><td>Phase 2 — Elaborate</td><td>12</td><td>Stories with hand-checkable criteria</td></tr>
+        <tr><td>−0:20</td><td>Block 0 — Setup (ideally before the session)</td><td>1–3</td><td>Green sync, everyone on a branch, bench OpMode open</td></tr>
+        <tr><td>0:00–0:20</td><td>Codebase walkthrough — delivered live from the front</td><td>capture sheet</td><td>A list of real methods; the missing technique marked</td></tr>
+        <tr><td>0:20–0:30</td><td>Choose an objective and check the guardrails</td><td>4–5</td><td>One sentence, five boxes ticked</td></tr>
+        <tr><td>0:30–0:40</td><td>Phase 1 — Plan Intent</td><td>6</td><td>Intent with a loop-time number</td></tr>
+        <tr><td>0:40–0:50</td><td>Phase 2 — Elaborate</td><td>7</td><td>Stories with hand-checkable criteria</td></tr>
         <tr><td>0:50–0:55</td><td>Break</td><td>—</td><td>—</td></tr>
-        <tr><td>0:55–1:10</td><td>Phase 3 — Design</td><td>13–14</td><td>Sequence, state table, one ADR</td></tr>
-        <tr><td>1:10–1:15</td><td>Phase 4 — Verify</td><td>15</td><td>Go / no-go checklist</td></tr>
-        <tr><td>1:15–1:50</td><td>Phase 5 — Bolt</td><td>16–19</td><td>Coordinator written, instrumented, running, measured</td></tr>
-        <tr><td>1:50–2:00</td><td>Wrap, demo, retro</td><td>21</td><td>Parking lot for next session</td></tr>
+        <tr><td>0:55–1:10</td><td>Phase 3 — Design</td><td>8–9</td><td>Sequence, state table, one ADR</td></tr>
+        <tr><td>1:10–1:15</td><td>Phase 4 — Verify</td><td>10</td><td>Go / no-go checklist</td></tr>
+        <tr><td>1:15–1:50</td><td>Phase 5 — Bolt</td><td>11–14</td><td>Coordinator written, instrumented, running, measured</td></tr>
+        <tr><td>1:50–2:00</td><td>Wrap, demo, retro</td><td>16</td><td>Parking lot for next session</td></tr>
       </table>
       </div>
-      <h2>What will go wrong in Block 0</h2>
+    </section>
+    <section id="glance">
+      <span class="eyebrow">Session at a glance, continued</span>
+      <h3>What will go wrong in Block 0</h3>
       <div class="table-scroll">
       <table class="agenda">
         <tr><th>What you'll see</th><th>What it actually is</th></tr>
         <tr><td>Gradle sync fails instantly, before downloading anything</td><td>They opened a subfolder instead of the repo root. Close and re-open the top <code>Into_The_Deep</code> folder.</td></tr>
         <tr><td>Someone is editing <code>master</code></td><td>The branch step got skipped. Catch this in the first ten minutes — much easier to fix before there are changes.</td></tr>
         <tr><td>Build fails with a JDK or Java-version error</td><td>An Android Studio configuration problem, not a code problem — handle it yourself rather than letting a student guess at settings.</td></tr>
-        <tr><td>Everything is just very slow</td><td>Normal for a first sync. Send them to read Step 5 on someone else's machine while it finishes.</td></tr>
+        <tr><td>Everything is just very slow</td><td>Normal for a first sync. Nothing after Step 3 needs their own machine until Phase 5, so let it run and start the walkthrough on time.</td></tr>
       </table>
       </div>
     </section>
-    <section id="arm">
-      <span class="eyebrow">Orientation</span>
-      <h2>What the arm actually is</h2>
-      <p class="lede">Worth knowing before you plan the room: this is not a motor and a servo. It is a five-degree-of-freedom limb with a gripper, already under closed-loop control, already coordinated by a two-level state machine.</p>
+    <section>
+      <span class="eyebrow">Briefing for whoever presents it</span>
+      <h2>The live walkthrough — 20 minutes, and what it owes the room</h2>
+      <p style="font-size:14px;color:var(--ink-soft);">This block is delivered from the front. Students are not reading the code alone; their worksheet carries a capture sheet instead of steps. That makes the talk a <b>contract</b>: three specific things have to come out of it, because Steps 4 through 14 assume students are holding them.</p>
+      <h3>What the walkthrough must leave them holding</h3>
+      <div class="table-scroll">
+      <table class="agenda">
+        <tr><th>They must leave with</th><th>Why — the step that breaks without it</th></tr>
+        <tr><td><b>Vocabulary.</b> At least six boolean questions and four orders, each named with its class, spelled correctly</td><td>Step 4 (choose an objective) and Step 9, whose state table must name real methods</td></tr>
+        <tr><td><b>The missing loop-time technique.</b> Three defences are in the code; per-mechanism timing is not</td><td>Step 14, where they add it back — and the <em>Measure</em> objective direction in Step 4</td></tr>
+        <tr><td><code>Logger</code>'s three levels — that <code>log()</code> only buffers, and that one <code>print()</code> at the bottom does the send</td><td>Step 12, where they instrument at <code>DEBUG</code> before the first run</td></tr>
+      </table>
+      </div>
+      <p style="font-size:14px;color:var(--ink-soft);">Two gotchas are also worth saying out loud, because they cost teams the back half of the Bolt block: <code>wasJustPressed(...)</code> depends on <code>readButtons()</code> at the top of the loop, and there is exactly one <code>telemetry.update()</code> in the whole loop. Both are on the capture sheet, but they land better said than read.</p>
+    </section>
+    <section id="walkthrough">
+      <span class="eyebrow">Briefing, continued</span>
+      <h3>Background for the presenter</h3>
+      <p style="font-size:14px;color:var(--ink-soft);">This is not a motor and a servo. It is a five-degree-of-freedom limb with a gripper, already under closed-loop control, already coordinated by a two-level state machine.</p>
       <div class="table-scroll">
       <table class="agenda">
         <tr><th>Part</th><th>Hardware</th><th>Coordinated by</th></tr>
@@ -366,9 +400,13 @@
         <tr><td>Whole limb</td><td>—</td><td><code>LimbFSM</code> over the first pair, <code>MonkeyPawFSM</code> over the second</td></tr>
       </table>
       </div>
-      <p>States are named for the game rather than the hardware — <code>AT_BASKET_HEIGHT</code>, <code>AT_SUBMERSIBLE_HEIGHT</code>, <code>INTAKING_SPECIMEN</code>, <code>PREPARED_TO_DEPOSIT_SAMPLE</code>. There are roughly sixty boolean query methods across the limb, and <b>that set is the vocabulary every student objective has to be written in.</b> Step 5 exists to make sure they have it before they start imagining.</p>
-      <div class="callout"><span class="label">Where their work goes</span><code>Core/TeleopWithoutDriving.java</code> is already a limb-only bench OpMode: it calls <code>drive(0,0,0,0)</code> and has <code>limbFSM.updateState(...)</code> commented out. Students construct their coordinator there and bind it to a free control. <code>MainTeleop</code> is the competition OpMode and is not to be touched.</div>
-      <h2>Three real FSM-and-wrapper pairs to put on the projector</h2>
+      <p>States are named for the game rather than the hardware — <code>AT_BASKET_HEIGHT</code>, <code>AT_SUBMERSIBLE_HEIGHT</code>, <code>INTAKING_SPECIMEN</code>, <code>PREPARED_TO_DEPOSIT_SAMPLE</code>. There are roughly sixty boolean query methods across the limb, and <b>that set is the vocabulary every student objective has to be written in.</b> Getting it onto their capture sheet is the single highest-value thing the walkthrough does — the size of their vocabulary is the size of what they can imagine at Step 4.</p>
+      <div class="callout"><span class="label">Where their work goes</span><code>Core/TeleopWithoutDriving.java</code> is already a limb-only bench OpMode: it calls <code>drive(0,0,0,0)</code> and has <code>limbFSM.updateState(...)</code> commented out. Students construct their coordinator there and bind it to a free control. <code>MainTeleop</code> is the competition OpMode and is not to be touched. Step 3 has them open that file and leave it open, so show it on the projector by name rather than assuming they'll find it at Step 13.</div>
+    </section>
+    <section>
+      <span class="eyebrow">Briefing, continued</span>
+      <h3>Three real FSM-and-wrapper pairs to put on the projector</h3>
+      <p style="font-size:14px;color:var(--ink-soft);">Read one pair properly rather than three quickly. The finger is the shortest and the clearest; the arm is the one that shows two mechanisms coordinating.</p>
       <div class="table-scroll">
       <table class="agenda">
         <tr><th>Mechanism</th><th>FSM</th><th>Wrapper</th><th>What drives its transitions</th></tr>
@@ -379,10 +417,10 @@
       </div>
       <p style="font-size:14px;color:var(--ink-soft);"><code>ArmFSM</code> is the one worth reading aloud: it changes its own PID gains based on what <code>ShoulderFSM</code> reports through boolean methods. That is two mechanisms coordinating without either knowing the other's internals — tenet 2, demonstrated by their own code.</p>
     </section>
-    <section id="objective">
+    <section>
       <span class="eyebrow">The worked example in this guide</span>
       <h2>One objective, carried all the way through</h2>
-      <p class="lede"><b>Safe stow.</b> Press a free control and the limb returns to a known travel pose from wherever it happens to be — retracting the arm fully <b>before</b> the shoulder rotates, so an extended arm never swings.</p>
+      <p><b>Safe stow.</b> Press a free control and the limb returns to a known travel pose from wherever it happens to be — retracting the arm fully <b>before</b> the shoulder rotates, so an extended arm never swings.</p>
       <p>It sits in the worksheet's <b>Recover</b> category. Choose a different category to demo if your teams are likely to gravitate here — the point is the shape, not the answer.</p>
       <div class="table-scroll">
       <table class="agenda">
@@ -394,7 +432,7 @@
         <tr><td>It's additive</td><td>Nothing changes unless the control is pressed</td></tr>
       </table>
       </div>
-      <h2>Phase 1 — Plan Intent</h2>
+      <h3>Phase 1 — Plan Intent</h3>
       <p>Dictate it out loud; one student types, everyone talks. Insist on the loop-time number here — retrofitting it after Phase 3 never happens.</p>
       <div class="prompt">Our arm can already retract and rotate to intake. We want one control that safely stows it from any position. Ask what you need to know, then draft a short intent with problem, success criteria and non-goals.</div>
       <div class="table-scroll">
@@ -407,7 +445,10 @@
         <tr><td>NFR — observability</td><td>At <code>DEBUG</code>, the log shows the current step and both values each transition is waiting on.</td></tr>
       </table>
       </div>
-      <h2>Phase 2 — Elaborate</h2>
+    </section>
+    <section id="objective">
+      <span class="eyebrow">The worked example, continued</span>
+      <h3>Phase 2 — Elaborate</h3>
       <p>Push back on anything you couldn't check by hand. “It stows properly” is not a criterion.</p>
       <div class="table-scroll">
       <table class="agenda">
@@ -419,7 +460,10 @@
         <tr><td>Loop-time budget</td><td>A <code>nanoTime</code> pair around <code>updateState()</code> shows the cost stays under the Phase 1 number.</td></tr>
       </table>
       </div>
-      <h2>Phase 3 — Design</h2>
+    </section>
+    <section>
+      <span class="eyebrow">The worked example, continued</span>
+      <h3>Phase 3 — Design</h3>
       <p>On paper first. The states are easy; the exit conditions are the lesson. Every arrow must name a boolean that already exists.</p>
       <div class="prompt">Here's our sequence: idle until pressed, retract, then rotate, then stowed. Turn it into a state table, and tell us which transitions we haven't given an exit condition — don't design it for us.</div>
       <div class="table-scroll">
@@ -432,15 +476,13 @@
       </table>
       </div>
       <p style="font-size:14px;color:var(--ink-soft);">Four states is deliberately small. A team proposing eight isn't necessarily wrong — ask them which two they'd merge if they had half the time, and whether each one has a distinct exit condition or just a distinct name.</p>
-      <div class="panel">
-        <h3>Mini ADR — what to record</h3>
-        <ul>
-          <li><b>Decision:</b> a separate coordinator class rather than new states inside <code>LimbFSM</code>.</li>
-          <li><b>Alternatives:</b> adding states to <code>LimbFSM</code> — rejected, because it would change how an existing mechanism behaves and breaks the session's one hard rule. A raw <code>if</code> chain in the OpMode — rejected, state leaks between loops.</li>
-          <li><b>Consequence:</b> one more class to construct and update, and a clean boundary that can be tested with mocks.</li>
-        </ul>
-      </div>
-      <h2>Phase 4 — Verify</h2>
+      <h3>Mini ADR — what to record</h3>
+      <ul>
+        <li><b>Decision:</b> a separate coordinator class rather than new states inside <code>LimbFSM</code>.</li>
+        <li><b>Alternatives:</b> adding states to <code>LimbFSM</code> — rejected, because it would change how an existing mechanism behaves and breaks the session's one hard rule. A raw <code>if</code> chain in the OpMode — rejected, state leaks between loops.</li>
+        <li><b>Consequence:</b> one more class to construct and update, and a clean boundary that can be tested with mocks.</li>
+      </ul>
+      <h3>Phase 4 — Verify</h3>
       <p>Run the design past this out loud before anyone opens a file. Three of these are the tenets as questions — those are the three worth slowing down on.</p>
       <ul class="checklist">
         <li>Every state has a clear way in and out. No state can trap the arm.</li>
@@ -451,22 +493,25 @@
         <li>◆ <b>Loop time</b> — there's a plan to measure the cost, in nanoseconds.</li>
         <li>Nothing changes when the new control isn't pressed.</li>
       </ul>
-      <h2>Phase 5 — Bolt, in four moves</h2>
+    </section>
+    <section>
+      <span class="eyebrow">The worked example, continued</span>
+      <h3>Phase 5 — Bolt, in four moves</h3>
       <p>The ordering matters more than the code. <b>Write, instrument, run, measure</b> — teams that run before instrumenting spend the back half of the block guessing.</p>
       <div class="table-scroll">
       <table class="agenda">
         <tr><th>Step</th><th>Move</th><th>What good looks like</th></tr>
-        <tr><td>16</td><td>Write the coordinator</td><td>Compiles; imports no hardware; one transition working before the second is written</td></tr>
-        <tr><td>17</td><td>Instrument it</td><td>Diagnostics written and switched on <b>before</b> the first run</td></tr>
-        <tr><td>18</td><td>Wire it in and run</td><td>Constructed in <code>TeleopWithoutDriving</code>; read with <code>wasJustPressed(...)</code>; log read before any code changes</td></tr>
-        <tr><td>19</td><td>Measure the cost</td><td>A decimal number of milliseconds from <code>nanoTime</code>, beside the whole-loop number</td></tr>
+        <tr><td>11</td><td>Write the coordinator</td><td>Compiles; imports no hardware; one transition working before the second is written</td></tr>
+        <tr><td>12</td><td>Instrument it</td><td>Diagnostics written and switched on <b>before</b> the first run</td></tr>
+        <tr><td>13</td><td>Wire it in and run</td><td>Constructed in <code>TeleopWithoutDriving</code>; read with <code>wasJustPressed(...)</code>; log read before any code changes</td></tr>
+        <tr><td>14</td><td>Measure the cost</td><td>A decimal number of milliseconds from <code>nanoTime</code>, beside the whole-loop number</td></tr>
       </table>
       </div>
       <div class="callout warn"><span class="label">Known gotcha — button edges</span><code>wasJustPressed(...)</code> works only because <code>readButtons()</code> runs at the top of the loop. It's already there. A student who reads <code>gamepad2.b</code> directly instead will restart the sequence on every loop the button is held, and the arm will appear to freeze at the first step — a symptom that looks nothing like its cause.</div>
     </section>
-    <section id="code">
+    <section>
       <span class="eyebrow">Fallback only — hand over if a team is genuinely stuck</span>
-      <h2>SafeStowFSM.java — the coordinator, as a fallback</h2>
+      <h2>SafeStowFSM — the coordinator, as a fallback</h2>
       <p>Hand this over only if a team is genuinely stuck. It coordinates existing state machines, touches no hardware, and logs the values its transitions wait on.</p>
       <pre>import static ...Logger.LogLevels.DEBUG;   // keeps the log lines short
 
@@ -508,8 +553,7 @@ public class SafeStowFSM {
 
     // A question other code can ask, not a state enum handed out.
     public boolean STOWED()  { return state == States.STOWED; }
-    public boolean STOWING() { return state == States.RETRACTING
-                                   || state == States.ROTATING; }
+    public boolean STOWING() { return state == States.RETRACTING || state == States.ROTATING; }
 
     public void log() {
         logger.log("SafeStow state", state, DEBUG);
@@ -519,9 +563,15 @@ public class SafeStowFSM {
         logger.log("  shoulder at intake?", shoulderFSM.AT_INTAKE(), DEBUG);
     }
 }</pre>
+    </section>
+    <section id="code">
+      <span class="eyebrow">Fallback only, continued</span>
       <p class="eyebrow" style="color:#8a6a22;">◆ Data and logging</p>
       <div class="callout"><span class="label">Why the log() method looks like that</span>It logs <code>armFSM.getCurrentHeight()</code> as well as <code>FULLY_RETRACTED()</code>. That extra line is the whole tenet in miniature: when the sequence stalls in <code>RETRACTING</code>, the boolean alone tells a student only that it hasn't finished. The height tells them whether the arm is moving and stopped short, never moved at all, or is oscillating around the tolerance — three different bugs that look identical from across the room.</div>
-      <h2>Wiring it into TeleopWithoutDriving.java</h2>
+    </section>
+    <section>
+      <span class="eyebrow">Fallback only, continued</span>
+      <h3>Wiring it into TeleopWithoutDriving.java</h3>
       <pre>// with the other FSM constructions, inside the try block:
 SafeStowFSM safeStowFSM = new SafeStowFSM(armFSM, shoulderFSM, logger);
 
@@ -538,32 +588,38 @@ safeStowFSM.log();
 logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       <div class="callout warn"><span class="label">Two things students get wrong here</span>They add a <code>telemetry.update()</code> of their own — there is exactly one in the loop, at the bottom, inside <code>Logger.print()</code>, and adding a second is the fastest way to make the whole robot laggy. And they use the millisecond <code>loopTimer</code> instead of <code>nanoTime</code>, read <code>0</code>, and conclude their code is free.</div>
     </section>
-    <section id="prompts">
+    <section>
       <span class="eyebrow">Tenet 4 in practice</span>
       <h2>Example prompts to demonstrate</h2>
-      <p class="lede">Read these aloud, project them, or hand them out — but demonstrate at least the first two live at kickoff. Students copy what they see modelled far more readily than what they are told.</p>
+      <p style="font-size:14px;color:var(--ink-soft);">Read these aloud, project them, or hand them out — but demonstrate at least the first two live at kickoff. Students copy what they see modelled far more readily than what they are told.</p>
       <p>The wording matters less than the shape, and the shape is consistent: <b>give it the real files, ask for one thing, and ask it to find gaps rather than to decide.</b> Point that out once and most teams will start writing their own good prompts by Phase 3.</p>
-      <h2>Orientation — Steps 5 to 8</h2>
-      <p>These are the ones worth demonstrating live, because they show AI being used to read code faster rather than to write it. That framing sets up the whole session.</p>
+      <h3>During the walkthrough — filling the capture sheet</h3>
+      <p>These are the ones worth demonstrating live, because they show AI being used to <b>read</b> code faster rather than to write it. That framing sets up the whole session, and it's the best use of the projector while the walkthrough is running — a team whose vocabulary table is thin can fill it in thirty seconds with the first prompt below rather than falling behind.</p>
       <div class="table-scroll">
       <table class="agenda">
-        <tr><th>Step and purpose</th><th>Prompt</th></tr>
-        <tr><td><b>Step 5</b> — build the vocabulary. — <em>Listen for: a list, not a summary.</em></td><td><code>Here are LimbFSM.java and MonkeyPawFSM.java. List every public method that returns a boolean, grouped by which part of the arm it describes. Do not summarise the classes — I want the vocabulary.</code></td></tr>
-        <tr><td><b>Step 6</b> — see the separation. — <em>Listen for: it points at real lines.</em></td><td><code>Here are ArmFSM.java and ArmMotorsWrapper.java. Explain the division of responsibility between these two classes, then point to any line in either file that seems to cross it.</code></td></tr>
-        <tr><td><b>Step 7</b> — find the missing technique. — <em>Listen for: it names the absent one.</em></td><td><code>Here are MainTeleop.java, HWMap.java and Logger.java. Find every technique in these files that exists to keep the loop fast, naming the file and method for each. Then tell me which common loop-time technique is NOT present.</code></td></tr>
-        <tr><td><b>Step 8</b> — understand the logger. — <em>Listen for: the cost question.</em></td><td><code>Here is Logger.java and one FSM log() method. Explain the three levels and when I would use each. What does it cost to call log() a hundred times in one loop, and why?</code></td></tr>
+        <tr><th>Capture sheet box</th><th>Prompt</th></tr>
+        <tr><td><b>Vocabulary.</b> — <em>Listen for: a list, not a summary.</em></td><td><code>Here are LimbFSM.java and MonkeyPawFSM.java. List every public method that returns a boolean, grouped by which part of the arm it describes. Do not summarise the classes — I want the vocabulary.</code></td></tr>
+        <tr><td><b>Separation, if you demo a pair.</b> — <em>Listen for: it points at real lines.</em></td><td><code>Here are ArmFSM.java and ArmMotorsWrapper.java. Explain the division of responsibility between these two classes, then point to any line in either file that seems to cross it.</code></td></tr>
+        <tr><td><b>The missing technique.</b> — <em>Listen for: it names the absent one.</em></td><td><code>Here are MainTeleop.java, HWMap.java and Logger.java. Find every technique in these files that exists to keep the loop fast, naming the file and method for each. Then tell me which common loop-time technique is NOT present.</code></td></tr>
+        <tr><td><b>The logger.</b> — <em>Listen for: the cost question.</em></td><td><code>Here is Logger.java and one FSM log() method. Explain the three levels and when I would use each. What does it cost to call log() a hundred times in one loop, and why?</code></td></tr>
       </table>
       </div>
-      <h2>Choosing an objective — Steps 9 and 10</h2>
+    </section>
+    <section id="prompts">
+      <span class="eyebrow">Tenet 4 in practice, continued</span>
+      <h3>Choosing an objective — Steps 4 and 5</h3>
       <p>Note what the first prompt does <b>not</b> ask for: it asks for options, not a recommendation. The choice stays with the team, and saying that out loud is worth thirty seconds.</p>
       <div class="table-scroll">
       <table class="agenda">
         <tr><th>Step and purpose</th><th>Prompt</th></tr>
-        <tr><td><b>Step 9</b> — generate options. — <em>Listen for: five distinct ideas, no code.</em></td><td><code>Our arm can already do these things: [paste the Step 5 list]. Suggest five different capabilities it does not have yet that could be built by sequencing only those existing methods. Do not write code. For each, say which methods it would use.</code></td></tr>
-        <tr><td><b>Step 10</b> — test against guardrails. — <em>Listen for: a specific failing constraint.</em></td><td><code>Here is our objective: [objective]. Check it against these five constraints: [paste the guardrails]. Which does it fail, and what is the smallest change that would make it pass?</code></td></tr>
+        <tr><td><b>Step 4</b> — generate options. — <em>Listen for: five distinct ideas, no code.</em></td><td><code>Our arm can already do these things: [paste the capture sheet vocabulary]. Suggest five different capabilities it does not have yet that could be built by sequencing only those existing methods. Do not write code. For each, say which methods it would use.</code></td></tr>
+        <tr><td><b>Step 5</b> — test against guardrails. — <em>Listen for: a specific failing constraint.</em></td><td><code>Here is our objective: [objective]. Check it against these five constraints: [paste the guardrails]. Which does it fail, and what is the smallest change that would make it pass?</code></td></tr>
       </table>
       </div>
-      <h2>The five phases</h2>
+    </section>
+    <section>
+      <span class="eyebrow">Tenet 4 in practice, continued</span>
+      <h3>The five phases</h3>
       <p>One prompt per phase, each modelling the boundary from the walkthrough table: AI drafts and challenges, the team decides.</p>
       <div class="table-scroll">
       <table class="agenda">
@@ -571,13 +627,25 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
         <tr><td><b>Phase 1</b> — let it interview them. — <em>The one-question-at-a-time rule is what makes this work.</em></td><td><code>I want to add a capability to our robot arm: [one sentence]. Before you write anything, interview me about it — one question at a time, waiting for my answer. When you have enough, draft a short intent with a problem statement, success criteria and non-goals.</code></td></tr>
         <tr><td><b>Phase 2</b> — make criteria testable. — <em>Listen for: it admits when it cannot describe a test.</em></td><td><code>Here are our acceptance criteria: [paste]. For each one, describe exactly how I would test it by hand, on a bench, with the robot on blocks. If you cannot describe a test for one, say so plainly rather than inventing one.</code></td></tr>
         <tr><td><b>Phase 3</b> — critique, do not design. — <em>The strongest prompt in the session.</em></td><td><code>Here is our state table: [paste]. For each row, check whether the exit condition names a method that actually exists in the files I gave you. List any that do not. Then list the transitions we have not defined at all.</code></td></tr>
+      </table>
+      </div>
+    </section>
+    <section>
+      <span class="eyebrow">Tenet 4 in practice, continued</span>
+      <h3>The five phases, continued</h3>
+      <div class="table-scroll">
+      <table class="agenda">
+        <tr><th>Phase and purpose</th><th>Prompt</th></tr>
         <tr><td><b>Phase 3b</b> — find the interruption cases.</td><td><code>Here is our sequence: [paste]. What happens if the driver presses a different control halfway through? Enumerate the cases we have not handled. Do not fix them.</code></td></tr>
         <tr><td><b>Phase 4</b> — make it a reviewer. — <em>Listen for: a list of gaps, not a rewrite.</em></td><td><code>Act as a reviewer, not an author. Here is our design: [paste]. What would break on real hardware, and what did we leave undefined? List what is missing. Do not fix anything.</code></td></tr>
       </table>
       </div>
       <div class="callout"><span class="label">The phrase to teach them</span>Three of the prompts above end with some version of <b>do not fix it, just tell me what is missing.</b> That single habit is most of what separates a team who stays the author of their design from a team who ends up reviewing something they did not write. Say it once at kickoff and again at the Phase 3 gate.</div>
-      <h2>Phase 5 — one prompt per dial position</h2>
-      <p>These are the same task at three settings. Showing all three side by side makes the dial concrete in a way the table alone does not.</p>
+    </section>
+    <section>
+      <span class="eyebrow">Tenet 4 in practice, continued</span>
+      <h3>Phase 5 — one prompt per dial position</h3>
+      <p>These are the same task at three settings. Showing all three side by side makes the dial concrete in a way the table alone does.</p>
       <div class="table-scroll">
       <table class="agenda">
         <tr><th>Position</th><th>Prompt</th></tr>
@@ -586,15 +654,18 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
         <tr><td><b>3 · Draft and review</b> — <em>The last sentence is the entire safety mechanism.</em></td><td><code>Here is my state table and an existing FSM from our codebase showing the conventions we follow: [paste both]. Write the class. Then list every assumption you made that is not written in my state table.</code></td></tr>
       </table>
       </div>
-      <h2>Instrumenting and debugging — Steps 17 and 18</h2>
+      <h3>Instrumenting and debugging — Steps 12 and 13</h3>
       <div class="table-scroll">
       <table class="agenda">
         <tr><th>Step and purpose</th><th>Prompt</th></tr>
-        <tr><td><b>Step 17</b> — decide what to log before writing it. — <em>Listen for: values, not just states.</em></td><td><code>Here is my updateState method: [paste]. For each transition, tell me which values I would need on screen to diagnose it stalling there. Do not write the logging code yet — just tell me what I would need to see.</code></td></tr>
-        <tr><td><b>Step 18</b> — debug from data, not guesses. — <em>The constraint in the first sentence is the lesson.</em></td><td><code>Here is my log output and my state table: [paste both]. The sequence stalls in RETRACTING. Based only on these numbers, what are the possible causes, ranked by likelihood? Do not suggest changes yet.</code></td></tr>
+        <tr><td><b>Step 12</b> — decide what to log before writing it. — <em>Listen for: values, not just states.</em></td><td><code>Here is my updateState method: [paste]. For each transition, tell me which values I would need on screen to diagnose it stalling there. Do not write the logging code yet — just tell me what I would need to see.</code></td></tr>
+        <tr><td><b>Step 13</b> — debug from data, not guesses. — <em>The constraint in the first sentence is the lesson.</em></td><td><code>Here is my log output and my state table: [paste both]. The sequence stalls in RETRACTING. Based only on these numbers, what are the possible causes, ranked by likelihood? Do not suggest changes yet.</code></td></tr>
       </table>
       </div>
-      <h2>Weak prompt, strong prompt</h2>
+    </section>
+    <section>
+      <span class="eyebrow">Tenet 4 in practice, continued</span>
+      <h3>Weak prompt, strong prompt</h3>
       <p>Worth putting on the board. Every pair below is the same intent — the right-hand version is scoped, grounded in real files, and asks for gaps rather than answers.</p>
       <div class="table-scroll">
       <table class="agenda">
@@ -606,17 +677,18 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
         <tr><td><code>Explain this codebase.</code></td><td><code>In these two files, what is the division of responsibility, and which line crosses it?</code></td></tr>
       </table>
       </div>
-      <div class="callout warn"><span class="label">What all the strong prompts have in common</span>They hand over the <b>real files</b> rather than describing them. They ask for <b>one thing</b>. They set a <b>boundary</b> — only this case, only these numbers, do not fix it. And several of them invite the answer <em>nothing is wrong</em> or <em>I cannot tell</em>, which is what makes the answer worth something when it does find a gap.</div>
+      <div class="callout"><span class="label">What all the strong prompts have in common</span>They hand over the <b>real files</b> rather than describing them. They ask for <b>one thing</b>. They set a <b>boundary</b> — only this case, only these numbers, do not fix it. And several of them invite the answer <em>nothing is wrong</em> or <em>I cannot tell</em>, which is what makes the answer worth something when it does find a gap.</div>
     </section>
-    <section id="facilitation">
+    <section>
       <span class="eyebrow">Facilitator notes</span>
       <h2>Where teams get stuck, and what to say</h2>
       <div class="table-scroll">
       <table class="agenda">
         <tr><th>What you'll see</th><th>What's actually happening</th><th>What to ask</th></tr>
         <tr><td>An objective that needs a new setpoint or PID tuning</td><td>Guardrail one failed and nobody said so out loud</td><td>“Which method already does that? Show me the line.”</td></tr>
+        <tr><td>A vague objective, or one built on a method that doesn't exist</td><td>The capture sheet is thin — they watched the walkthrough without writing</td><td>“Read me your vocabulary list. Which line does this need?”</td></tr>
         <tr><td>A state table with “when it's ready” in column three</td><td>They designed the steps but not the finishing conditions</td><td>“What would the code actually check on that loop?”</td></tr>
-        <tr><td>Debugging by changing something and re-running</td><td>Step 17 got skipped or rushed</td><td>“What's on the screen right now? What value failed the comparison?”</td></tr>
+        <tr><td>Debugging by changing something and re-running</td><td>Step 12 got skipped or rushed</td><td>“What's on the screen right now? What value failed the comparison?”</td></tr>
         <tr><td>Loop time reported as 0 ms</td><td>Millisecond timer on a sub-millisecond method</td><td>“Is that a measurement, or the smallest number your timer can show?”</td></tr>
         <tr><td>Arm freezes at the first step of the sequence</td><td>Reading the button directly instead of <code>wasJustPressed</code></td><td>“How many times per second is that transition firing?”</td></tr>
         <tr><td>Code has drifted from the state table</td><td>Orders scattered through the switch cases</td><td>“Where does each state's order live? Could there be two?”</td></tr>
@@ -625,9 +697,9 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       </table>
       </div>
     </section>
-    <section>
+    <section id="facilitation">
       <span class="eyebrow">Optional · only for teams already demoing</span>
-      <h2>Step 20 — testing without the robot</h2>
+      <h2>Step 15 — testing without the robot</h2>
       <p>This is tenet 2 paying out: because the coordinator only talks to other state machines, every branch can be tested with mocks at a desk. <code>ArmFSMTest.java</code> shows the house pattern — <code>mock()</code> each dependency, build the class, drive one transition, check what it ordered and where it landed.</p>
       <div class="callout warn"><span class="label">Know this before you send anyone to run the suite</span><b>The existing test suite does not currently compile.</b> <code>ArmFSMTest</code> calls <code>updateState(0)</code> against a four-argument signature, <code>LimbFSMTest</code> passes twelve arguments to a fifteen-parameter method, and <code>ShoulderFSMTest</code> calls a one-parameter method with none. Of 127 <code>@Test</code> methods, 46 are live and five of the eight classes are fully commented out. Decide beforehand whether to fix the three signatures or to name it honestly as what happens when tests drift from the code they test — either is a good lesson, but discovering it by accident at minute 105 is not.</div>
     </section>
@@ -636,17 +708,15 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       <h2>Wrap, demo, retro</h2>
       <p>Have every team demo on the bench and say what it does before pressing anything. Then ask each for three things: their measured loop-time number, one thing the log told them that watching didn't, and what's in their parking lot.</p>
       <p>The middle one matters most. It's the question that turns tenet 3 from a rule they were told into something they experienced — and the answers are usually the best material you'll get for the next session.</p>
-      <div class="panel">
-        <h3>Parking lot — where next sessions come from</h3>
-        <ul>
-          <li><b>Restore per-subsystem timing properly</b> across every FSM, not just the new one — the gap Step 7 exposed.</li>
-          <li><b>Fix the test suite</b>, then keep it green. A well-scoped AI-DLC objective in its own right.</li>
-          <li><b>Give `LimbFSM.updateState()` a command object</b> — fifteen parameters, several passed as bare <code>false</code> at every call site.</li>
-          <li><b>Promote a team's coordinator into `LimbFSM`</b> as a real state, once it has proven itself on the bench.</li>
-        </ul>
-      </div>
+      <h3>Parking lot — where next sessions come from</h3>
+      <ul>
+        <li><b>Restore per-subsystem timing properly</b> across every FSM, not just the new one — the gap the walkthrough exposed.</li>
+        <li><b>Fix the test suite</b>, then keep it green. A well-scoped AI-DLC objective in its own right.</li>
+        <li>Give <code>LimbFSM.updateState()</code> <b>a command object</b> — fifteen parameters, several passed as bare <code>false</code> at every call site.</li>
+        <li><b>Promote a team's coordinator</b> into <code>LimbFSM</code> as a real state, once it has proven itself on the bench.</li>
+      </ul>
     </section>
-    <section id="appendix">
+    <section>
       <span class="eyebrow">Appendix</span>
       <h2>Findings from the codebase review</h2>
       <p>Turned up while preparing this guide. None affect the session; all look like real defects worth a mentor's attention.</p>
@@ -663,5 +733,5 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       <p style="font-size:14px;color:var(--ink-soft);">Reviewed against <code>Into_The_Deep-master</code>: <code>Core/</code>, <code>Teleop/Monkeys_Limb/</code>, <code>Teleop/monkeypaw/</code>, <code>Teleop/Wrappers/</code>, the eight test classes and both gradle dependency files. FTC SDK 10.2.0, FTCLib 2.1.1, JUnit 5.10.3, Mockito 5.13.0 — verified against the repository rather than assumed.</p>
     </section>
   </div>
-  <footer><hr class="rule" style="margin-bottom:32px;"><p>Reviewed against <code>Into_The_Deep-master</code>&amp;#58; <code>Core/</code>, <code>Teleop/Monkeys_Limb/</code>, <code>Teleop/monkeypaw/</code>, <code>Teleop/Wrappers/</code>, the eight test classes and both gradle dependency files. FTC SDK 10.2.0, FTCLib 2.1.1, JUnit 5.10.3, Mockito 5.13.0 — verified against the repository rather than assumed. Every method named in the worked objective was confirmed to exist. Source of truth for this document is <code>src/teachers-guide.md</code>.</p></footer>
+  <footer><hr class="rule" style="margin-bottom:32px;"><p>"Reviewed against <code>Into_The_Deep-master</code>: <code>Core/</code>, <code>Teleop/Monkeys_Limb/</code>, <code>Teleop/monkeypaw/</code>, <code>Teleop/Wrappers/</code>, the eight test classes and both gradle dependency files. FTC SDK 10.2.0, FTCLib 2.1.1, JUnit 5.10.3, Mockito 5.13.0 — verified against the repository rather than assumed. Every method named in the worked objective was confirmed to exist. Source of truth for this document is <code>src/teachers-guide.md</code>."</p></footer>
 </article>

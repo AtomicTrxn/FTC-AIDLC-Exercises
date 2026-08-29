@@ -4,320 +4,412 @@ kicker: AI-DLC × INTO THE DEEP · TEACHER'S GUIDE · 2-HOUR SESSION
 title: Give the Arm Something
 title2: New to Do
 dek: "The arm arrives already built. Students don't construct a mechanism — they decide **what it should be able to do that it can't do yet**, and carry that objective through five phases of AI-DLC. Every team chooses a different objective; every team is held to the same four engineering tenets and the same guardrails."
-chips: "Session=120 min; Setup=+20 min; Team=3–6 students; Codebase=Into_The_Deep; Bench OpMode=TeleopWithoutDriving"
+chips: "Session=120 min; Setup=+20 min; Walkthrough=20 min, live; Team=3–6 students; Bench OpMode=TeleopWithoutDriving"
 pairactive: Teacher's Guide
-pair: "→ Student Worksheet — 21 steps, separate handout"
+pair: "→ Student Worksheet — 16 steps, separate handout"
 footer: "Reviewed against `Into_The_Deep-master`: `Core/`, `Teleop/Monkeys_Limb/`, `Teleop/monkeypaw/`, `Teleop/Wrappers/`, the eight test classes and both gradle dependency files. FTC SDK 10.2.0, FTCLib 2.1.1, JUnit 5.10.3, Mockito 5.13.0 — verified against the repository rather than assumed. Every method named in the worked objective was confirmed to exist. Source of truth for this document is `src/teachers-guide.md`."
 ---
 
-*AI-DLC × INTO THE DEEP · TEACHER'S GUIDE · 2-HOUR SESSION*
+@eyebrow AI-DLC × INTO THE DEEP · TEACHER'S GUIDE · 2-HOUR SESSION
 
-# Give the Arm Something New to Do
+@h1 Give the Arm Something New to Do
 
-The arm arrives already built. Students don't construct a mechanism — they decide **what it should be able to do that it can't do yet**, and carry that objective through five phases of AI-DLC. Every team chooses a different objective; every team is held to the same four engineering tenets and the same guardrails.
+@p The arm arrives already built. Students don't construct a mechanism — they decide **what it should be able to do that it can't do yet**, and carry that objective through five phases of AI-DLC. Every team chooses a different objective; every team is held to the same four engineering tenets and the same guardrails.
 
-**On this page**
+@nav
+@item #howto | How to use this guide
+@item #tenets | The four tenets
+@item #ai | AI, done well
+@item #glance | Session shape
+@item #walkthrough | The live walkthrough
+@item #objective | Worked objective
+@item #code | Fallback code
+@item #prompts | Example prompts
+@item #facilitation | Where teams stick
+@item #appendix | Review findings
+@end
 
-- How to use this guide
-- The four tenets
-- AI, done well
-- Session shape
-- What the arm is
-- Worked objective
-- Fallback code
-- Example prompts
-- Where teams stick
-- Review findings
+@table
+@th Session | Setup | Team | Codebase | Bench OpMode
+@tr 120 min | +20 min | 3–6 students | `Into_The_Deep` | `TeleopWithoutDriving`
+@end
 
-| Session | Setup | Team | Codebase | Bench OpMode |
-|---|---|---|---|---|
-| 120 min | +20 min | 3–6 students | `Into_The_Deep` | `TeleopWithoutDriving` |
+@box Paired handout
+**Student Worksheet — Give the Arm Something New to Do.** Sixteen numbered steps. Steps 1–3 are setup and deliberately prescriptive. Between Step 3 and Step 4 sits a **capture sheet, not a step** — the page they fill in while someone walks the codebase from the front. Everything from Step 4 on gives them a lens and questions rather than instructions, and Steps 4–5 are where they choose an objective and pressure-test it against fixed guardrails.
+@end
 
-> **Paired handout**
->
-> **Student Worksheet — Give the Arm Something New to Do.** Twenty-one numbered steps. Steps 1–4 are setup and deliberately prescriptive; everything after that gives them a lens and questions rather than instructions. Steps 9–10 are where they choose an objective and pressure-test it against fixed guardrails.
+// HOW TO USE
+@pagebreak
 
-*Read this first*
+@eyebrow Read this first
 
-## How to use this guide
+@anchor howto
 
-This is one fully worked objective, carried through all five phases, so you have something rehearsed to demo and a fallback if a team stalls. **It is not the objective students should produce.** Pick something else to demo if you like — what matters is that they see the shape of the work, not this particular answer.
+@h2 How to use this guide
 
-The worksheet deliberately withholds the specificity you have here. Where you have a state table, they have four blank rows and a rule that column three must name a real method. Where you have code, they have three constraints and a question about scope. That gap is the exercise.
+@p This is one fully worked objective, carried through all five phases, so you have something rehearsed to demo and a fallback if a team stalls. **It is not the objective students should produce.** Pick something else to demo if you like — what matters is that they see the shape of the work, not this particular answer.
 
-> **The single biggest risk to this session**
->
-> Students working in the real competition repository can break the robot for everyone. The worksheet's one hard rule is that **nothing they add may change existing behaviour when their control isn't pressed** — additive only, on a branch. Say it out loud at kickoff, and check it at the Phase 4 gate. `B`, the right bumper and `start` are the only unbound controls on either gamepad; everything else is taken.
+@p The worksheet deliberately withholds the specificity you have here. Where you have a state table, they have four blank rows and a rule that column three must name a real method. Where you have code, they have three constraints and a question about scope. That gap is the exercise.
 
-### Where your blocks and their steps line up
+@p **The codebase orientation is no longer theirs to do.** Earlier versions of the worksheet had students read the code themselves across four steps. That block is now a twenty-minute walkthrough delivered live, and the worksheet carries only a capture sheet against it. See _The live walkthrough_ below for what that talk has to leave them holding — later steps depend on it, so it is a contract, not a tour.
 
-| Your block | Steps | What you're watching for |
-|---|---|---|
-| Block 0 — Setup | 1 – 4 | Green Gradle sync, everyone on their own branch, nobody editing `master` |
-| Learn the arm | 5 – 8 | They can name real methods, and they found the missing loop-time technique |
-| Choose an objective | 9 – 10 | Five guardrails ticked honestly — this is where you intervene, not later |
-| Phase 1 — Intent | 11 | A loop-time number, and a non-goals row that actually says no to something |
-| Phase 2 — Elaborate | 12 | Criteria you could check by hand; one story about observability |
-| Phase 3 — Design | 13 – 14 | Every arrow labelled with a boolean that exists |
-| Phase 4 — Verify | 15 | Unticked boxes fixed or cut — and a written decision about AI use |
-| Phase 5 — Bolt | 16 – 19 | Write, instrument, run, measure — in that order |
-| Stretch | 20 | Only for teams already demoing |
-| Wrap & retro | 21 | A measured number, one thing the log revealed, and whether the AI split was right |
+@rule The single biggest risk to this session
+Students working in the real competition repository can break the robot for everyone. The worksheet's one hard rule is that **nothing they add may change existing behaviour when their control isn't pressed** — additive only, on a branch. Say it out loud at kickoff, and check it at the Phase 4 gate. `B`, the right bumper and `start` are the only unbound controls on either gamepad; everything else is taken.
+@end
 
-<!-- ================= TENETS ================= -->
+// BLOCK ALIGNMENT
+@pagebreak
 
-*The spine of the session*
+@eyebrow Read this first, continued
 
-## The four tenets — and how to teach them
+@h3 Where your blocks and their steps line up
 
-*Objectives vary by team. These don't. Each tenet appears in the worksheet marked with a ◆, and each has a moment in the session where it stops being advice and becomes something students have to do. Those moments are where your attention is worth most.*
+@table
+@th Your block | Steps | What you're watching for
+@tr Block 0 — Setup | 1 – 3 | Green Gradle sync, everyone on their own branch, nobody editing `master`
+@tr Codebase walkthrough (live) | capture sheet | Pens moving. A blank vocabulary table now is a stalled team at Phase 3
+@tr Choose an objective | 4 – 5 | Five guardrails ticked honestly — this is where you intervene, not later
+@tr Phase 1 — Intent | 6 | A loop-time number, and a non-goals row that actually says no to something
+@tr Phase 2 — Elaborate | 7 | Criteria you could check by hand; one story about observability
+@tr Phase 3 — Design | 8 – 9 | Every arrow labelled with a boolean that exists
+@tr Phase 4 — Verify | 10 | Unticked boxes fixed or cut — and a written decision about AI use
+@tr Phase 5 — Bolt | 11 – 14 | Write, instrument, run, measure — in that order
+@tr Stretch | 15 | Only for teams already demoing
+@tr Wrap & retro | 16 | A measured number, one thing the log revealed, and whether the AI split was right
+@end
 
-### Tenet 1 — Loop time
+// TENETS
+@pagebreak
 
-**The idea:** One loop, shared by every mechanism, running the whole match. Time you spend is time nobody else gets. A slow loop doesn't crash — it makes the robot feel vague, which is much harder for a student to diagnose than a failure.
+@eyebrow The spine of the session
 
-**Their moment:** Step 7 they find three defences already in the code and discover the fourth is missing. Step 19 they add it back with `System.nanoTime()`.
+@anchor tenets
 
-**What to watch for:** A team that reports “0 ms” and moves on. The existing `loopTimer` resolves to whole milliseconds and their addition costs far less than one, so a millisecond timer teaches them nothing. Push them to nanoseconds — this is the difference between a measurement and a shrug.
+@h2 The four tenets — and how to teach them
 
-### Tenet 2 — Separation of duties
+@note Objectives vary by team. These don't. Each tenet appears in the worksheet marked with a ◆, and each has a moment in the session where it stops being advice and becomes something students have to do. Those moments are where your attention is worth most.
 
-**The idea:** One job per class, one job per method. Wrappers touch hardware; state machines decide; the OpMode runs the loop. The payoff is that you can reason about — and test — one method at a time.
+@tenet 1 | Loop time
+@tline The idea | One loop, shared by every mechanism, running the whole match. Time you spend is time nobody else gets. A slow loop doesn't crash — it makes the robot feel vague, which is much harder for a student to diagnose than a failure.
+@tline Their moment | In the walkthrough they log three defences already in the code and mark the fourth “missing”. Step 14 they add it back with `System.nanoTime()`.
+@tline What to watch for | A team that reports “0 ms” and moves on. The existing `loopTimer` resolves to whole milliseconds and their addition costs far less than one, so a millisecond timer teaches them nothing. Push them to nanoseconds — this is the difference between a measurement and a shrug.
+@end
 
-**Their moment:** Step 6 they read `ArmFSM` and `ArmMotorsWrapper` side by side. Step 16 they write a coordinator that gives orders through existing methods and touches no hardware at all.
+@tenet 2 | Separation of duties
+@tline The idea | One job per class, one job per method. Wrappers touch hardware; state machines decide; the OpMode runs the loop. The payoff is that you can reason about — and test — one method at a time.
+@tline Their moment | In the walkthrough they see `ArmFSM` and `ArmMotorsWrapper` side by side. Step 11 they write a coordinator that gives orders through existing methods and touches no hardware at all.
+@tline On globals | Worth being precise with students rather than absolutist. This codebase is full of `public static` fields, and they are nearly all deliberate — tunable constants exposed for live adjustment. The rule isn't “no globals”, it's **“no globals you can't defend.”** A student who makes a field global because passing it was tedious has made a different decision than the one this code made, and should be able to say why.
+@end
 
-**On globals:** Worth being precise with students rather than absolutist. This codebase is full of `public static` fields, and they are nearly all deliberate — tunable constants exposed for live adjustment. The rule isn't “no globals”, it's **“no globals you can't defend.”** A student who makes a field global because passing it was tedious has made a different decision than the one this code made, and should be able to say why.
+// TENETS, CONTINUED
+@pagebreak
 
-### Tenet 3 — Data and logging
+@eyebrow The spine of the session, continued
 
-**The idea:** Watching tells you **that** something is wrong. Only data tells you **why**. Students are writing comparisons, tolerances and ordering — and every one of those failure modes looks identical from across the room.
+@tenet 3 | Data and logging
+@tline The idea | Watching tells you **that** something is wrong. Only data tells you **why**. Students are writing comparisons, tolerances and ordering — and every one of those failure modes looks identical from across the room.
+@tline Their moment | In the walkthrough they meet `Logger` and its three levels. Step 12 — placed before the first run on purpose — they instrument their own code. Step 13 says read the log before changing any code.
+@tline What to watch for | The instinct to debug by changing something and running it again. When a team is on their fourth guess, ask them what's on the screen. If the answer is “the state”, ask what value the failing comparison was made from. That question usually ends the guessing.
+@tline Why the ordering matters | Step 12 comes before Step 13 on purpose. Instrumenting after something breaks costs the same five minutes but under time pressure, and by then they've usually already changed three things.
+@end
 
-**Their moment:** Step 8 they read `Logger` and its three levels. Step 17 — placed before the first run on purpose — they instrument their own code. Step 18 says read the log before changing any code.
+@tenet 4 | Using AI responsibly and effectively
+@tline The idea | AI is a tool that accelerates the work. It does not replace the thinking. Point at the shape of the session when you teach this: **four of the five phases happen before anyone writes code**, and that is not nostalgia — it is what makes the fifth phase fast instead of expensive.
+@tline Say this plainly | Design and planning matter exactly as much when AI writes the code as when they write it by hand. Arguably more, because AI will produce a large amount of confident, plausible, wrong code very quickly — and fastest of all when nobody has told it what they actually want.
+@tline The failure mode | Code that compiles, looks reasonable, and nobody understands or intended. It comes from skipping the design and asking for the answer. It isn't fast; it moves the debugging to later, when there is less time and more of it to unpick.
+@tline Their moment | Step 10, at the Verify gate — design already done — they choose how much of the typing to hand over, and write down why. At the retro they say whether it was right.
+@tline What to watch for | Not which position they picked. Whether they can explain the code they shipped. That is the only signal that separates using AI well from generating something nobody owns.
+@end
+
+@box Teach the conflict, not just the rules
+Logging costs loop time. Separation costs indirection. Students will hit a moment where two tenets pull opposite ways, and the useful lesson is that engineering is the trade rather than the absence of one. The codebase already models the good answer: `Logger` buffers all loop and flushes once, so rich diagnostics cost almost nothing — and the level switches from a gamepad button so debug output can ship without ever reaching the driver.
+@end
+
+// AI DONE WELL
+@pagebreak
 
-**What to watch for:** The instinct to debug by changing something and running it again. When a team is on their fourth guess, ask them what's on the screen. If the answer is “the state”, ask what value the failing comparison was made from. That question usually ends the guessing.
+@eyebrow Tenet 4, in detail
 
-**Why the ordering matters:** Step 17 comes before Step 18 on purpose. Instrumenting after something breaks costs the same five minutes but under time pressure, and by then they've usually already changed three things.
+@anchor ai
 
-### Tenet 4 — Using AI responsibly and effectively
+@h2 AI accelerates the work. It doesn't replace the thinking.
 
-**The idea:** AI is a tool that accelerates the work. It does not replace the thinking. Point at the shape of the session when you teach this: **four of the five phases happen before anyone writes code**, and that is not nostalgia — it is what makes the fifth phase fast instead of expensive.
+@p Worth walking through at kickoff, and worth being explicit about **why the session is shaped the way it is**: four phases of deciding before one phase of building. In each phase there is something AI does well and something that stays theirs, and the boundary is the interesting part.
 
-**Say this plainly:** Design and planning matter exactly as much when AI writes the code as when they write it by hand. Arguably more, because AI will produce a large amount of confident, plausible, wrong code very quickly — and fastest of all when nobody has told it what they actually want.
+@table
+@th Phase | What AI is good at here | What stays theirs
+@tr **1 · Intent** | Interviewing them. Asking what they left out. Turning a rambling explanation into a tight paragraph. | Deciding which problem is worth solving at all.
+@tr **2 · Elaborate** | Proposing slices. Spotting acceptance criteria that can't actually be checked. | Deciding what's in scope and what they're saying no to.
+@tr **3 · Design** | Formalising a sketch into a table. Finding transitions with no exit condition. | The design itself. They ask it to critique, not to decide.
+@tr **4 · Verify** | Playing reviewer — “what did we miss?”, “what breaks on hardware?” | The go / no-go. It advises; they decide.
+@tr **5 · Bolt** | Anything from answering questions to writing whole classes — the dial. | Understanding every line that ships.
+@end
 
-**The failure mode:** Code that compiles, looks reasonable, and nobody understands or intended. It comes from skipping the design and asking for the answer. It isn't fast; it moves the debugging to later, when there is less time and more of it to unpick.
+// THE DIAL
+@pagebreak
 
-**Their moment:** Step 15, at the Verify gate — design already done — they choose how much of the typing to hand over, and write down why. At the retro they say whether it was right.
+@eyebrow Tenet 4, continued
 
-**What to watch for:** Not which position they picked. Whether they can explain the code they shipped. That is the only signal that separates using AI well from generating something nobody owns.
+@h3 Where they spend the speed
 
-> **Teach the conflict, not just the rules**
->
-> Logging costs loop time. Separation costs indirection. Students will hit a moment where two tenets pull opposite ways, and the useful lesson is that engineering is the trade rather than the absence of one. The codebase already models the good answer: `Logger` buffers all loop and flushes once, so rich diagnostics cost almost nothing — and the level switches from a gamepad button so debug output can ship without ever reaching the driver.
+@p Once the design is done, students choose how much of the typing to hand over. All three positions are used in industry by good engineers on real code. Your job is not to push them toward a position — it is to make the choice conscious, and to be clear that this is a choice about **typing, not about thinking**. Every position below assumes a state table they believe in.
 
-<!-- ================= AI DONE WELL ================= -->
+@table
+@th Position | What it looks like | Who it suits, and what it costs
+@tr **1 · Ask only** | They write every line; AI answers questions about the codebase and about Java. | A student new to Java, or one who wants the reps. Slowest — expect less finished at demo, and say that's fine.
+@tr **2 · Piece by piece** | They own the design and the file, ask for one case at a time, and check each against their state table before asking for the next. | Most teams. The pattern the worksheet is built around, and the closest to normal professional practice.
+@tr **3 · Draft and review** | AI writes the class from their state table; they read every line and own what ships. | A strong team with a genuinely good table. Fastest, and the position where the guardrail below does all the work.
+@end
 
-*Tenet 4, in detail*
+@rule The line that doesn't move
+**They have to be able to explain every line they ship.** “The AI wrote it” is not an explanation, and it is not an answer they can give a teammate at a competition when the arm does something surprising. If a team can't explain their own code at the demo, the useful response isn't a lecture — it's “turn it down a notch and do that method again.” That single question is the difference between deliberate work and slop, and it is worth asking every team at least once.
+@end
 
-## AI accelerates the work. It doesn't replace the thinking.
+// SESSION AT A GLANCE
+@pagebreak
 
-Worth walking through at kickoff, and worth being explicit about **why the session is shaped the way it is**: four phases of deciding before one phase of building. In each phase there is something AI does well and something that stays theirs, and the boundary is the interesting part.
+@eyebrow Session at a glance
 
-| Phase | What AI is good at here | What stays theirs |
-|---|---|---|
-| **1 · Intent** | Interviewing them. Asking what they left out. Turning a rambling explanation into a tight paragraph. | Deciding which problem is worth solving at all. |
-| **2 · Elaborate** | Proposing slices. Spotting acceptance criteria that can't actually be checked. | Deciding what's in scope and what they're saying no to. |
-| **3 · Design** | Formalising a sketch into a table. Finding transitions with no exit condition. | The design itself. They ask it to critique, not to decide. |
-| **4 · Verify** | Playing reviewer — “what did we miss?”, “what breaks on hardware?” | The go / no-go. It advises; they decide. |
-| **5 · Bolt** | Anything from answering questions to writing whole classes — the dial. | Understanding every line that ships. |
+@anchor glance
 
-### Where they spend the speed
+@h2 Ten blocks — 20 minutes of setup, then two hours
 
-Once the design is done, students choose how much of the typing to hand over. All three positions are used in industry by good engineers on real code. Your job is not to push them toward a position — it is to make the choice conscious, and to be clear that this is a choice about **typing, not about thinking**. Every position below assumes a state table they believe in.
+@p **Block 0 is setup**, and it's the one to move out of the session if you possibly can. Unlike a bare SDK it's short — the project already declares FTCLib 2.1.1, JUnit 5.10.3 and Mockito 5.13.0, so students confirm rather than configure.
 
-| Position | What it looks like | Who it suits, and what it costs |
-|---|---|---|
-| **1 · Ask only** | They write every line; AI answers questions about the codebase and about Java. | A student new to Java, or one who wants the reps. Slowest — expect less finished at demo, and say that's fine. |
-| **2 · Piece by piece** | They own the design and the file, ask for one case at a time, and check each against their state table before asking for the next. | Most teams. The pattern the worksheet is built around, and the closest to normal professional practice. |
-| **3 · Draft and review** | AI writes the class from their state table; they read every line and own what ships. | A strong team with a genuinely good table. Fastest, and the position where the guardrail below does all the work. |
+@p **Block 1 is the live codebase walkthrough**, presented from the front. It is the only block students don't drive themselves, and the only one where their worksheet is a capture sheet rather than a set of steps.
 
-> **The line that doesn't move**
->
-> **They have to be able to explain every line they ship.** “The AI wrote it” is not an explanation, and it is not an answer they can give a teammate at a competition when the arm does something surprising. If a team can't explain their own code at the demo, the useful response isn't a lecture — it's “turn it down a notch and do that method again.” That single question is the difference between deliberate work and slop, and it is worth asking every team at least once.
+@timeline
+@seg 20 | 20 min | 0 · Setup | c4
+@seg 20 | 20 min | Walkthrough | c1
+@seg 10 | 10 min | Choose | c3
+@seg 10 | 10 min | 1 · Intent | c2
+@seg 10 | 10 min | 2 · Elab | c3
+@seg 5 | 5 min | Break | c4
+@seg 15 | 15 min | 3 · Design | c2
+@seg 5 | 5 min | 4 · Ver | c6
+@seg 35 | 35 min | 5 · Bolt | c5
+@seg 10 | 10 min | Wrap | c7
+@end
 
-<!-- ================= SESSION AT A GLANCE ================= -->
+@table
+@th Time | Block | Steps | Deliverable
+@tr −0:20 | Block 0 — Setup (ideally before the session) | 1–3 | Green sync, everyone on a branch, bench OpMode open
+@tr 0:00–0:20 | Codebase walkthrough — delivered live from the front | capture sheet | A list of real methods; the missing technique marked
+@tr 0:20–0:30 | Choose an objective and check the guardrails | 4–5 | One sentence, five boxes ticked
+@tr 0:30–0:40 | Phase 1 — Plan Intent | 6 | Intent with a loop-time number
+@tr 0:40–0:50 | Phase 2 — Elaborate | 7 | Stories with hand-checkable criteria
+@tr 0:50–0:55 | Break | — | —
+@tr 0:55–1:10 | Phase 3 — Design | 8–9 | Sequence, state table, one ADR
+@tr 1:10–1:15 | Phase 4 — Verify | 10 | Go / no-go checklist
+@tr 1:15–1:50 | Phase 5 — Bolt | 11–14 | Coordinator written, instrumented, running, measured
+@tr 1:50–2:00 | Wrap, demo, retro | 16 | Parking lot for next session
+@end
 
-*Session at a glance*
+// BLOCK 0 TROUBLE
+@pagebreak
 
-## Ten blocks — 20 minutes of setup, then two hours
+@eyebrow Session at a glance, continued
 
-**Block 0 is setup**, and it's the one to move out of the session if you possibly can. Unlike a bare SDK it's short — the project already declares FTCLib 2.1.1, JUnit 5.10.3 and Mockito 5.13.0, so students confirm rather than configure.
+@h3 What will go wrong in Block 0
 
-| Stage | Time |
-|---|---|
-| 0 · Setup | 20 min |
-| Learn arm | 20 min |
-| Choose | 10 min |
-| 1 · Intent | 10 min |
-| 2 · Elab | 10 min |
-| Break | 5 min |
-| 3 · Design | 15 min |
-| 4 · Ver | 5 min |
-| 5 · Bolt | 35 min |
-| Wrap | 10 min |
+@table
+@th What you'll see | What it actually is
+@tr Gradle sync fails instantly, before downloading anything | They opened a subfolder instead of the repo root. Close and re-open the top `Into_The_Deep` folder.
+@tr Someone is editing `master` | The branch step got skipped. Catch this in the first ten minutes — much easier to fix before there are changes.
+@tr Build fails with a JDK or Java-version error | An Android Studio configuration problem, not a code problem — handle it yourself rather than letting a student guess at settings.
+@tr Everything is just very slow | Normal for a first sync. Nothing after Step 3 needs their own machine until Phase 5, so let it run and start the walkthrough on time.
+@end
 
-| Time | Block | Steps | Deliverable |
-|---|---|---|---|
-| −0:20 | Block 0 — Setup (ideally before the session) | 1–4 | Green sync, everyone on a branch |
-| 0:00–0:20 | Learn the arm — vocabulary, structure, the tenets in the wild | 5–8 | A list of real methods; the missing technique found |
-| 0:20–0:30 | Choose an objective and check the guardrails | 9–10 | One sentence, five boxes ticked |
-| 0:30–0:40 | Phase 1 — Plan Intent | 11 | Intent with a loop-time number |
-| 0:40–0:50 | Phase 2 — Elaborate | 12 | Stories with hand-checkable criteria |
-| 0:50–0:55 | Break | — | — |
-| 0:55–1:10 | Phase 3 — Design | 13–14 | Sequence, state table, one ADR |
-| 1:10–1:15 | Phase 4 — Verify | 15 | Go / no-go checklist |
-| 1:15–1:50 | Phase 5 — Bolt | 16–19 | Coordinator written, instrumented, running, measured |
-| 1:50–2:00 | Wrap, demo, retro | 21 | Parking lot for next session |
+// THE ARM
+@pagebreak
 
-### What will go wrong in Block 0
+@eyebrow Briefing for whoever presents it
 
-| What you'll see | What it actually is |
-|---|---|
-| Gradle sync fails instantly, before downloading anything | They opened a subfolder instead of the repo root. Close and re-open the top `Into_The_Deep` folder. |
-| Someone is editing `master` | The branch step got skipped. Catch this in the first ten minutes — much easier to fix before there are changes. |
-| Build fails with a JDK or Java-version error | An Android Studio configuration problem, not a code problem — handle it yourself rather than letting a student guess at settings. |
-| Everything is just very slow | Normal for a first sync. Send them to read Step 5 on someone else's machine while it finishes. |
+@anchor walkthrough
 
-<!-- ================= THE ARM ================= -->
+@h2 The live walkthrough — 20 minutes, and what it owes the room
 
-*Orientation*
+@note This block is delivered from the front. Students are not reading the code alone; their worksheet carries a capture sheet instead of steps. That makes the talk a **contract**: three specific things have to come out of it, because Steps 4 through 14 assume students are holding them.
 
-## What the arm actually is
+@h3 What the walkthrough must leave them holding
 
-*Worth knowing before you plan the room: this is not a motor and a servo. It is a five-degree-of-freedom limb with a gripper, already under closed-loop control, already coordinated by a two-level state machine.*
+@table
+@th They must leave with | Why — the step that breaks without it
+@tr **Vocabulary.** At least six boolean questions and four orders, each named with its class, spelled correctly | Step 4 (choose an objective) and Step 9, whose state table must name real methods
+@tr **The missing loop-time technique.** Three defences are in the code; per-mechanism timing is not | Step 14, where they add it back — and the _Measure_ objective direction in Step 4
+@tr `Logger`'s three levels — that `log()` only buffers, and that one `print()` at the bottom does the send | Step 12, where they instrument at `DEBUG` before the first run
+@end
 
-| Part | Hardware | Coordinated by |
-|---|---|---|
-| Monkey's Limb | Shoulder pivot (`PM`) plus a three-motor extension stage (`AM1`–`AM3`), positioned in centimetres by a `PIDFController` | `ShoulderFSM`, `ArmFSM` |
-| Monkey's Paw | Elbow, wrist flex, wrist deviation and finger servos (`ES`, `WFS`, `WDS`, `FS`), three closed-loop against analog encoders | `ElbowFSM`, `WristFSM`, `DeviatorFSM`, `FingerFSM` |
-| Whole limb | — | `LimbFSM` over the first pair, `MonkeyPawFSM` over the second |
+@note Two gotchas are also worth saying out loud, because they cost teams the back half of the Bolt block: `wasJustPressed(...)` depends on `readButtons()` at the top of the loop, and there is exactly one `telemetry.update()` in the whole loop. Both are on the capture sheet, but they land better said than read.
 
-States are named for the game rather than the hardware — `AT_BASKET_HEIGHT`, `AT_SUBMERSIBLE_HEIGHT`, `INTAKING_SPECIMEN`, `PREPARED_TO_DEPOSIT_SAMPLE`. There are roughly sixty boolean query methods across the limb, and **that set is the vocabulary every student objective has to be written in.** Step 5 exists to make sure they have it before they start imagining.
+// WALKTHROUGH BACKGROUND
+@pagebreak
 
-> **Where their work goes**
->
-> `Core/TeleopWithoutDriving.java` is already a limb-only bench OpMode: it calls `drive(0,0,0,0)` and has `limbFSM.updateState(...)` commented out. Students construct their coordinator there and bind it to a free control. `MainTeleop` is the competition OpMode and is not to be touched.
+@eyebrow Briefing, continued
 
-### Three real FSM-and-wrapper pairs to put on the projector
+@h3 Background for the presenter
 
-| Mechanism | FSM | Wrapper | What drives its transitions |
-|---|---|---|---|
-| Extending arm | `ArmFSM` | `ArmMotorsWrapper` | `pidfController.atSetPoint()` plus target-position predicates |
-| Shoulder | `ShoulderFSM` | `ShoulderWrapper` | Angle error against a tolerance, in degrees |
-| Finger | `FingerFSM` | `FingerServoWrapper` | Target angle reached — the simplest of the three, and the best one to read first |
+@note This is not a motor and a servo. It is a five-degree-of-freedom limb with a gripper, already under closed-loop control, already coordinated by a two-level state machine.
 
-*`ArmFSM` is the one worth reading aloud: it changes its own PID gains based on what `ShoulderFSM` reports through boolean methods. That is two mechanisms coordinating without either knowing the other's internals — tenet 2, demonstrated by their own code.*
+@table
+@th Part | Hardware | Coordinated by
+@tr Monkey's Limb | Shoulder pivot (`PM`) plus a three-motor extension stage (`AM1`–`AM3`), positioned in centimetres by a `PIDFController` | `ShoulderFSM`, `ArmFSM`
+@tr Monkey's Paw | Elbow, wrist flex, wrist deviation and finger servos (`ES`, `WFS`, `WDS`, `FS`), three closed-loop against analog encoders | `ElbowFSM`, `WristFSM`, `DeviatorFSM`, `FingerFSM`
+@tr Whole limb | — | `LimbFSM` over the first pair, `MonkeyPawFSM` over the second
+@end
 
-<!-- ================= WORKED OBJECTIVE ================= -->
+@p States are named for the game rather than the hardware — `AT_BASKET_HEIGHT`, `AT_SUBMERSIBLE_HEIGHT`, `INTAKING_SPECIMEN`, `PREPARED_TO_DEPOSIT_SAMPLE`. There are roughly sixty boolean query methods across the limb, and **that set is the vocabulary every student objective has to be written in.** Getting it onto their capture sheet is the single highest-value thing the walkthrough does — the size of their vocabulary is the size of what they can imagine at Step 4.
 
-*The worked example in this guide*
+@box Where their work goes
+`Core/TeleopWithoutDriving.java` is already a limb-only bench OpMode: it calls `drive(0,0,0,0)` and has `limbFSM.updateState(...)` commented out. Students construct their coordinator there and bind it to a free control. `MainTeleop` is the competition OpMode and is not to be touched. Step 3 has them open that file and leave it open, so show it on the projector by name rather than assuming they'll find it at Step 13.
+@end
 
-## One objective, carried all the way through
+// FSM PAIRS
+@pagebreak
 
-***Safe stow.*** Press a free control and the limb returns to a known travel pose from wherever it happens to be — retracting the arm fully **before** the shoulder rotates, so an extended arm never swings.
+@eyebrow Briefing, continued
 
-It sits in the worksheet's **Recover** category. Choose a different category to demo if your teams are likely to gravitate here — the point is the shape, not the answer.
+@h3 Three real FSM-and-wrapper pairs to put on the projector
 
-| Why it's a good worked example | What it demonstrates |
-|---|---|
-| It uses only existing motions | `armFSM.retract()`, `shoulderFSM.moveToIntakeAngle()` — no new setpoints to measure |
-| It has a real ordering constraint | Retract before rotate. A sequence, not two independent commands |
-| Its exit conditions already exist | `armFSM.FULLY_RETRACTED()`, `shoulderFSM.AT_INTAKE()` |
-| It's visibly done | You can see it from across the room without telemetry |
-| It's additive | Nothing changes unless the control is pressed |
+@note Read one pair properly rather than three quickly. The finger is the shortest and the clearest; the arm is the one that shows two mechanisms coordinating.
 
-### Phase 1 — Plan Intent
+@table
+@th Mechanism | FSM | Wrapper | What drives its transitions
+@tr Extending arm | `ArmFSM` | `ArmMotorsWrapper` | `pidfController.atSetPoint()` plus target-position predicates
+@tr Shoulder | `ShoulderFSM` | `ShoulderWrapper` | Angle error against a tolerance, in degrees
+@tr Finger | `FingerFSM` | `FingerServoWrapper` | Target angle reached — the simplest of the three, and the best one to read first
+@end
 
-Dictate it out loud; one student types, everyone talks. Insist on the loop-time number here — retrofitting it after Phase 3 never happens.
+@note `ArmFSM` is the one worth reading aloud: it changes its own PID gains based on what `ShoulderFSM` reports through boolean methods. That is two mechanisms coordinating without either knowing the other's internals — tenet 2, demonstrated by their own code.
 
-> **Prompt:** Our arm can already retract and rotate to intake. We want one control that safely stows it from any position. Ask what you need to know, then draft a short intent with problem, success criteria and non-goals.
+// WORKED OBJECTIVE
+@pagebreak
 
-| Section | For this objective |
-|---|---|
-| Problem | Recovering to a safe travel pose takes several separate inputs, and under pressure drivers rotate an extended arm. |
-| Success criteria | One press returns the limb to the travel pose from any starting position, arm before shoulder, every time. |
-| Non-goals | The paw. Autonomous. Anything about what the arm was holding. (Say no to these out loud — this row is where scope creep dies.) |
-| NFR — loop time | The coordinator's `updateState()` costs under ~0.2 ms, measured with `System.nanoTime()` — not with the millisecond `loopTimer`. |
-| NFR — observability | At `DEBUG`, the log shows the current step and both values each transition is waiting on. |
+@eyebrow The worked example in this guide
 
-### Phase 2 — Elaborate
+@anchor objective
 
-Push back on anything you couldn't check by hand. “It stows properly” is not a criterion.
+@h2 One objective, carried all the way through
 
-| Story | Acceptance criterion |
-|---|---|
-| Retract first | From extended, pressing the control retracts fully before the shoulder moves at all. |
-| Then rotate | Once `FULLY_RETRACTED()` is true, the shoulder moves and stops at `AT_INTAKE()`. |
-| Already stowed | Pressing it when already stowed does nothing and logs nothing new. |
-| Observability | At `DEBUG`, the log names the current step and the value each transition is waiting on. |
-| Loop-time budget | A `nanoTime` pair around `updateState()` shows the cost stays under the Phase 1 number. |
+@p **Safe stow.** Press a free control and the limb returns to a known travel pose from wherever it happens to be — retracting the arm fully **before** the shoulder rotates, so an extended arm never swings.
 
-### Phase 3 — Design
+@p It sits in the worksheet's **Recover** category. Choose a different category to demo if your teams are likely to gravitate here — the point is the shape, not the answer.
 
-On paper first. The states are easy; the exit conditions are the lesson. Every arrow must name a boolean that already exists.
+@table
+@th Why it's a good worked example | What it demonstrates
+@tr It uses only existing motions | `armFSM.retract()`, `shoulderFSM.moveToIntakeAngle()` — no new setpoints to measure
+@tr It has a real ordering constraint | Retract before rotate. A sequence, not two independent commands
+@tr Its exit conditions already exist | `armFSM.FULLY_RETRACTED()`, `shoulderFSM.AT_INTAKE()`
+@tr It's visibly done | You can see it from across the room without telemetry
+@tr It's additive | Nothing changes unless the control is pressed
+@end
 
-> **Prompt:** Here's our sequence: idle until pressed, retract, then rotate, then stowed. Turn it into a state table, and tell us which transitions we haven't given an exit condition — don't design it for us.
+@h3 Phase 1 — Plan Intent
 
-| State | What it orders | Existing boolean that ends it | Goes to |
-|---|---|---|---|
-| `IDLE` | nothing | the control was just pressed | `RETRACTING` |
-| `RETRACTING` | `armFSM.retract()` | `armFSM.FULLY_RETRACTED()` | `ROTATING` |
-| `ROTATING` | `shoulderFSM.moveToIntakeAngle()` | `shoulderFSM.AT_INTAKE()` | `STOWED` |
-| `STOWED` | nothing | any other driver input | `IDLE` |
+@p Dictate it out loud; one student types, everyone talks. Insist on the loop-time number here — retrofitting it after Phase 3 never happens.
 
-*Four states is deliberately small. A team proposing eight isn't necessarily wrong — ask them which two they'd merge if they had half the time, and whether each one has a distinct exit condition or just a distinct name.*
+@prompt Our arm can already retract and rotate to intake. We want one control that safely stows it from any position. Ask what you need to know, then draft a short intent with problem, success criteria and non-goals.
 
-#### Mini ADR — what to record
+@table
+@th Section | For this objective
+@tr Problem | Recovering to a safe travel pose takes several separate inputs, and under pressure drivers rotate an extended arm.
+@tr Success criteria | One press returns the limb to the travel pose from any starting position, arm before shoulder, every time.
+@tr Non-goals | The paw. Autonomous. Anything about what the arm was holding. (Say no to these out loud — this row is where scope creep dies.)
+@tr NFR — loop time | The coordinator's `updateState()` costs under ~0.2 ms, measured with `System.nanoTime()` — not with the millisecond `loopTimer`.
+@tr NFR — observability | At `DEBUG`, the log shows the current step and both values each transition is waiting on.
+@end
 
+// WORKED OBJECTIVE, ELABORATE
+@pagebreak
+
+@eyebrow The worked example, continued
+
+@h3 Phase 2 — Elaborate
+
+@p Push back on anything you couldn't check by hand. “It stows properly” is not a criterion.
+
+@table
+@th Story | Acceptance criterion
+@tr Retract first | From extended, pressing the control retracts fully before the shoulder moves at all.
+@tr Then rotate | Once `FULLY_RETRACTED()` is true, the shoulder moves and stops at `AT_INTAKE()`.
+@tr Already stowed | Pressing it when already stowed does nothing and logs nothing new.
+@tr Observability | At `DEBUG`, the log names the current step and the value each transition is waiting on.
+@tr Loop-time budget | A `nanoTime` pair around `updateState()` shows the cost stays under the Phase 1 number.
+@end
+
+// WORKED OBJECTIVE, CONTINUED
+@pagebreak
+
+@eyebrow The worked example, continued
+
+@h3 Phase 3 — Design
+
+@p On paper first. The states are easy; the exit conditions are the lesson. Every arrow must name a boolean that already exists.
+
+@prompt Here's our sequence: idle until pressed, retract, then rotate, then stowed. Turn it into a state table, and tell us which transitions we haven't given an exit condition — don't design it for us.
+
+@table
+@th State | What it orders | Existing boolean that ends it | Goes to
+@tr `IDLE` | nothing | the control was just pressed | `RETRACTING`
+@tr `RETRACTING` | `armFSM.retract()` | `armFSM.FULLY_RETRACTED()` | `ROTATING`
+@tr `ROTATING` | `shoulderFSM.moveToIntakeAngle()` | `shoulderFSM.AT_INTAKE()` | `STOWED`
+@tr `STOWED` | nothing | any other driver input | `IDLE`
+@end
+
+@note Four states is deliberately small. A team proposing eight isn't necessarily wrong — ask them which two they'd merge if they had half the time, and whether each one has a distinct exit condition or just a distinct name.
+
+@h3 Mini ADR — what to record
+
+@bullets
 - **Decision:** a separate coordinator class rather than new states inside `LimbFSM`.
 - **Alternatives:** adding states to `LimbFSM` — rejected, because it would change how an existing mechanism behaves and breaks the session's one hard rule. A raw `if` chain in the OpMode — rejected, state leaks between loops.
 - **Consequence:** one more class to construct and update, and a clean boundary that can be tested with mocks.
 
-### Phase 4 — Verify
+@h3 Phase 4 — Verify
 
-Run the design past this out loud before anyone opens a file. Three of these are the tenets as questions — those are the three worth slowing down on.
+@p Run the design past this out loud before anyone opens a file. Three of these are the tenets as questions — those are the three worth slowing down on.
 
-- [ ] Every state has a clear way in and out. No state can trap the arm.
-- [ ] Every exit condition names a method that exists, spelled as it is in the file.
-- [ ] You know what happens if the driver interrupts mid-sequence.
-- [ ] ◆ **Separation** — orders go only through existing methods; nothing touches hardware; nothing needs a variable from outside.
-- [ ] ◆ **Data** — the values each transition waits on will be logged, at `DEBUG`.
-- [ ] ◆ **Loop time** — there's a plan to measure the cost, in nanoseconds.
-- [ ] Nothing changes when the new control isn't pressed.
+@check Every state has a clear way in and out. No state can trap the arm.
+@check Every exit condition names a method that exists, spelled as it is in the file.
+@check You know what happens if the driver interrupts mid-sequence.
+@check ◆ **Separation** — orders go only through existing methods; nothing touches hardware; nothing needs a variable from outside.
+@check ◆ **Data** — the values each transition waits on will be logged, at `DEBUG`.
+@check ◆ **Loop time** — there's a plan to measure the cost, in nanoseconds.
+@check Nothing changes when the new control isn't pressed.
 
-### Phase 5 — Bolt, in four moves
+// WORKED OBJECTIVE, BOLT
+@pagebreak
 
-The ordering matters more than the code. **Write, instrument, run, measure** — teams that run before instrumenting spend the back half of the block guessing.
+@eyebrow The worked example, continued
 
-| Step | Move | What good looks like |
-|---|---|---|
-| 16 | Write the coordinator | Compiles; imports no hardware; one transition working before the second is written |
-| 17 | Instrument it | Diagnostics written and switched on **before** the first run |
-| 18 | Wire it in and run | Constructed in `TeleopWithoutDriving`; read with `wasJustPressed(...)`; log read before any code changes |
-| 19 | Measure the cost | A decimal number of milliseconds from `nanoTime`, beside the whole-loop number |
+@h3 Phase 5 — Bolt, in four moves
 
-> **Known gotcha — button edges**
->
-> `wasJustPressed(...)` works only because `readButtons()` runs at the top of the loop. It's already there. A student who reads `gamepad2.b` directly instead will restart the sequence on every loop the button is held, and the arm will appear to freeze at the first step — a symptom that looks nothing like its cause.
+@p The ordering matters more than the code. **Write, instrument, run, measure** — teams that run before instrumenting spend the back half of the block guessing.
 
-<!-- ================= FALLBACK CODE ================= -->
+@table
+@th Step | Move | What good looks like
+@tr 11 | Write the coordinator | Compiles; imports no hardware; one transition working before the second is written
+@tr 12 | Instrument it | Diagnostics written and switched on **before** the first run
+@tr 13 | Wire it in and run | Constructed in `TeleopWithoutDriving`; read with `wasJustPressed(...)`; log read before any code changes
+@tr 14 | Measure the cost | A decimal number of milliseconds from `nanoTime`, beside the whole-loop number
+@end
 
-*Fallback only — hand over if a team is genuinely stuck*
+@rule Known gotcha — button edges
+`wasJustPressed(...)` works only because `readButtons()` runs at the top of the loop. It's already there. A student who reads `gamepad2.b` directly instead will restart the sequence on every loop the button is held, and the arm will appear to freeze at the first step — a symptom that looks nothing like its cause.
+@end
 
-## SafeStowFSM — the coordinator, as a fallback
+// FALLBACK CODE
+@pagebreak
 
-Hand this over only if a team is genuinely stuck. It coordinates existing state machines, touches no hardware, and logs the values its transitions wait on.
+@eyebrow Fallback only — hand over if a team is genuinely stuck
 
-```java
+@anchor code
+
+@h2 SafeStowFSM — the coordinator, as a fallback
+
+@p Hand this over only if a team is genuinely stuck. It coordinates existing state machines, touches no hardware, and logs the values its transitions wait on.
+
+@code 
 import static ...Logger.LogLevels.DEBUG;   // keeps the log lines short
 
 public class SafeStowFSM {
@@ -368,17 +460,27 @@ public class SafeStowFSM {
         logger.log("  shoulder at intake?", shoulderFSM.AT_INTAKE(), DEBUG);
     }
 }
-```
+@end
 
-*◆ Data and logging*
+// FALLBACK, WHY THE LOG LOOKS LIKE THAT
+@pagebreak
 
-> **Why the `log()` method looks like that**
->
-> It logs `armFSM.getCurrentHeight()` as well as `FULLY_RETRACTED()`. That extra line is the whole tenet in miniature: when the sequence stalls in `RETRACTING`, the boolean alone tells a student only that it hasn't finished. The height tells them whether the arm is moving and stopped short, never moved at all, or is oscillating around the tolerance — three different bugs that look identical from across the room.
+@eyebrow Fallback only, continued
 
-### Wiring it into TeleopWithoutDriving.java
+@tenettag Data and logging
 
-```java
+@box Why the log() method looks like that
+It logs `armFSM.getCurrentHeight()` as well as `FULLY_RETRACTED()`. That extra line is the whole tenet in miniature: when the sequence stalls in `RETRACTING`, the boolean alone tells a student only that it hasn't finished. The height tells them whether the arm is moving and stopped short, never moved at all, or is oscillating around the tolerance — three different bugs that look identical from across the room.
+@end
+
+// WIRING
+@pagebreak
+
+@eyebrow Fallback only, continued
+
+@h3 Wiring it into TeleopWithoutDriving.java
+
+@code 
 // with the other FSM constructions, inside the try block:
 SafeStowFSM safeStowFSM = new SafeStowFSM(armFSM, shoulderFSM, logger);
 
@@ -393,151 +495,203 @@ double stowMs = (System.nanoTime() - t0) / 1_000_000.0;
 // inside the existing log() method — NOT a new telemetry.update():
 safeStowFSM.log();
 logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);
-```
+@end
 
-> **Two things students get wrong here**
->
-> They add a `telemetry.update()` of their own — there is exactly one in the loop, at the bottom, inside `Logger.print()`, and adding a second is the fastest way to make the whole robot laggy. And they use the millisecond `loopTimer` instead of `nanoTime`, read `0`, and conclude their code is free.
+@rule Two things students get wrong here
+They add a `telemetry.update()` of their own — there is exactly one in the loop, at the bottom, inside `Logger.print()`, and adding a second is the fastest way to make the whole robot laggy. And they use the millisecond `loopTimer` instead of `nanoTime`, read `0`, and conclude their code is free.
+@end
 
-<!-- ================= EXAMPLE PROMPTS ================= -->
+// EXAMPLE PROMPTS
+@pagebreak
 
-*Tenet 4 in practice*
+@eyebrow Tenet 4 in practice
 
-## Example prompts to demonstrate
+@anchor prompts
 
-*Read these aloud, project them, or hand them out — but demonstrate at least the first two live at kickoff. Students copy what they see modelled far more readily than what they are told.*
+@h2 Example prompts to demonstrate
 
-The wording matters less than the shape, and the shape is consistent: **give it the real files, ask for one thing, and ask it to find gaps rather than to decide.** Point that out once and most teams will start writing their own good prompts by Phase 3.
+@note Read these aloud, project them, or hand them out — but demonstrate at least the first two live at kickoff. Students copy what they see modelled far more readily than what they are told.
 
-### Orientation — Steps 5 to 8
+@p The wording matters less than the shape, and the shape is consistent: **give it the real files, ask for one thing, and ask it to find gaps rather than to decide.** Point that out once and most teams will start writing their own good prompts by Phase 3.
 
-These are the ones worth demonstrating live, because they show AI being used to read code faster rather than to write it. That framing sets up the whole session.
+@h3 During the walkthrough — filling the capture sheet
 
-| Step and purpose | Prompt |
-|---|---|
-| **Step 5** — build the vocabulary.<br>*Listen for: a list, not a summary.* | `Here are LimbFSM.java and MonkeyPawFSM.java. List every public method that returns a boolean, grouped by which part of the arm it describes. Do not summarise the classes — I want the vocabulary.` |
-| **Step 6** — see the separation.<br>*Listen for: it points at real lines.* | `Here are ArmFSM.java and ArmMotorsWrapper.java. Explain the division of responsibility between these two classes, then point to any line in either file that seems to cross it.` |
-| **Step 7** — find the missing technique.<br>*Listen for: it names the absent one.* | `Here are MainTeleop.java, HWMap.java and Logger.java. Find every technique in these files that exists to keep the loop fast, naming the file and method for each. Then tell me which common loop-time technique is NOT present.` |
-| **Step 8** — understand the logger.<br>*Listen for: the cost question.* | `Here is Logger.java and one FSM log() method. Explain the three levels and when I would use each. What does it cost to call log() a hundred times in one loop, and why?` |
+@p These are the ones worth demonstrating live, because they show AI being used to **read** code faster rather than to write it. That framing sets up the whole session, and it's the best use of the projector while the walkthrough is running — a team whose vocabulary table is thin can fill it in thirty seconds with the first prompt below rather than falling behind.
 
-### Choosing an objective — Steps 9 and 10
+@table
+@th Capture sheet box | Prompt
+@tr **Vocabulary.**\n_Listen for: a list, not a summary._ | `Here are LimbFSM.java and MonkeyPawFSM.java. List every public method that returns a boolean, grouped by which part of the arm it describes. Do not summarise the classes — I want the vocabulary.`
+@tr **Separation, if you demo a pair.**\n_Listen for: it points at real lines._ | `Here are ArmFSM.java and ArmMotorsWrapper.java. Explain the division of responsibility between these two classes, then point to any line in either file that seems to cross it.`
+@tr **The missing technique.**\n_Listen for: it names the absent one._ | `Here are MainTeleop.java, HWMap.java and Logger.java. Find every technique in these files that exists to keep the loop fast, naming the file and method for each. Then tell me which common loop-time technique is NOT present.`
+@tr **The logger.**\n_Listen for: the cost question._ | `Here is Logger.java and one FSM log() method. Explain the three levels and when I would use each. What does it cost to call log() a hundred times in one loop, and why?`
+@end
 
-Note what the first prompt does **not** ask for: it asks for options, not a recommendation. The choice stays with the team, and saying that out loud is worth thirty seconds.
+// PROMPTS, CHOOSING
+@pagebreak
 
-| Step and purpose | Prompt |
-|---|---|
-| **Step 9** — generate options.<br>*Listen for: five distinct ideas, no code.* | `Our arm can already do these things: [paste the Step 5 list]. Suggest five different capabilities it does not have yet that could be built by sequencing only those existing methods. Do not write code. For each, say which methods it would use.` |
-| **Step 10** — test against guardrails.<br>*Listen for: a specific failing constraint.* | `Here is our objective: [objective]. Check it against these five constraints: [paste the guardrails]. Which does it fail, and what is the smallest change that would make it pass?` |
+@eyebrow Tenet 4 in practice, continued
 
-### The five phases
+@h3 Choosing an objective — Steps 4 and 5
 
-One prompt per phase, each modelling the boundary from the walkthrough table: AI drafts and challenges, the team decides.
+@p Note what the first prompt does **not** ask for: it asks for options, not a recommendation. The choice stays with the team, and saying that out loud is worth thirty seconds.
 
-| Phase and purpose | Prompt |
-|---|---|
-| **Phase 1** — let it interview them.<br>*The one-question-at-a-time rule is what makes this work.* | `I want to add a capability to our robot arm: [one sentence]. Before you write anything, interview me about it — one question at a time, waiting for my answer. When you have enough, draft a short intent with a problem statement, success criteria and non-goals.` |
-| **Phase 2** — make criteria testable.<br>*Listen for: it admits when it cannot describe a test.* | `Here are our acceptance criteria: [paste]. For each one, describe exactly how I would test it by hand, on a bench, with the robot on blocks. If you cannot describe a test for one, say so plainly rather than inventing one.` |
-| **Phase 3** — critique, do not design.<br>*The strongest prompt in the session.* | `Here is our state table: [paste]. For each row, check whether the exit condition names a method that actually exists in the files I gave you. List any that do not. Then list the transitions we have not defined at all.` |
-| **Phase 3b** — find the interruption cases. | `Here is our sequence: [paste]. What happens if the driver presses a different control halfway through? Enumerate the cases we have not handled. Do not fix them.` |
-| **Phase 4** — make it a reviewer.<br>*Listen for: a list of gaps, not a rewrite.* | `Act as a reviewer, not an author. Here is our design: [paste]. What would break on real hardware, and what did we leave undefined? List what is missing. Do not fix anything.` |
+@table
+@th Step and purpose | Prompt
+@tr **Step 4** — generate options.\n_Listen for: five distinct ideas, no code._ | `Our arm can already do these things: [paste the capture sheet vocabulary]. Suggest five different capabilities it does not have yet that could be built by sequencing only those existing methods. Do not write code. For each, say which methods it would use.`
+@tr **Step 5** — test against guardrails.\n_Listen for: a specific failing constraint._ | `Here is our objective: [objective]. Check it against these five constraints: [paste the guardrails]. Which does it fail, and what is the smallest change that would make it pass?`
+@end
 
-> **The phrase to teach them**
->
-> Three of the prompts above end with some version of **do not fix it, just tell me what is missing.** That single habit is most of what separates a team who stays the author of their design from a team who ends up reviewing something they did not write. Say it once at kickoff and again at the Phase 3 gate.
+// PROMPTS, PHASES
+@pagebreak
 
-### Phase 5 — one prompt per dial position
+@eyebrow Tenet 4 in practice, continued
 
-These are the same task at three settings. Showing all three side by side makes the dial concrete in a way the table alone does.
+@h3 The five phases
 
-| Position | Prompt |
-|---|---|
-| **1 · Ask only**<br>*They write the code; AI explains the codebase.* | `I am writing a class that calls armFSM.retract(). Explain what that method actually does, whether it blocks, and how I would know when it has finished. Do not write my class.` |
-| **2 · Piece by piece**<br>*The scoping words are what make this safe.* | `Here is my state table and my class so far: [paste]. Add ONLY the RETRACTING case, matching row two of the table exactly. Do not add other cases, do not refactor what is there, and do not add fields I have not declared.` |
-| **3 · Draft and review**<br>*The last sentence is the entire safety mechanism.* | `Here is my state table and an existing FSM from our codebase showing the conventions we follow: [paste both]. Write the class. Then list every assumption you made that is not written in my state table.` |
+@p One prompt per phase, each modelling the boundary from the walkthrough table: AI drafts and challenges, the team decides.
 
-### Instrumenting and debugging — Steps 17 and 18
+@table
+@th Phase and purpose | Prompt
+@tr **Phase 1** — let it interview them.\n_The one-question-at-a-time rule is what makes this work._ | `I want to add a capability to our robot arm: [one sentence]. Before you write anything, interview me about it — one question at a time, waiting for my answer. When you have enough, draft a short intent with a problem statement, success criteria and non-goals.`
+@tr **Phase 2** — make criteria testable.\n_Listen for: it admits when it cannot describe a test._ | `Here are our acceptance criteria: [paste]. For each one, describe exactly how I would test it by hand, on a bench, with the robot on blocks. If you cannot describe a test for one, say so plainly rather than inventing one.`
+@tr **Phase 3** — critique, do not design.\n_The strongest prompt in the session._ | `Here is our state table: [paste]. For each row, check whether the exit condition names a method that actually exists in the files I gave you. List any that do not. Then list the transitions we have not defined at all.`
+@end
 
-| Step and purpose | Prompt |
-|---|---|
-| **Step 17** — decide what to log before writing it.<br>*Listen for: values, not just states.* | `Here is my updateState method: [paste]. For each transition, tell me which values I would need on screen to diagnose it stalling there. Do not write the logging code yet — just tell me what I would need to see.` |
-| **Step 18** — debug from data, not guesses.<br>*The constraint in the first sentence is the lesson.* | `Here is my log output and my state table: [paste both]. The sequence stalls in RETRACTING. Based only on these numbers, what are the possible causes, ranked by likelihood? Do not suggest changes yet.` |
+// PROMPTS, PHASES CONTINUED
+@pagebreak
 
-### Weak prompt, strong prompt
+@eyebrow Tenet 4 in practice, continued
 
-Worth putting on the board. Every pair below is the same intent — the right-hand version is scoped, grounded in real files, and asks for gaps rather than answers.
+@h3 The five phases, continued
 
-| Instead of | Ask this |
-|---|---|
-| `Write me a state machine for stowing the arm.` | `Here is my state table. Add only the ROTATING case, matching row three exactly.` |
-| `Is this design good?` | `Which rows of this table name a method that does not exist in the files I gave you?` |
-| `Fix my bug.` | `Here is my log and my state table. Based only on this data, rank the possible causes.` |
-| `How should I build this?` | `Here is how I plan to build it. What have I not accounted for?` |
-| `Explain this codebase.` | `In these two files, what is the division of responsibility, and which line crosses it?` |
+@table
+@th Phase and purpose | Prompt
+@tr **Phase 3b** — find the interruption cases. | `Here is our sequence: [paste]. What happens if the driver presses a different control halfway through? Enumerate the cases we have not handled. Do not fix them.`
+@tr **Phase 4** — make it a reviewer.\n_Listen for: a list of gaps, not a rewrite._ | `Act as a reviewer, not an author. Here is our design: [paste]. What would break on real hardware, and what did we leave undefined? List what is missing. Do not fix anything.`
+@end
 
-> **What all the strong prompts have in common**
->
-> They hand over the **real files** rather than describing them. They ask for **one thing**. They set a **boundary** — only this case, only these numbers, do not fix it. And several of them invite the answer *nothing is wrong* or *I cannot tell*, which is what makes the answer worth something when it does find a gap.
+@box The phrase to teach them
+Three of the prompts above end with some version of **do not fix it, just tell me what is missing.** That single habit is most of what separates a team who stays the author of their design from a team who ends up reviewing something they did not write. Say it once at kickoff and again at the Phase 3 gate.
+@end
 
-<!-- ================= FACILITATION ================= -->
+// PROMPTS, DIAL
+@pagebreak
 
-*Facilitator notes*
+@eyebrow Tenet 4 in practice, continued
 
-## Where teams get stuck, and what to say
+@h3 Phase 5 — one prompt per dial position
 
-| What you'll see | What's actually happening | What to ask |
-|---|---|---|
-| An objective that needs a new setpoint or PID tuning | Guardrail one failed and nobody said so out loud | “Which method already does that? Show me the line.” |
-| A state table with “when it's ready” in column three | They designed the steps but not the finishing conditions | “What would the code actually check on that loop?” |
-| Debugging by changing something and re-running | Step 17 got skipped or rushed | “What's on the screen right now? What value failed the comparison?” |
-| Loop time reported as 0 ms | Millisecond timer on a sub-millisecond method | “Is that a measurement, or the smallest number your timer can show?” |
-| Arm freezes at the first step of the sequence | Reading the button directly instead of `wasJustPressed` | “How many times per second is that transition firing?” |
-| Code has drifted from the state table | Orders scattered through the switch cases | “Where does each state's order live? Could there be two?” |
-| A `public static` added for convenience | Tenet 2, and a chance for the good version of this conversation | “What makes this different from the tunable constants? Could you pass it instead?” |
-| “The AI wrote the whole class at once” | Typing handed over before the design was done — this is the slop failure mode | “Walk me through line twelve. If you can't, turn it down a notch.” |
+@p These are the same task at three settings. Showing all three side by side makes the dial concrete in a way the table alone does.
 
-<!-- ================= STEP 20 ================= -->
+@table
+@th Position | Prompt
+@tr **1 · Ask only**\n_They write the code; AI explains the codebase._ | `I am writing a class that calls armFSM.retract(). Explain what that method actually does, whether it blocks, and how I would know when it has finished. Do not write my class.`
+@tr **2 · Piece by piece**\n_The scoping words are what make this safe._ | `Here is my state table and my class so far: [paste]. Add ONLY the RETRACTING case, matching row two of the table exactly. Do not add other cases, do not refactor what is there, and do not add fields I have not declared.`
+@tr **3 · Draft and review**\n_The last sentence is the entire safety mechanism._ | `Here is my state table and an existing FSM from our codebase showing the conventions we follow: [paste both]. Write the class. Then list every assumption you made that is not written in my state table.`
+@end
 
-*Optional · only for teams already demoing*
+@h3 Instrumenting and debugging — Steps 12 and 13
 
-## Step 20 — testing without the robot
+@table
+@th Step and purpose | Prompt
+@tr **Step 12** — decide what to log before writing it.\n_Listen for: values, not just states._ | `Here is my updateState method: [paste]. For each transition, tell me which values I would need on screen to diagnose it stalling there. Do not write the logging code yet — just tell me what I would need to see.`
+@tr **Step 13** — debug from data, not guesses.\n_The constraint in the first sentence is the lesson._ | `Here is my log output and my state table: [paste both]. The sequence stalls in RETRACTING. Based only on these numbers, what are the possible causes, ranked by likelihood? Do not suggest changes yet.`
+@end
 
-This is tenet 2 paying out: because the coordinator only talks to other state machines, every branch can be tested with mocks at a desk. `ArmFSMTest.java` shows the house pattern — `mock()` each dependency, build the class, drive one transition, check what it ordered and where it landed.
+// PROMPTS, WEAK VS STRONG
+@pagebreak
 
-> **Know this before you send anyone to run the suite**
->
-> **The existing test suite does not currently compile.** `ArmFSMTest` calls `updateState(0)` against a four-argument signature, `LimbFSMTest` passes twelve arguments to a fifteen-parameter method, and `ShoulderFSMTest` calls a one-parameter method with none. Of 127 `@Test` methods, 46 are live and five of the eight classes are fully commented out. Decide beforehand whether to fix the three signatures or to name it honestly as what happens when tests drift from the code they test — either is a good lesson, but discovering it by accident at minute 105 is not.
+@eyebrow Tenet 4 in practice, continued
 
-<!-- ================= WRAP ================= -->
+@h3 Weak prompt, strong prompt
 
-*10 minutes*
+@p Worth putting on the board. Every pair below is the same intent — the right-hand version is scoped, grounded in real files, and asks for gaps rather than answers.
 
-## Wrap, demo, retro
+@table
+@th Instead of | Ask this
+@tr `Write me a state machine for stowing the arm.` | `Here is my state table. Add only the ROTATING case, matching row three exactly.`
+@tr `Is this design good?` | `Which rows of this table name a method that does not exist in the files I gave you?`
+@tr `Fix my bug.` | `Here is my log and my state table. Based only on this data, rank the possible causes.`
+@tr `How should I build this?` | `Here is how I plan to build it. What have I not accounted for?`
+@tr `Explain this codebase.` | `In these two files, what is the division of responsibility, and which line crosses it?`
+@end
 
-Have every team demo on the bench and say what it does before pressing anything. Then ask each for three things: their measured loop-time number, one thing the log told them that watching didn't, and what's in their parking lot.
+@box What all the strong prompts have in common
+They hand over the **real files** rather than describing them. They ask for **one thing**. They set a **boundary** — only this case, only these numbers, do not fix it. And several of them invite the answer _nothing is wrong_ or _I cannot tell_, which is what makes the answer worth something when it does find a gap.
+@end
 
-The middle one matters most. It's the question that turns tenet 3 from a rule they were told into something they experienced — and the answers are usually the best material you'll get for the next session.
+// FACILITATION
+@pagebreak
 
-#### Parking lot — where next sessions come from
+@eyebrow Facilitator notes
 
-- **Restore per-subsystem timing properly** across every FSM, not just the new one — the gap Step 7 exposed.
+@anchor facilitation
+
+@h2 Where teams get stuck, and what to say
+
+@table
+@th What you'll see | What's actually happening | What to ask
+@tr An objective that needs a new setpoint or PID tuning | Guardrail one failed and nobody said so out loud | “Which method already does that? Show me the line.”
+@tr A vague objective, or one built on a method that doesn't exist | The capture sheet is thin — they watched the walkthrough without writing | “Read me your vocabulary list. Which line does this need?”
+@tr A state table with “when it's ready” in column three | They designed the steps but not the finishing conditions | “What would the code actually check on that loop?”
+@tr Debugging by changing something and re-running | Step 12 got skipped or rushed | “What's on the screen right now? What value failed the comparison?”
+@tr Loop time reported as 0 ms | Millisecond timer on a sub-millisecond method | “Is that a measurement, or the smallest number your timer can show?”
+@tr Arm freezes at the first step of the sequence | Reading the button directly instead of `wasJustPressed` | “How many times per second is that transition firing?”
+@tr Code has drifted from the state table | Orders scattered through the switch cases | “Where does each state's order live? Could there be two?”
+@tr A `public static` added for convenience | Tenet 2, and a chance for the good version of this conversation | “What makes this different from the tunable constants? Could you pass it instead?”
+@tr “The AI wrote the whole class at once” | Typing handed over before the design was done — this is the slop failure mode | “Walk me through line twelve. If you can't, turn it down a notch.”
+@end
+
+// STEP 20
+@pagebreak
+
+@eyebrow Optional · only for teams already demoing
+
+@h2 Step 15 — testing without the robot
+
+@p This is tenet 2 paying out: because the coordinator only talks to other state machines, every branch can be tested with mocks at a desk. `ArmFSMTest.java` shows the house pattern — `mock()` each dependency, build the class, drive one transition, check what it ordered and where it landed.
+
+@rule Know this before you send anyone to run the suite
+**The existing test suite does not currently compile.** `ArmFSMTest` calls `updateState(0)` against a four-argument signature, `LimbFSMTest` passes twelve arguments to a fifteen-parameter method, and `ShoulderFSMTest` calls a one-parameter method with none. Of 127 `@Test` methods, 46 are live and five of the eight classes are fully commented out. Decide beforehand whether to fix the three signatures or to name it honestly as what happens when tests drift from the code they test — either is a good lesson, but discovering it by accident at minute 105 is not.
+@end
+
+// WRAP
+@pagebreak
+
+@eyebrow 10 minutes
+
+@h2 Wrap, demo, retro
+
+@p Have every team demo on the bench and say what it does before pressing anything. Then ask each for three things: their measured loop-time number, one thing the log told them that watching didn't, and what's in their parking lot.
+
+@p The middle one matters most. It's the question that turns tenet 3 from a rule they were told into something they experienced — and the answers are usually the best material you'll get for the next session.
+
+@h3 Parking lot — where next sessions come from
+
+@bullets
+- **Restore per-subsystem timing properly** across every FSM, not just the new one — the gap the walkthrough exposed.
 - **Fix the test suite**, then keep it green. A well-scoped AI-DLC objective in its own right.
-- **Give `LimbFSM.updateState()` a command object** — fifteen parameters, several passed as bare `false` at every call site.
-- **Promote a team's coordinator into `LimbFSM`** as a real state, once it has proven itself on the bench.
+- Give `LimbFSM.updateState()` **a command object** — fifteen parameters, several passed as bare `false` at every call site.
+- **Promote a team's coordinator** into `LimbFSM` as a real state, once it has proven itself on the bench.
 
-<!-- ================= APPENDIX ================= -->
+// APPENDIX
+@pagebreak
 
-*Appendix*
+@eyebrow Appendix
 
-## Findings from the codebase review
+@anchor appendix
 
-Turned up while preparing this guide. None affect the session; all look like real defects worth a mentor's attention.
+@h2 Findings from the codebase review
 
-| Where | What |
-|---|---|
-| `ArmFSM.isFullyExtended()` | Compares doubles with `==` against a value computed from spool geometry, so `FULLY_EXTENDED` looks unreachable. |
-| `Logger` | `PRODUCTION()` and `DRIVER_DATA()` both return `state == DEBUG`. Harmless while nothing calls them. |
-| `build.dependencies.gradle` | Declares FTCLib core 2.0.1 while `TeamCode/build.gradle` declares 2.1.1. Gradle resolves upward, so it builds — but it's a trap for whoever changes one next. |
-| `ArmFSM.updateState()` | Runs `updatePIDF()` before `readPositionInCM()`, so that call sees the previous loop's cached position. `MainTeleop` calls `updatePID()` again later with fresh data, so it may wash out — worth tracing deliberately. |
-| `MainTeleop.triggersWasJustPressed()` | Hand-rolls edge detection for four buttons that `GamepadEx.wasJustPressed()` already handles. The two **triggers** genuinely need it — FTCLib has no analog-trigger edge detection — but the buttons duplicate work. |
+@p Turned up while preparing this guide. None affect the session; all look like real defects worth a mentor's attention.
 
-*Reviewed against `Into_The_Deep-master`: `Core/`, `Teleop/Monkeys_Limb/`, `Teleop/monkeypaw/`, `Teleop/Wrappers/`, the eight test classes and both gradle dependency files. FTC SDK 10.2.0, FTCLib 2.1.1, JUnit 5.10.3, Mockito 5.13.0 — verified against the repository rather than assumed.*
+@table
+@th Where | What
+@tr `ArmFSM.isFullyExtended()` | Compares doubles with `==` against a value computed from spool geometry, so `FULLY_EXTENDED` looks unreachable.
+@tr `Logger` | `PRODUCTION()` and `DRIVER_DATA()` both return `state == DEBUG`. Harmless while nothing calls them.
+@tr `build.dependencies.gradle` | Declares FTCLib core 2.0.1 while `TeamCode/build.gradle` declares 2.1.1. Gradle resolves upward, so it builds — but it's a trap for whoever changes one next.
+@tr `ArmFSM.updateState()` | Runs `updatePIDF()` before `readPositionInCM()`, so that call sees the previous loop's cached position. `MainTeleop` calls `updatePID()` again later with fresh data, so it may wash out — worth tracing deliberately.
+@tr `MainTeleop.triggersWasJustPressed()` | Hand-rolls edge detection for four buttons that `GamepadEx.wasJustPressed()` already handles. The two **triggers** genuinely need it — FTCLib has no analog-trigger edge detection — but the buttons duplicate work.
+@end
+
+@note Reviewed against `Into_The_Deep-master`: `Core/`, `Teleop/Monkeys_Limb/`, `Teleop/monkeypaw/`, `Teleop/Wrappers/`, the eight test classes and both gradle dependency files. FTC SDK 10.2.0, FTCLib 2.1.1, JUnit 5.10.3, Mockito 5.13.0 — verified against the repository rather than assumed.

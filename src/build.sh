@@ -10,7 +10,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 OUT="${OUT:-..}"
-export NODE_PATH="${NODE_PATH:-$HOME/.npm-global/lib/node_modules}"
+export NODE_PATH="${NODE_PATH:-$(npm root -g)}"   # docx is installed globally
 
 echo "building student worksheet…"
 node render.js student-worksheet.md \
