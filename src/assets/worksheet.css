@@ -1,0 +1,109 @@
+<style>
+/* ============================================================
+   worksheet.css — the interactive layer: toolbar, fields, print.
+   Loaded on top of artifact.css, which owns the document styling.
+   ============================================================ */
+
+body { margin: 0; }
+
+/* ---------- toolbar ---------- */
+.ws-bar {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--paper, #fff);
+  border-bottom: 1px solid var(--rule, #d5dae1);
+  box-shadow: 0 1px 12px rgba(16, 24, 40, .06);
+}
+.ws-bar-in {
+  max-width: 880px; margin: 0 auto; padding: 10px 24px;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  font: 500 13px/1.3 "Trebuchet MS", system-ui, sans-serif;
+}
+.ws-home { color: var(--accent, #1f5d4c); text-decoration: none; font-weight: 700; white-space: nowrap; }
+.ws-home:hover { text-decoration: underline; }
+.ws-rev { color: var(--ink-soft, #5c6675); white-space: nowrap; }
+.ws-rev b { color: var(--ink, #1f2937); }
+
+.ws-progress { display: flex; align-items: center; gap: 8px; color: var(--ink-soft, #5c6675); white-space: nowrap; }
+.ws-meter { display: block; width: 84px; height: 6px; border-radius: 99px; background: var(--rule, #d5dae1); overflow: hidden; }
+.ws-meter i { display: block; height: 100%; width: 0; background: var(--accent, #1f5d4c); transition: width .25s ease; }
+
+.ws-status { margin-left: auto; color: var(--ink-soft, #5c6675); font-size: 12px; white-space: nowrap; }
+.ws-status.ok { color: var(--accent, #1f5d4c); }
+.ws-status.warn { color: #8a5d10; font-weight: 700; }
+
+.ws-actions { display: flex; gap: 8px; }
+.ws-btn {
+  font: 600 12px/1 "Trebuchet MS", system-ui, sans-serif;
+  padding: 7px 12px; border-radius: 7px; cursor: pointer;
+  border: 1px solid var(--rule, #d5dae1); background: #fff; color: var(--ink, #1f2937);
+}
+.ws-btn:hover { border-color: var(--accent, #1f5d4c); color: var(--accent, #1f5d4c); }
+.ws-btn.is-open { background: var(--accent-soft, #eaf2ee); border-color: var(--accent, #1f5d4c); color: var(--accent, #1f5d4c); }
+.ws-btn.danger:hover { border-color: #a33; color: #a33; }
+.ws-btn.small { padding: 5px 10px; }
+.ws-btn:focus-visible, .ws-field:focus-visible, input[type=checkbox]:focus-visible {
+  outline: 2px solid var(--accent, #1f5d4c); outline-offset: 2px;
+}
+
+.ws-panel, .ws-note {
+  max-width: 880px; margin: 0 auto; padding: 14px 24px 18px;
+  border-top: 1px solid var(--rule, #d5dae1);
+  font: 400 13px/1.5 "Trebuchet MS", system-ui, sans-serif; color: var(--ink, #1f2937);
+}
+.ws-note { background: var(--accent-soft, #eaf2ee); }
+.ws-note.warn { background: #fbf2df; color: #8a5d10; }
+.ws-empty { margin: 0 0 10px; color: var(--ink-soft, #5c6675); }
+.ws-revs { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ws-revs li {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 10px 12px; border: 1px solid var(--rule, #d5dae1); border-radius: 8px; background: #fff;
+}
+.r-n { font-weight: 700; }
+.r-m { color: var(--ink-soft, #5c6675); font-size: 12px; }
+.ws-revs li .ws-btn { margin-left: auto; }
+
+/* ---------- fields ---------- */
+.ws-field {
+  display: block; width: 100%; box-sizing: border-box;
+  min-height: 44px; padding: 8px 10px; resize: vertical;
+  font: 400 15px/1.45 Georgia, "Times New Roman", serif; color: var(--ink, #1f2937);
+  background: #fcfdfd; border: 1px solid var(--rule, #d5dae1); border-radius: 6px;
+}
+.ws-field:focus { background: #fff; border-color: var(--accent, #1f5d4c); }
+.ws-field::placeholder { color: #9aa3ae; }
+
+table.agenda.ix td { vertical-align: top; padding: 8px; }
+table.agenda.ix td:has(.ws-field) { width: 46%; }
+
+.checklist li.ix { list-style: none; margin-left: 0; }
+.checklist li.ix label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.checklist li.ix input { margin-top: 4px; flex: none; width: 17px; height: 17px; accent-color: var(--accent, #1f5d4c); }
+.checklist li.ix input:checked + span { color: var(--ink-soft, #5c6675); }
+
+.step-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.step-head h3 { flex: 1 1 auto; }
+.step-done {
+  display: flex; gap: 8px; align-items: center; cursor: pointer; white-space: nowrap;
+  font: 700 11px/1 "Trebuchet MS", system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-soft, #5c6675); padding: 6px 10px; border: 1px solid var(--rule, #d5dae1); border-radius: 99px;
+}
+.step-done input { width: 15px; height: 15px; accent-color: var(--accent, #1f5d4c); }
+.step-head.is-done .step-done { color: var(--accent, #1f5d4c); border-color: var(--accent, #1f5d4c); background: var(--accent-soft, #eaf2ee); }
+
+.sketch { border: 1px dashed var(--rule, #d5dae1); border-radius: 8px; padding: 14px; margin: 18px 0; }
+.sketch .label { display: block; font-size: 13px; color: var(--ink-soft, #5c6675); margin-bottom: 10px; }
+
+/* ---------- print ---------- */
+@media print {
+  .ws-bar { display: none !important; }
+  .ws-field { border: none; border-bottom: 1px solid #bbb; border-radius: 0; background: none; min-height: 0; }
+  .step-done { border: none; padding: 0; }
+  article { max-width: none; }
+}
+
+@media (max-width: 620px) {
+  .ws-bar-in { padding: 10px 16px; gap: 10px; }
+  .ws-status { margin-left: 0; width: 100%; order: 9; }
+  .ws-progress .ws-meter { width: 56px; }
+}
+</style>

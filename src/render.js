@@ -38,7 +38,8 @@ function parse(src) {
     i = 1;
     while (i < lines.length && lines[i].trim() !== "---") {
       const m = lines[i].match(/^([A-Za-z0-9_]+):\s*(.*)$/);
-      if (m) meta[m[1]] = m[2].trim();
+      // strip the optional surrounding quotes YAML allows on a scalar
+      if (m) meta[m[1]] = m[2].trim().replace(/^(['"])([\s\S]*)\1$/, "$2");
       i++;
     }
     i++;
@@ -482,11 +483,59 @@ function htmlInline(s) {
   }).join("");
 }
 
-function toHtml({ meta, nodes }, outPath, cssPath) {
+const TOOLBAR_HTML = (title, opts) => `
+<div class="ws-bar" role="region" aria-label="Worksheet controls">
+  <div class="ws-bar-in">
+    <a class="ws-home" href="${esc(opts.home || "index.html")}" title="All exercises">&#8592; Exercises</a>
+    <span class="ws-rev">Revision <b id="ws-rev">1</b></span>
+    <span class="ws-progress"><span id="ws-progress-text">0 of 0 steps</span>
+      <span class="ws-meter"><i id="ws-meter-fill"></i></span></span>
+    <span class="ws-status" id="ws-status" aria-live="polite">Ready</span>
+    <span class="ws-actions">
+      <button type="button" id="ws-history-btn" class="ws-btn">Revisions</button>
+      <button type="button" id="ws-print-btn" class="ws-btn">Print</button>
+      <button type="button" id="ws-reset-btn" class="ws-btn danger">Reset</button>
+    </span>
+  </div>
+  <div class="ws-panel" id="ws-history" hidden></div>
+  <div class="ws-note" id="ws-note" hidden></div>
+</div>`;
+
+function toHtml({ meta, nodes }, outPath, cssPath, opts = {}) {
   const css = fs.readFileSync(cssPath, "utf8");
+  const IX = !!opts.interactive;          // emit form controls bound to localStorage
   const h = [];
-  h.push(`<title>${esc(meta.title + (meta.title2 ? " " + meta.title2 : ""))}</title>`);
-  h.push(css);
+  const docTitle = meta.title + (meta.title2 ? " " + meta.title2 : "");
+
+  // Stable per-field ids. Derived from position, so they survive a rebuild as
+  // long as the source order is unchanged; the schema hash below catches the
+  // case where it isn't.
+  let curStep = "0", tIdx = 0, cIdx = 0, sIdx = 0;
+  const fieldIds = [];
+  const fid = (kind, extra) => {
+    const id = `s${curStep}-${kind}${extra}`;
+    fieldIds.push(id);
+    return id;
+  };
+  const area = (id, rows) =>
+    `<textarea class="ws-field" data-field="${esc(id)}" rows="${rows}" ` +
+    `aria-label="answer" spellcheck="true"></textarea>`;
+
+  if (opts.standalone) {
+    h.push(`<!doctype html>`);
+    h.push(`<html lang="en"><head>`);
+    h.push(`<meta charset="utf-8">`);
+    h.push(`<meta name="viewport" content="width=device-width,initial-scale=1">`);
+    h.push(`<title>${esc(docTitle)}</title>`);
+    if (opts.favicon) h.push(`<link rel="icon" href="${esc(opts.favicon)}">`);
+    h.push(css);
+    if (opts.extraCss) h.push(fs.readFileSync(opts.extraCss, "utf8"));
+    h.push(`</head><body>`);
+  } else {
+    h.push(`<title>${esc(docTitle)}</title>`);
+    h.push(css);
+  }
+  if (IX) h.push(TOOLBAR_HTML(docTitle, opts));
   h.push(`<article>`);
 
   h.push(`  <header class="masthead">`);
@@ -520,13 +569,28 @@ function toHtml({ meta, nodes }, outPath, cssPath) {
   const flushChecks = () => {
     if (pendingChecks.length) {
       h.push(`      <ul class="checklist">`);
-      pendingChecks.forEach((c) => h.push(`        <li>${htmlInline(c)}</li>`));
+      pendingChecks.forEach((c) => {
+        if (IX) {
+          const id = fid("chk", ++cIdx);
+          h.push(`        <li class="ix"><label><input type="checkbox" class="ws-check" data-field="${esc(id)}"><span>${htmlInline(c)}</span></label></li>`);
+        } else {
+          h.push(`        <li>${htmlInline(c)}</li>`);
+        }
+      });
       h.push(`      </ul>`);
       pendingChecks = [];
     }
   };
 
+  // The masthead already prints the kicker and title from the frontmatter, so
+  // drop the leading @eyebrow / @h1 that repeat them.
+  let seenBody = false;
   for (const nd of nodes) {
+    if (!seenBody) {
+      if (nd.t === "eyebrow" && meta.kicker && nd.text.trim() === meta.kicker.trim()) continue;
+      if (nd.t === "h1" && nd.text.trim() === docTitle.trim()) { seenBody = true; continue; }
+      if (nd.t !== "anchor") seenBody = true;
+    }
     if (nd.t !== "check") flushChecks();
     switch (nd.t) {
       case "anchor": pendingId = nd.id; break;
@@ -545,7 +609,17 @@ function toHtml({ meta, nodes }, outPath, cssPath) {
 
       case "step":
       case "phase":
-        h.push(`      <h3><span class="phase-no">${esc(nd.n)}</span>${esc(nd.title)}${nd.meta ? ` <span style="font-size:12px;color:var(--ink-soft);letter-spacing:.08em;">· ${esc(nd.meta)}</span>` : ""}</h3>`);
+        curStep = nd.n; tIdx = 0; cIdx = 0; sIdx = 0;
+        if (IX) {
+          const id = `step-${nd.n}-done`;
+          fieldIds.push(id);
+          h.push(`      <div class="step-head" data-step="${esc(nd.n)}">`);
+          h.push(`        <h3><span class="phase-no">${esc(nd.n)}</span>${esc(nd.title)}${nd.meta ? ` <span style="font-size:12px;color:var(--ink-soft);letter-spacing:.08em;">· ${esc(nd.meta)}</span>` : ""}</h3>`);
+          h.push(`        <label class="step-done"><input type="checkbox" class="ws-check ws-step" data-field="${esc(id)}"><span>Step complete</span></label>`);
+          h.push(`      </div>`);
+        } else {
+          h.push(`      <h3><span class="phase-no">${esc(nd.n)}</span>${esc(nd.title)}${nd.meta ? ` <span style="font-size:12px;color:var(--ink-soft);letter-spacing:.08em;">· ${esc(nd.meta)}</span>` : ""}</h3>`);
+        }
         break;
 
       case "tenettag": h.push(`      <p class="eyebrow" style="color:#8a6a22;">◆ ${esc(nd.text)}</p>`); break;
@@ -592,6 +666,12 @@ function toHtml({ meta, nodes }, outPath, cssPath) {
 
       case "prompt": h.push(`      <div class="prompt">${esc(nd.text)}</div>`); break;
 
+      case "sketch":
+        h.push(`      <div class="sketch"><span class="label">${htmlInline(nd.text)}</span>`);
+        if (IX) h.push(`        ${area(fid("sk", ++sIdx), 8)}`);
+        h.push(`      </div>`);
+        break;
+
       case "img": {
         const b64 = fs.readFileSync(nd.src).toString("base64");
         h.push(`      <div class="diagram-frame"><img alt="diagram" style="width:100%;height:auto;" src="data:image/png;base64,${b64}"></div>`);
@@ -607,11 +687,17 @@ function toHtml({ meta, nodes }, outPath, cssPath) {
         break;
 
       case "table": {
-        const skipBlank = (c) => (BLANK_RE.test(c) ? "" : htmlInline(c.replace(/\\n/g, " — ")));
+        tIdx++;
+        const cellHtml = (c, ri, ci) => {
+          const bm = String(c).match(BLANK_RE);
+          if (!bm) return htmlInline(String(c).replace(/\\n/g, " — "));
+          if (!IX) return "";
+          return area(fid("t", `${tIdx}r${ri}c${ci}`), Math.max(2, parseInt(bm[1], 10)));
+        };
         h.push(`      <div class="table-scroll">`);
-        h.push(`      <table class="agenda">`);
+        h.push(`      <table class="agenda${IX ? " ix" : ""}">`);
         if (nd.head) h.push(`        <tr>${nd.head.map((x) => `<th>${esc(x)}</th>`).join("")}</tr>`);
-        nd.rows.forEach((r) => h.push(`        <tr>${r.map((c) => `<td>${skipBlank(c)}</td>`).join("")}</tr>`));
+        nd.rows.forEach((r, ri) => h.push(`        <tr>${r.map((c, ci) => `<td>${cellHtml(c, ri, ci)}</td>`).join("")}</tr>`));
         h.push(`      </table>`);
         h.push(`      </div>`);
         break;
@@ -625,8 +711,23 @@ function toHtml({ meta, nodes }, outPath, cssPath) {
   if (meta.footer) h.push(`  <footer><hr class="rule" style="margin-bottom:32px;"><p>${htmlInline(meta.footer)}</p></footer>`);
   h.push(`</article>`);
 
+  if (IX) {
+    // The schema hash lets the runtime notice that the worksheet itself
+    // changed shape, rather than restoring answers into the wrong boxes.
+    const schema = require("crypto").createHash("sha1").update(fieldIds.join("|")).digest("hex").slice(0, 12);
+    h.push(`<script>window.WS_CONFIG=${JSON.stringify({
+      docId: opts.docId || "worksheet",
+      title: docTitle,
+      schema,
+      fields: fieldIds,
+      keepRevisions: 2,
+    })};</script>`);
+    h.push(`<script src="${esc(opts.script || "assets/worksheet.js")}"></script>`);
+  }
+  if (opts.standalone) h.push(`</body></html>`);
+
   fs.writeFileSync(outPath, h.join("\n"));
-  console.log(`html  → ${outPath}`);
+  console.log(`html  → ${outPath}${IX ? `  (${fieldIds.length} saved fields)` : ""}`);
 }
 
 /* ============================================================
@@ -642,4 +743,22 @@ const parsed = parse(fs.readFileSync(srcFile, "utf8"));
 const jobs = [];
 if (getArg("--docx")) jobs.push(toDocx(parsed, getArg("--docx")));
 if (getArg("--html")) toHtml(parsed, getArg("--html"), getArg("--css") || path.join(__dirname, "artifact.css"));
+// --web emits a complete, standalone page whose answers persist in the browser
+if (getArg("--web")) {
+  toHtml(parsed, getArg("--web"), getArg("--css") || path.join(__dirname, "artifact.css"), {
+    interactive: true,
+    standalone: true,
+    docId: getArg("--doc-id") || path.basename(srcFile, ".md"),
+    extraCss: getArg("--web-css") || path.join(__dirname, "assets", "worksheet.css"),
+    script: getArg("--script") || "assets/worksheet.js",
+    home: getArg("--home") || "index.html",
+  });
+}
+// --page emits the same document standalone but read-only (no form controls)
+if (getArg("--page")) {
+  toHtml(parsed, getArg("--page"), getArg("--css") || path.join(__dirname, "artifact.css"), {
+    standalone: true,
+    extraCss: getArg("--web-css") || path.join(__dirname, "assets", "worksheet.css"),
+  });
+}
 Promise.all(jobs).then(() => console.log("done."));

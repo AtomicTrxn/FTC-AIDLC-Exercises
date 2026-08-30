@@ -22,8 +22,30 @@ node render.js teachers-guide.md \
   --html "$OUT/Arm Bolt Teachers Guide.html" \
   --css artifact.css
 
+# ---- the GitHub Pages site ----
+SITE="${SITE:-../docs}"
+mkdir -p "$SITE/assets"
+
+echo "building interactive worksheet…"
+node render.js student-worksheet.md \
+  --web "$SITE/worksheet-arm-bolt.html" \
+  --doc-id arm-bolt
+
+echo "building guide page…"
+node render.js teachers-guide.md \
+  --page "$SITE/teachers-guide-arm-bolt.html"
+
+echo "building landing page…"
+node site.js site-manifest.json "$SITE/index.html"
+
+cp assets/worksheet.js "$SITE/assets/worksheet.js"
+touch "$SITE/.nojekyll"
+
 echo
 echo "done. generated:"
 echo "  $OUT/Arm Bolt Student Worksheet.docx"
 echo "  $OUT/Arm Bolt Teachers Guide.docx"
 echo "  $OUT/Arm Bolt Teachers Guide.html   (publish this as the artifact)"
+echo "  $SITE/index.html                    (GitHub Pages site)"
+echo "  $SITE/worksheet-arm-bolt.html       (interactive, saves locally)"
+echo "  $SITE/teachers-guide-arm-bolt.html"

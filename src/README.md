@@ -9,8 +9,15 @@ Everything in the parent folder is **generated**. Edit the markdown here, then r
 | `teachers-guide.md` | The teacher's guide. Source for the guide `.docx` **and** the published web version. |
 | `codebase-review.md` | The Into The Deep review — findings against the exercise. Reference; not part of the session materials. |
 | `render.js` | The generator. Parses the markdown, emits `.docx` and `.html`. |
+| `site.js` | Builds the landing page from `site-manifest.json`. |
+| `site-manifest.json` | The list of exercises. **Adding new material is an entry here, not a code change.** |
+| `assets/worksheet.js` | Answer persistence for the interactive worksheet. |
+| `assets/worksheet.css` | The interactive layer: toolbar, fields, print rules. |
+| `assets/site.css` | The landing page. |
 | `artifact.css` | Styling for the web version only. The `.docx` styling lives in `render.js`. |
 | `build.sh` | Regenerates everything. |
+
+Everything in `../docs/` is generated too — that folder is the GitHub Pages site.
 
 Requires Node with the `docx` package available on `NODE_PATH`. `build.sh` reads
 `npm root -g`, so a global install is enough:
@@ -97,3 +104,47 @@ The build prints the expected page count. Convert to PDF and confirm:
 - **The codebase walkthrough is presenter-led**, so the worksheet carries a capture sheet rather than reading steps. Anything the capture sheet stops collecting breaks a later step: the vocabulary feeds Steps 4 and 9, the “missing” loop-time row feeds Step 14, the log levels feed Step 12.
 - **The guide has no blank pages.** A blank page usually means content exactly filled the previous page and an `@pagebreak` then added an empty one — remove that break or trim above it.
 - **Code listings fit on one page** where possible. `render.js` keeps a listing together automatically at 52 lines or fewer.
+
+---
+
+## The web version
+
+`build.sh` also emits `../docs/`, which GitHub Pages serves:
+
+| File | What it is |
+|---|---|
+| `index.html` | Landing page, generated from `site-manifest.json`. |
+| `worksheet-arm-bolt.html` | The worksheet with answer fields that save to the reader's browser. |
+| `teachers-guide-arm-bolt.html` | The guide, read-only. |
+| `assets/worksheet.js` | Copied from `src/assets/`. |
+
+Two renderer flags drive it: `--web` emits a standalone interactive page,
+`--page` emits the same document standalone but read-only. The existing
+`--html` still emits the artifact fragment and is unchanged.
+
+### How answers are stored
+
+Per document, in the reader's own browser — nothing is uploaded:
+
+```
+aidlc:<docId>:current   { rev, schema, started, updated, values }
+aidlc:<docId>:history   [ {rev, schema, started, archived, values}, … ]
+```
+
+Fields save ~350 ms after typing stops. **Reset** archives the current sheet
+into `history` and starts the next revision; `history` keeps the 2 most recent
+and drops the oldest. Restoring a revision archives the current sheet first,
+so a misclick never loses work.
+
+`schema` is a hash of every field id on the page. If the worksheet is edited
+so that fields shift, the stored answers would land in the wrong boxes — so on
+a hash mismatch the runtime archives the old sheet, starts a fresh revision,
+and says so in a banner. **Reordering or adding steps changes the hash**; that
+is deliberate, but it does mean readers mid-exercise start a new revision.
+
+### Adding another exercise
+
+1. Write `src/<name>.md` in the directive format above.
+2. Add a `--web` (or `--page`) line for it in `build.sh`.
+3. Add an entry to `site-manifest.json`. Set `"status": "planned"` to list it
+   under *In preparation* without linking to it.
