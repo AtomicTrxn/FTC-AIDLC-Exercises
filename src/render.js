@@ -248,8 +248,9 @@ function toDocx({ meta, nodes }, outPath) {
           verticalAlign: VerticalAlign.CENTER,
           margins: { top: 90, bottom: 90, left: 200, right: 100 },
           children: [
-            new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text: title, font: SANS, bold: true, size: 26, color: INK })] }),
-            new Paragraph({ spacing: { after: 0 }, children: [new TextRun({ text: metaTxt, font: SANS, bold: true, size: 16, color, characterSpacing: 16 })] }),
+            // keepNext stops a step header being stranded alone at a page bottom
+            new Paragraph({ keepNext: true, spacing: { after: 40 }, children: [new TextRun({ text: title, font: SANS, bold: true, size: 26, color: INK })] }),
+            new Paragraph({ keepNext: true, spacing: { after: 0 }, children: [new TextRun({ text: metaTxt, font: SANS, bold: true, size: 16, color, characterSpacing: 16 })] }),
           ],
         }),
       ] })],
@@ -326,7 +327,7 @@ function toDocx({ meta, nodes }, outPath) {
       case "step": out.push(numberedHeader("STEP", nd.n, nd.title, nd.meta, nd.optional ? AMBER : ACCENT)); break;
       case "phase": out.push(numberedHeader("PHASE", nd.n, nd.title, nd.meta, ACCENT)); break;
 
-      case "tenettag": out.push(new Paragraph({ spacing: { before: 60, after: 40 },
+      case "tenettag": out.push(new Paragraph({ keepNext: true, spacing: { before: 60, after: 40 },
         children: [new TextRun({ text: "◆  " + nd.text.toUpperCase(), font: SANS, bold: true, size: 15, color: TENET, characterSpacing: 22 })] })); break;
 
       case "tenet": out.push(new Table({
