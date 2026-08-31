@@ -5,8 +5,8 @@ Everything in the parent folder is **generated**. Edit the markdown here, then r
 
 | File | What it is |
 |---|---|
-| `student-worksheet.md` | The 16-step student handout. Source for the worksheet `.docx`. |
-| `teachers-guide.md` | The teacher's guide. Source for the guide `.docx` **and** the published web version. |
+| `worksheet.md` | The five-phase handout. Source for the worksheet `.docx`. |
+| `answer-guide.md` | The answer guide. Source for the guide `.docx` **and** the published web version. |
 | `codebase-review.md` | The Into The Deep review — findings against the exercise. Reference; not part of the session materials. |
 | `render.js` | The generator. Parses the markdown, emits `.docx` and `.html`. |
 | `site.js` | Builds the landing page from `site-manifest.json`. |
@@ -85,7 +85,10 @@ literally, and `***both***` renders the asterisks. Use one marker per span. Head
 ```
 
 Widths are DXA (twentieths of a point) and must total 9360 to fill the text column.
-`[blank:N]` makes a fill-in cell N lines tall. `\n` inside a cell breaks the line.
+The web renderer reuses the same numbers as a `<colgroup>` of percentages, so one
+set of widths drives both the `.docx` and the page — a lopsided table on screen is
+a lopsided table in print. `[blank:N]` makes a fill-in cell N lines tall. `\n`
+inside a cell breaks the line.
 
 ### Web-only
 
@@ -100,10 +103,36 @@ Widths are DXA (twentieths of a point) and must total 9360 to fill the text colu
 
 The build prints the expected page count. Convert to PDF and confirm:
 
-- **The worksheet has no blank pages, and every page from 7 on starts with a step header** — with the two capture-sheet pages (9 and 10) the only exception. No step may span a page break — that is the whole point of the format. If a step overflows, trim a `@gap` or split it into two steps.
-- **The codebase walkthrough is presenter-led**, so the worksheet carries a capture sheet rather than reading steps. Anything the capture sheet stops collecting breaks a later step: the vocabulary feeds Steps 4 and 9, the “missing” loop-time row feeds Step 14, the log levels feed Step 12.
-- **The guide has no blank pages.** A blank page usually means content exactly filled the previous page and an `@pagebreak` then added an empty one — remove that break or trim above it.
-- **Code listings fit on one page** where possible. `render.js` keeps a listing together automatically at 52 lines or fewer.
+- **The worksheet is eight pages, none of them blank.** Pages 1 and 2 are front
+  matter — the title block, the one rule and *What AI-DLC is* on page 1; the four
+  tenets and *Before you start* on page 2. **Pages 3 to 7 each open with a
+  `@step` header**, one phase per page, Phase 1 through Phase 5. Page 8 is the
+  one continuation: it carries the rest of Phase 5 and opens with an `@h2`.
+- **A phase gets one page, and Phase 5 is the sole exception.** A team works a
+  page, ticks its `@done`, and turns over — so a phase splitting across a break
+  by accident is a bug. Phase 5 is split deliberately, at the seam between
+  building (page 7: the dial, the four moves, the three rules) and measuring
+  (page 8: the results table, the `@done`, the wrap). That matches how the block
+  runs — 40 minutes at the bench, then the numbers and the retro as a team.
+  Page 7 sits at about 95% full, so anything added to the build half has to
+  displace something. Cut a `@lens` bullet or tighten a table cell rather than
+  letting it spill.
+- **Do not add a second `@step 5` for page 8.** Step numbers become field ids in
+  the interactive build (`step-5-done`), so a repeated number collides in the
+  saved answers and miscounts the progress meter. The continuation is an `@h2`
+  for that reason.
+- **Each phase depends on what an earlier one collected**, so deleting a row
+  breaks the phase downstream of it. The vocabulary list on page 2 feeds Phase
+  1's prompt and its `@done`; Phase 1's loop-time budget row is what Phase 5
+  measures against; Phase 3's state table is what Phase 4 checks and what Phase
+  5's prompt pastes; the dial position, now the first thing Phase 5 asks for, is
+  what the wrap on page 8 asks whether you got right.
+- **The guide has no blank pages.** A blank page usually means content exactly
+  filled the previous page and an `@pagebreak` then added an empty one — remove
+  that break or trim above it.
+- **Code listings fit on one page** where possible. `render.js` keeps a listing
+  together automatically at 52 lines or fewer. This is a guide concern only —
+  the worksheet carries no `@code` blocks.
 
 ---
 
@@ -115,7 +144,7 @@ The build prints the expected page count. Convert to PDF and confirm:
 |---|---|
 | `index.html` | Landing page, generated from `site-manifest.json`. |
 | `worksheet-arm-bolt.html` | The worksheet with answer fields that save to the reader's browser. |
-| `teachers-guide-arm-bolt.html` | The guide, read-only. |
+| `answer-guide-arm-bolt.html` | The answer guide, read-only. |
 | `assets/worksheet.js` | Copied from `src/assets/`. |
 
 Two renderer flags drive it: `--web` emits a standalone interactive page,

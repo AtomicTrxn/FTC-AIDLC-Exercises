@@ -12,14 +12,14 @@ cd "$(dirname "$0")"
 OUT="${OUT:-..}"
 export NODE_PATH="${NODE_PATH:-$(npm root -g)}"   # docx is installed globally
 
-echo "building student worksheet…"
-node render.js student-worksheet.md \
-  --docx "$OUT/Arm Bolt Student Worksheet.docx"
+echo "building worksheet…"
+node render.js worksheet.md \
+  --docx "$OUT/Arm Bolt Worksheet.docx"
 
-echo "building teacher's guide…"
-node render.js teachers-guide.md \
-  --docx "$OUT/Arm Bolt Teachers Guide.docx" \
-  --html "$OUT/Arm Bolt Teachers Guide.html" \
+echo "building answer guide…"
+node render.js answer-guide.md \
+  --docx "$OUT/Arm Bolt Answer Guide.docx" \
+  --html "$OUT/Arm Bolt Answer Guide.html" \
   --css artifact.css
 
 # ---- the GitHub Pages site ----
@@ -27,13 +27,13 @@ SITE="${SITE:-../docs}"
 mkdir -p "$SITE/assets"
 
 echo "building interactive worksheet…"
-node render.js student-worksheet.md \
+node render.js worksheet.md \
   --web "$SITE/worksheet-arm-bolt.html" \
   --doc-id arm-bolt
 
-echo "building guide page…"
-node render.js teachers-guide.md \
-  --page "$SITE/teachers-guide-arm-bolt.html"
+echo "building answer guide page…"
+node render.js answer-guide.md \
+  --page "$SITE/answer-guide-arm-bolt.html"
 
 echo "building landing page…"
 node site.js site-manifest.json "$SITE/index.html"
@@ -43,9 +43,9 @@ touch "$SITE/.nojekyll"
 
 echo
 echo "done. generated:"
-echo "  $OUT/Arm Bolt Student Worksheet.docx"
-echo "  $OUT/Arm Bolt Teachers Guide.docx"
-echo "  $OUT/Arm Bolt Teachers Guide.html   (publish this as the artifact)"
+echo "  $OUT/Arm Bolt Worksheet.docx"
+echo "  $OUT/Arm Bolt Answer Guide.docx"
+echo "  $OUT/Arm Bolt Answer Guide.html   (publish this as the artifact)"
 echo "  $SITE/index.html                    (GitHub Pages site)"
 echo "  $SITE/worksheet-arm-bolt.html       (interactive, saves locally)"
-echo "  $SITE/teachers-guide-arm-bolt.html"
+echo "  $SITE/answer-guide-arm-bolt.html"

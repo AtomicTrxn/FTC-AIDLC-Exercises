@@ -1,7 +1,3 @@
-<!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Give the Arm Something New to Do</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <style>
@@ -23,6 +19,14 @@
     --good:#3f7a4e;
     --good-soft:#e2eee3;
     --shadow: 0 1px 2px rgba(30,30,20,0.06), 0 8px 24px -12px rgba(30,30,20,0.18);
+
+    /* One column width for every band of the page — masthead, quick-nav, body,
+       toolbar and footer all read from these, so they can never drift apart.
+       The column grows with the window and stops at --doc-max; --doc-min is the
+       floor below which the page scrolls sideways rather than crushing. */
+    --doc-max: 1040px;
+    --doc-min: 360px;
+    --doc-pad: 24px;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
@@ -45,7 +49,7 @@
 
   *{box-sizing:border-box;}
   body{
-    margin:0;
+    margin:0; min-width:var(--doc-min);
     background:
       linear-gradient(var(--paper),var(--paper)),
       repeating-linear-gradient(0deg, transparent, transparent 27px, var(--rule) 27px, var(--rule) 28px);
@@ -66,10 +70,10 @@
   a{ color:var(--accent); text-decoration-thickness:1px; text-underline-offset:2px; }
   a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
-  .wrap{ max-width:760px; margin:0 auto; padding:0 24px 40px; }
-  .wide{ max-width:1000px; margin:0 auto; padding:0 24px; }
+  .wrap{ max-width:var(--doc-max); margin:0 auto; padding:0 var(--doc-pad) 40px; }
+  .wide{ max-width:var(--doc-max); margin:0 auto; padding:0 var(--doc-pad); }
 
-  .masthead{ max-width:1000px; margin:0 auto; padding:56px 24px 32px; border-bottom:2px solid var(--ink); }
+  .masthead{ max-width:var(--doc-max); margin:0 auto; padding:56px var(--doc-pad) 32px; border-bottom:2px solid var(--ink); }
   .masthead .eyebrow{ margin-bottom:14px; display:block; }
   .masthead h1{ font-size:clamp(32px,5vw,50px); line-height:1.03; max-width:19ch; }
   .masthead p.dek{ font-family:"Source Serif 4", serif; font-size:18.5px; color:var(--ink-soft); max-width:56ch; margin-top:14px; }
@@ -88,7 +92,7 @@
   .doc-switch .inactive{ color:var(--ink-soft); }
 
   nav.quicknav{
-    max-width:1000px; margin:0 auto; padding:14px 24px; display:flex; flex-wrap:wrap; gap:4px 18px;
+    max-width:var(--doc-max); margin:0 auto; padding:14px var(--doc-pad); display:flex; flex-wrap:wrap; gap:4px 18px;
     border-bottom:1px solid var(--rule); font-family:"Barlow Condensed", sans-serif; font-weight:600; letter-spacing:0.02em; font-size:14px;
   }
   nav.quicknav a{ color:var(--ink-soft); text-decoration:none; white-space:nowrap; }
@@ -98,7 +102,7 @@
   section{ padding-top:52px; }
   section > .eyebrow{ display:block; margin-bottom:8px; }
   section h2{ font-size:29px; margin-bottom:14px; }
-  section h2 .phase-no{
+  section h2 .phase-no, section h3 .phase-no{
     display:inline-block; font-family:"JetBrains Mono",monospace; font-size:16px; font-weight:600; color:var(--accent);
     border:1px solid var(--accent); border-radius:50%; width:30px;height:30px; line-height:28px; text-align:center;
     margin-right:10px; vertical-align:middle;
@@ -117,8 +121,15 @@
   .seg.c1{ background:#3c5a6b; } .seg.c2{ background:#1c5f8a; } .seg.c3{ background:#2c7593; }
   .seg.c4{ background:#48505a; } .seg.c5{ background:#b8551c; } .seg.c6{ background:#1c5f8a; } .seg.c7{ background:#5b5d51;}
 
-  table.agenda{ width:100%; border-collapse:collapse; margin-top:18px; font-size:14.5px;}
-  table.agenda th, table.agenda td{ text-align:left; padding:9px 10px; border-bottom:1px solid var(--rule); vertical-align:top;}
+  table.agenda{ width:100%; table-layout:fixed; border-collapse:collapse; margin-top:18px; font-size:14.5px;}
+  /* Below this the columns stop being usable, so .table-scroll takes over.
+     Answer tables need a per-column floor wide enough to actually type in;
+     read-only tables only need to stay legible. */
+  .table-scroll > table.agenda{ min-width:520px; }
+  .table-scroll > table.agenda.ix{ min-width:calc(var(--ncol,2) * 180px); }
+  table.agenda th, table.agenda td{ text-align:left; padding:9px 10px; border-bottom:1px solid var(--rule); vertical-align:top; overflow-wrap:break-word;}
+  /* Fixed layout can't widen a column for a long method name, so let it wrap. */
+  table.agenda code{ overflow-wrap:anywhere; }
   table.agenda th{ font-family:"Barlow Condensed",sans-serif; text-transform:uppercase; font-size:11.5px; letter-spacing:0.08em; color:var(--ink-soft); font-weight:600;}
   table.agenda td.time{ font-family:"JetBrains Mono",monospace; font-size:13px; white-space:nowrap; color:var(--ink-soft);}
   .table-scroll{ overflow-x:auto; }
@@ -185,125 +196,20 @@
   .techcard p{ font-size:14px; margin:0; color:var(--ink-soft); }
 
   hr.rule{ border:none; border-top:1px solid var(--rule); margin:52px 0 0; }
-  footer{ max-width:1000px; margin:0 auto; padding:40px 24px 60px; color:var(--ink-soft); font-size:14px; }
+  footer{ max-width:var(--doc-max); margin:0 auto; padding:40px var(--doc-pad) 60px; color:var(--ink-soft); font-size:14px; }
   footer a{ color:var(--ink-soft); }
   footer h3{ font-size:15px; color:var(--ink); margin-bottom:10px; }
+  @media (max-width:620px){
+    :root{ --doc-pad:16px; }
+    body{ font-size:16px; }
+    .masthead{ padding-top:36px; }
+  }
+
   ::selection{ background:var(--accent); color:var(--surface); }
 </style>
-<style>
-/* ============================================================
-   worksheet.css — the interactive layer: toolbar, fields, print.
-   Loaded on top of artifact.css, which owns the document styling.
-   ============================================================ */
-
-body { margin: 0; }
-
-/* ---------- toolbar ---------- */
-.ws-bar {
-  position: sticky; top: 0; z-index: 50;
-  background: var(--paper, #fff);
-  border-bottom: 1px solid var(--rule, #d5dae1);
-  box-shadow: 0 1px 12px rgba(16, 24, 40, .06);
-}
-.ws-bar-in {
-  max-width: 880px; margin: 0 auto; padding: 10px 24px;
-  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-  font: 500 13px/1.3 "Trebuchet MS", system-ui, sans-serif;
-}
-.ws-home { color: var(--accent, #1f5d4c); text-decoration: none; font-weight: 700; white-space: nowrap; }
-.ws-home:hover { text-decoration: underline; }
-.ws-rev { color: var(--ink-soft, #5c6675); white-space: nowrap; }
-.ws-rev b { color: var(--ink, #1f2937); }
-
-.ws-progress { display: flex; align-items: center; gap: 8px; color: var(--ink-soft, #5c6675); white-space: nowrap; }
-.ws-meter { display: block; width: 84px; height: 6px; border-radius: 99px; background: var(--rule, #d5dae1); overflow: hidden; }
-.ws-meter i { display: block; height: 100%; width: 0; background: var(--accent, #1f5d4c); transition: width .25s ease; }
-
-.ws-status { margin-left: auto; color: var(--ink-soft, #5c6675); font-size: 12px; white-space: nowrap; }
-.ws-status.ok { color: var(--accent, #1f5d4c); }
-.ws-status.warn { color: #8a5d10; font-weight: 700; }
-
-.ws-actions { display: flex; gap: 8px; }
-.ws-btn {
-  font: 600 12px/1 "Trebuchet MS", system-ui, sans-serif;
-  padding: 7px 12px; border-radius: 7px; cursor: pointer;
-  border: 1px solid var(--rule, #d5dae1); background: #fff; color: var(--ink, #1f2937);
-}
-.ws-btn:hover { border-color: var(--accent, #1f5d4c); color: var(--accent, #1f5d4c); }
-.ws-btn.is-open { background: var(--accent-soft, #eaf2ee); border-color: var(--accent, #1f5d4c); color: var(--accent, #1f5d4c); }
-.ws-btn.danger:hover { border-color: #a33; color: #a33; }
-.ws-btn.small { padding: 5px 10px; }
-.ws-btn:focus-visible, .ws-field:focus-visible, input[type=checkbox]:focus-visible {
-  outline: 2px solid var(--accent, #1f5d4c); outline-offset: 2px;
-}
-
-.ws-panel, .ws-note {
-  max-width: 880px; margin: 0 auto; padding: 14px 24px 18px;
-  border-top: 1px solid var(--rule, #d5dae1);
-  font: 400 13px/1.5 "Trebuchet MS", system-ui, sans-serif; color: var(--ink, #1f2937);
-}
-.ws-note { background: var(--accent-soft, #eaf2ee); }
-.ws-note.warn { background: #fbf2df; color: #8a5d10; }
-.ws-empty { margin: 0 0 10px; color: var(--ink-soft, #5c6675); }
-.ws-revs { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.ws-revs li {
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  padding: 10px 12px; border: 1px solid var(--rule, #d5dae1); border-radius: 8px; background: #fff;
-}
-.r-n { font-weight: 700; }
-.r-m { color: var(--ink-soft, #5c6675); font-size: 12px; }
-.ws-revs li .ws-btn { margin-left: auto; }
-
-/* ---------- fields ---------- */
-.ws-field {
-  display: block; width: 100%; box-sizing: border-box;
-  min-height: 44px; padding: 8px 10px; resize: vertical;
-  font: 400 15px/1.45 Georgia, "Times New Roman", serif; color: var(--ink, #1f2937);
-  background: #fcfdfd; border: 1px solid var(--rule, #d5dae1); border-radius: 6px;
-}
-.ws-field:focus { background: #fff; border-color: var(--accent, #1f5d4c); }
-.ws-field::placeholder { color: #9aa3ae; }
-
-table.agenda.ix td { vertical-align: top; padding: 8px; }
-table.agenda.ix td:has(.ws-field) { width: 46%; }
-
-.checklist li.ix { list-style: none; margin-left: 0; }
-.checklist li.ix label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
-.checklist li.ix input { margin-top: 4px; flex: none; width: 17px; height: 17px; accent-color: var(--accent, #1f5d4c); }
-.checklist li.ix input:checked + span { color: var(--ink-soft, #5c6675); }
-
-.step-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
-.step-head h3 { flex: 1 1 auto; }
-.step-done {
-  display: flex; gap: 8px; align-items: center; cursor: pointer; white-space: nowrap;
-  font: 700 11px/1 "Trebuchet MS", system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--ink-soft, #5c6675); padding: 6px 10px; border: 1px solid var(--rule, #d5dae1); border-radius: 99px;
-}
-.step-done input { width: 15px; height: 15px; accent-color: var(--accent, #1f5d4c); }
-.step-head.is-done .step-done { color: var(--accent, #1f5d4c); border-color: var(--accent, #1f5d4c); background: var(--accent-soft, #eaf2ee); }
-
-.sketch { border: 1px dashed var(--rule, #d5dae1); border-radius: 8px; padding: 14px; margin: 18px 0; }
-.sketch .label { display: block; font-size: 13px; color: var(--ink-soft, #5c6675); margin-bottom: 10px; }
-
-/* ---------- print ---------- */
-@media print {
-  .ws-bar { display: none !important; }
-  .ws-field { border: none; border-bottom: 1px solid #bbb; border-radius: 0; background: none; min-height: 0; }
-  .step-done { border: none; padding: 0; }
-  article { max-width: none; }
-}
-
-@media (max-width: 620px) {
-  .ws-bar-in { padding: 10px 16px; gap: 10px; }
-  .ws-status { margin-left: 0; width: 100%; order: 9; }
-  .ws-progress .ws-meter { width: 56px; }
-}
-</style>
-
-</head><body>
 <article>
   <header class="masthead">
-    <span class="eyebrow">AI-DLC × INTO THE DEEP · TEACHER'S GUIDE · 2-HOUR SESSION</span>
+    <span class="eyebrow">AI-DLC × INTO THE DEEP · ANSWER GUIDE · 2-HOUR SESSION</span>
     <h1>Give the Arm Something New to Do</h1>
     <p class="dek">The arm arrives already built. Students don't construct a mechanism — they decide <b>what it should be able to do that it can't do yet</b>, and carry that objective through five phases of AI-DLC. Every team chooses a different objective; every team is held to the same four engineering tenets and the same guardrails.</p>
     <div class="meta-row">
@@ -313,7 +219,7 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <span class="meta-chip">Team: <b>3–6 students</b></span>
       <span class="meta-chip">Bench OpMode: <b>TeleopWithoutDriving</b></span>
     </div>
-    <div class="doc-switch"><span class="active">Teacher's Guide</span><span class="inactive">→ Student Worksheet — 16 steps, separate handout</span></div>
+    <div class="doc-switch"><span class="active">Answer Guide</span><span class="inactive">→ Worksheet — five phases, separate handout</span></div>
   </header>
   <nav class="quicknav">
     <a href="#howto"><span class="num">00</span>How to use this guide</a>
@@ -330,12 +236,13 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
   <div class="wrap">
       <p>The arm arrives already built. Students don't construct a mechanism — they decide <b>what it should be able to do that it can't do yet</b>, and carry that objective through five phases of AI-DLC. Every team chooses a different objective; every team is held to the same four engineering tenets and the same guardrails.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:5">
+        <colgroup><col style="width:20.00%"><col style="width:20.00%"><col style="width:20.00%"><col style="width:20.00%"><col style="width:20.00%"></colgroup>
         <tr><th>Session</th><th>Setup</th><th>Team</th><th>Codebase</th><th>Bench OpMode</th></tr>
         <tr><td>120 min</td><td>+20 min</td><td>3–6 students</td><td><code>Into_The_Deep</code></td><td><code>TeleopWithoutDriving</code></td></tr>
       </table>
       </div>
-      <div class="callout"><span class="label">Paired handout</span><b>Student Worksheet — Give the Arm Something New to Do.</b> Sixteen numbered steps. Steps 1–3 are setup and deliberately prescriptive. Between Step 3 and Step 4 sits a <b>capture sheet, not a step</b> — the page they fill in while someone walks the codebase from the front. Everything from Step 4 on gives them a lens and questions rather than instructions, and Steps 4–5 are where they choose an objective and pressure-test it against fixed guardrails.</div>
+      <div class="callout"><span class="label">Paired handout</span><b>Worksheet — Give the Arm Something New to Do.</b> Sixteen numbered steps. Steps 1–3 are setup and deliberately prescriptive. Between Step 3 and Step 4 sits a <b>capture sheet, not a step</b> — the page they fill in while someone walks the codebase from the front. Everything from Step 4 on gives them a lens and questions rather than instructions, and Steps 4–5 are where they choose an objective and pressure-test it against fixed guardrails.</div>
     <section>
       <span class="eyebrow">Read this first</span>
       <h2>How to use this guide</h2>
@@ -348,7 +255,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <span class="eyebrow">Read this first, continued</span>
       <h3>Where your blocks and their steps line up</h3>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:3">
+        <colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.33%"></colgroup>
         <tr><th>Your block</th><th>Steps</th><th>What you're watching for</th></tr>
         <tr><td>Block 0 — Setup</td><td>1 – 3</td><td>Green Gradle sync, everyone on their own branch, nobody editing <code>master</code></td></tr>
         <tr><td>Codebase walkthrough (live)</td><td>capture sheet</td><td>Pens moving. A blank vocabulary table now is a stalled team at Phase 3</td></tr>
@@ -401,7 +309,7 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
           <li><b>The idea:</b> AI is a tool that accelerates the work. It does not replace the thinking. Point at the shape of the session when you teach this: <b>four of the five phases happen before anyone writes code</b>, and that is not nostalgia — it is what makes the fifth phase fast instead of expensive.</li>
           <li><b>Say this plainly:</b> Design and planning matter exactly as much when AI writes the code as when they write it by hand. Arguably more, because AI will produce a large amount of confident, plausible, wrong code very quickly — and fastest of all when nobody has told it what they actually want.</li>
           <li><b>The failure mode:</b> Code that compiles, looks reasonable, and nobody understands or intended. It comes from skipping the design and asking for the answer. It isn't fast; it moves the debugging to later, when there is less time and more of it to unpick.</li>
-          <li><b>Their moment:</b> Step 10, at the Verify gate — design already done — they choose how much of the typing to hand over, and write down why. At the retro they say whether it was right.</li>
+          <li><b>Their moment:</b> The first thing Phase 5 asks for — design already done, before a line is written — they choose how much of the typing to hand over, and write down why. At the wrap they say whether it was right.</li>
           <li><b>What to watch for:</b> Not which position they picked. Whether they can explain the code they shipped. That is the only signal that separates using AI well from generating something nobody owns.</li>
         </ul>
       </div>
@@ -412,7 +320,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <h2>AI accelerates the work. It doesn't replace the thinking.</h2>
       <p>Worth walking through at kickoff, and worth being explicit about <b>why the session is shaped the way it is</b>: four phases of deciding before one phase of building. In each phase there is something AI does well and something that stays theirs, and the boundary is the interesting part.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:3">
+        <colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.33%"></colgroup>
         <tr><th>Phase</th><th>What AI is good at here</th><th>What stays theirs</th></tr>
         <tr><td><b>1 · Intent</b></td><td>Interviewing them. Asking what they left out. Turning a rambling explanation into a tight paragraph.</td><td>Deciding which problem is worth solving at all.</td></tr>
         <tr><td><b>2 · Elaborate</b></td><td>Proposing slices. Spotting acceptance criteria that can't actually be checked.</td><td>Deciding what's in scope and what they're saying no to.</td></tr>
@@ -427,7 +336,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <h3>Where they spend the speed</h3>
       <p>Once the design is done, students choose how much of the typing to hand over. All three positions are used in industry by good engineers on real code. Your job is not to push them toward a position — it is to make the choice conscious, and to be clear that this is a choice about <b>typing, not about thinking</b>. Every position below assumes a state table they believe in.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:3">
+        <colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.33%"></colgroup>
         <tr><th>Position</th><th>What it looks like</th><th>Who it suits, and what it costs</th></tr>
         <tr><td><b>1 · Ask only</b></td><td>They write every line; AI answers questions about the codebase and about Java.</td><td>A student new to Java, or one who wants the reps. Slowest — expect less finished at demo, and say that's fine.</td></tr>
         <tr><td><b>2 · Piece by piece</b></td><td>They own the design and the file, ask for one case at a time, and check each against their state table before asking for the next.</td><td>Most teams. The pattern the worksheet is built around, and the closest to normal professional practice.</td></tr>
@@ -456,7 +366,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
     </div></div>
     <section>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:4">
+        <colgroup><col style="width:25.00%"><col style="width:25.00%"><col style="width:25.00%"><col style="width:25.00%"></colgroup>
         <tr><th>Time</th><th>Block</th><th>Steps</th><th>Deliverable</th></tr>
         <tr><td>−0:20</td><td>Block 0 — Setup (ideally before the session)</td><td>1–3</td><td>Green sync, everyone on a branch, bench OpMode open</td></tr>
         <tr><td>0:00–0:20</td><td>Codebase walkthrough — delivered live from the front</td><td>capture sheet</td><td>A list of real methods; the missing technique marked</td></tr>
@@ -475,7 +386,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <span class="eyebrow">Session at a glance, continued</span>
       <h3>What will go wrong in Block 0</h3>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>What you'll see</th><th>What it actually is</th></tr>
         <tr><td>Gradle sync fails instantly, before downloading anything</td><td>They opened a subfolder instead of the repo root. Close and re-open the top <code>Into_The_Deep</code> folder.</td></tr>
         <tr><td>Someone is editing <code>master</code></td><td>The branch step got skipped. Catch this in the first ten minutes — much easier to fix before there are changes.</td></tr>
@@ -490,7 +402,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <p style="font-size:14px;color:var(--ink-soft);">This block is delivered from the front. Students are not reading the code alone; their worksheet carries a capture sheet instead of steps. That makes the talk a <b>contract</b>: three specific things have to come out of it, because Steps 4 through 14 assume students are holding them.</p>
       <h3>What the walkthrough must leave them holding</h3>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>They must leave with</th><th>Why — the step that breaks without it</th></tr>
         <tr><td><b>Vocabulary.</b> At least six boolean questions and four orders, each named with its class, spelled correctly</td><td>Step 4 (choose an objective) and Step 9, whose state table must name real methods</td></tr>
         <tr><td><b>The missing loop-time technique.</b> Three defences are in the code; per-mechanism timing is not</td><td>Step 14, where they add it back — and the <em>Measure</em> objective direction in Step 4</td></tr>
@@ -504,7 +417,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <h3>Background for the presenter</h3>
       <p style="font-size:14px;color:var(--ink-soft);">This is not a motor and a servo. It is a five-degree-of-freedom limb with a gripper, already under closed-loop control, already coordinated by a two-level state machine.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:3">
+        <colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.33%"></colgroup>
         <tr><th>Part</th><th>Hardware</th><th>Coordinated by</th></tr>
         <tr><td>Monkey's Limb</td><td>Shoulder pivot (<code>PM</code>) plus a three-motor extension stage (<code>AM1</code>–<code>AM3</code>), positioned in centimetres by a <code>PIDFController</code></td><td><code>ShoulderFSM</code>, <code>ArmFSM</code></td></tr>
         <tr><td>Monkey's Paw</td><td>Elbow, wrist flex, wrist deviation and finger servos (<code>ES</code>, <code>WFS</code>, <code>WDS</code>, <code>FS</code>), three closed-loop against analog encoders</td><td><code>ElbowFSM</code>, <code>WristFSM</code>, <code>DeviatorFSM</code>, <code>FingerFSM</code></td></tr>
@@ -519,7 +433,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <h3>Three real FSM-and-wrapper pairs to put on the projector</h3>
       <p style="font-size:14px;color:var(--ink-soft);">Read one pair properly rather than three quickly. The finger is the shortest and the clearest; the arm is the one that shows two mechanisms coordinating.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:4">
+        <colgroup><col style="width:25.00%"><col style="width:25.00%"><col style="width:25.00%"><col style="width:25.00%"></colgroup>
         <tr><th>Mechanism</th><th>FSM</th><th>Wrapper</th><th>What drives its transitions</th></tr>
         <tr><td>Extending arm</td><td><code>ArmFSM</code></td><td><code>ArmMotorsWrapper</code></td><td><code>pidfController.atSetPoint()</code> plus target-position predicates</td></tr>
         <tr><td>Shoulder</td><td><code>ShoulderFSM</code></td><td><code>ShoulderWrapper</code></td><td>Angle error against a tolerance, in degrees</td></tr>
@@ -534,7 +449,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <p><b>Safe stow.</b> Press a free control and the limb returns to a known travel pose from wherever it happens to be — retracting the arm fully <b>before</b> the shoulder rotates, so an extended arm never swings.</p>
       <p>It sits in the worksheet's <b>Recover</b> category. Choose a different category to demo if your teams are likely to gravitate here — the point is the shape, not the answer.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Why it's a good worked example</th><th>What it demonstrates</th></tr>
         <tr><td>It uses only existing motions</td><td><code>armFSM.retract()</code>, <code>shoulderFSM.moveToIntakeAngle()</code> — no new setpoints to measure</td></tr>
         <tr><td>It has a real ordering constraint</td><td>Retract before rotate. A sequence, not two independent commands</td></tr>
@@ -547,7 +463,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <p>Dictate it out loud; one student types, everyone talks. Insist on the loop-time number here — retrofitting it after Phase 3 never happens.</p>
       <div class="prompt">Our arm can already retract and rotate to intake. We want one control that safely stows it from any position. Ask what you need to know, then draft a short intent with problem, success criteria and non-goals.</div>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Section</th><th>For this objective</th></tr>
         <tr><td>Problem</td><td>Recovering to a safe travel pose takes several separate inputs, and under pressure drivers rotate an extended arm.</td></tr>
         <tr><td>Success criteria</td><td>One press returns the limb to the travel pose from any starting position, arm before shoulder, every time.</td></tr>
@@ -562,7 +479,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <h3>Phase 2 — Elaborate</h3>
       <p>Push back on anything you couldn't check by hand. “It stows properly” is not a criterion.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Story</th><th>Acceptance criterion</th></tr>
         <tr><td>Retract first</td><td>From extended, pressing the control retracts fully before the shoulder moves at all.</td></tr>
         <tr><td>Then rotate</td><td>Once <code>FULLY_RETRACTED()</code> is true, the shoulder moves and stops at <code>AT_INTAKE()</code>.</td></tr>
@@ -578,7 +496,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <p>On paper first. The states are easy; the exit conditions are the lesson. Every arrow must name a boolean that already exists.</p>
       <div class="prompt">Here's our sequence: idle until pressed, retract, then rotate, then stowed. Turn it into a state table, and tell us which transitions we haven't given an exit condition — don't design it for us.</div>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:4">
+        <colgroup><col style="width:25.00%"><col style="width:25.00%"><col style="width:25.00%"><col style="width:25.00%"></colgroup>
         <tr><th>State</th><th>What it orders</th><th>Existing boolean that ends it</th><th>Goes to</th></tr>
         <tr><td><code>IDLE</code></td><td>nothing</td><td>the control was just pressed</td><td><code>RETRACTING</code></td></tr>
         <tr><td><code>RETRACTING</code></td><td><code>armFSM.retract()</code></td><td><code>armFSM.FULLY_RETRACTED()</code></td><td><code>ROTATING</code></td></tr>
@@ -610,7 +529,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <h3>Phase 5 — Bolt, in four moves</h3>
       <p>The ordering matters more than the code. <b>Write, instrument, run, measure</b> — teams that run before instrumenting spend the back half of the block guessing.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:3">
+        <colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.33%"></colgroup>
         <tr><th>Step</th><th>Move</th><th>What good looks like</th></tr>
         <tr><td>11</td><td>Write the coordinator</td><td>Compiles; imports no hardware; one transition working before the second is written</td></tr>
         <tr><td>12</td><td>Instrument it</td><td>Diagnostics written and switched on <b>before</b> the first run</td></tr>
@@ -677,7 +597,7 @@ public class SafeStowFSM {
     </section>
     <section id="code">
       <span class="eyebrow">Fallback only, continued</span>
-      <p class="eyebrow" style="color:#8a6a22;">◆ Data and logging</p>
+      <p class="eyebrow" style="color:var(--accent-warm);">◆ Data and logging</p>
       <div class="callout"><span class="label">Why the log() method looks like that</span>It logs <code>armFSM.getCurrentHeight()</code> as well as <code>FULLY_RETRACTED()</code>. That extra line is the whole tenet in miniature: when the sequence stalls in <code>RETRACTING</code>, the boolean alone tells a student only that it hasn't finished. The height tells them whether the arm is moving and stopped short, never moved at all, or is oscillating around the tolerance — three different bugs that look identical from across the room.</div>
     </section>
     <section>
@@ -707,7 +627,8 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       <h3>During the walkthrough — filling the capture sheet</h3>
       <p>These are the ones worth demonstrating live, because they show AI being used to <b>read</b> code faster rather than to write it. That framing sets up the whole session, and it's the best use of the projector while the walkthrough is running — a team whose vocabulary table is thin can fill it in thirty seconds with the first prompt below rather than falling behind.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Capture sheet box</th><th>Prompt</th></tr>
         <tr><td><b>Vocabulary.</b> — <em>Listen for: a list, not a summary.</em></td><td><code>Here are LimbFSM.java and MonkeyPawFSM.java. List every public method that returns a boolean, grouped by which part of the arm it describes. Do not summarise the classes — I want the vocabulary.</code></td></tr>
         <tr><td><b>Separation, if you demo a pair.</b> — <em>Listen for: it points at real lines.</em></td><td><code>Here are ArmFSM.java and ArmMotorsWrapper.java. Explain the division of responsibility between these two classes, then point to any line in either file that seems to cross it.</code></td></tr>
@@ -721,7 +642,8 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       <h3>Choosing an objective — Steps 4 and 5</h3>
       <p>Note what the first prompt does <b>not</b> ask for: it asks for options, not a recommendation. The choice stays with the team, and saying that out loud is worth thirty seconds.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Step and purpose</th><th>Prompt</th></tr>
         <tr><td><b>Step 4</b> — generate options. — <em>Listen for: five distinct ideas, no code.</em></td><td><code>Our arm can already do these things: [paste the capture sheet vocabulary]. Suggest five different capabilities it does not have yet that could be built by sequencing only those existing methods. Do not write code. For each, say which methods it would use.</code></td></tr>
         <tr><td><b>Step 5</b> — test against guardrails. — <em>Listen for: a specific failing constraint.</em></td><td><code>Here is our objective: [objective]. Check it against these five constraints: [paste the guardrails]. Which does it fail, and what is the smallest change that would make it pass?</code></td></tr>
@@ -733,7 +655,8 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       <h3>The five phases</h3>
       <p>One prompt per phase, each modelling the boundary from the walkthrough table: AI drafts and challenges, the team decides.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Phase and purpose</th><th>Prompt</th></tr>
         <tr><td><b>Phase 1</b> — let it interview them. — <em>The one-question-at-a-time rule is what makes this work.</em></td><td><code>I want to add a capability to our robot arm: [one sentence]. Before you write anything, interview me about it — one question at a time, waiting for my answer. When you have enough, draft a short intent with a problem statement, success criteria and non-goals.</code></td></tr>
         <tr><td><b>Phase 2</b> — make criteria testable. — <em>Listen for: it admits when it cannot describe a test.</em></td><td><code>Here are our acceptance criteria: [paste]. For each one, describe exactly how I would test it by hand, on a bench, with the robot on blocks. If you cannot describe a test for one, say so plainly rather than inventing one.</code></td></tr>
@@ -745,7 +668,8 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       <span class="eyebrow">Tenet 4 in practice, continued</span>
       <h3>The five phases, continued</h3>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Phase and purpose</th><th>Prompt</th></tr>
         <tr><td><b>Phase 3b</b> — find the interruption cases.</td><td><code>Here is our sequence: [paste]. What happens if the driver presses a different control halfway through? Enumerate the cases we have not handled. Do not fix them.</code></td></tr>
         <tr><td><b>Phase 4</b> — make it a reviewer. — <em>Listen for: a list of gaps, not a rewrite.</em></td><td><code>Act as a reviewer, not an author. Here is our design: [paste]. What would break on real hardware, and what did we leave undefined? List what is missing. Do not fix anything.</code></td></tr>
@@ -758,7 +682,8 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       <h3>Phase 5 — one prompt per dial position</h3>
       <p>These are the same task at three settings. Showing all three side by side makes the dial concrete in a way the table alone does.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Position</th><th>Prompt</th></tr>
         <tr><td><b>1 · Ask only</b> — <em>They write the code; AI explains the codebase.</em></td><td><code>I am writing a class that calls armFSM.retract(). Explain what that method actually does, whether it blocks, and how I would know when it has finished. Do not write my class.</code></td></tr>
         <tr><td><b>2 · Piece by piece</b> — <em>The scoping words are what make this safe.</em></td><td><code>Here is my state table and my class so far: [paste]. Add ONLY the RETRACTING case, matching row two of the table exactly. Do not add other cases, do not refactor what is there, and do not add fields I have not declared.</code></td></tr>
@@ -767,7 +692,8 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       </div>
       <h3>Instrumenting and debugging — Steps 12 and 13</h3>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Step and purpose</th><th>Prompt</th></tr>
         <tr><td><b>Step 12</b> — decide what to log before writing it. — <em>Listen for: values, not just states.</em></td><td><code>Here is my updateState method: [paste]. For each transition, tell me which values I would need on screen to diagnose it stalling there. Do not write the logging code yet — just tell me what I would need to see.</code></td></tr>
         <tr><td><b>Step 13</b> — debug from data, not guesses. — <em>The constraint in the first sentence is the lesson.</em></td><td><code>Here is my log output and my state table: [paste both]. The sequence stalls in RETRACTING. Based only on these numbers, what are the possible causes, ranked by likelihood? Do not suggest changes yet.</code></td></tr>
@@ -779,7 +705,8 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       <h3>Weak prompt, strong prompt</h3>
       <p>Worth putting on the board. Every pair below is the same intent — the right-hand version is scoped, grounded in real files, and asks for gaps rather than answers.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Instead of</th><th>Ask this</th></tr>
         <tr><td><code>Write me a state machine for stowing the arm.</code></td><td><code>Here is my state table. Add only the ROTATING case, matching row three exactly.</code></td></tr>
         <tr><td><code>Is this design good?</code></td><td><code>Which rows of this table name a method that does not exist in the files I gave you?</code></td></tr>
@@ -794,7 +721,8 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       <span class="eyebrow">Facilitator notes</span>
       <h2>Where teams get stuck, and what to say</h2>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:3">
+        <colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.33%"></colgroup>
         <tr><th>What you'll see</th><th>What's actually happening</th><th>What to ask</th></tr>
         <tr><td>An objective that needs a new setpoint or PID tuning</td><td>Guardrail one failed and nobody said so out loud</td><td>“Which method already does that? Show me the line.”</td></tr>
         <tr><td>A vague objective, or one built on a method that doesn't exist</td><td>The capture sheet is thin — they watched the walkthrough without writing</td><td>“Read me your vocabulary list. Which line does this need?”</td></tr>
@@ -832,7 +760,8 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       <h2>Findings from the codebase review</h2>
       <p>Turned up while preparing this guide. None affect the session; all look like real defects worth a mentor's attention.</p>
       <div class="table-scroll">
-      <table class="agenda">
+      <table class="agenda" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Where</th><th>What</th></tr>
         <tr><td><code>ArmFSM.isFullyExtended()</code></td><td>Compares doubles with <code>==</code> against a value computed from spool geometry, so <code>FULLY_EXTENDED</code> looks unreachable.</td></tr>
         <tr><td><code>Logger</code></td><td><code>PRODUCTION()</code> and <code>DRIVER_DATA()</code> both return <code>state == DEBUG</code>. Harmless while nothing calls them.</td></tr>
@@ -844,6 +773,5 @@ logger.log("SafeStow ms", stowMs, Logger.LogLevels.DEBUG);</pre>
       <p style="font-size:14px;color:var(--ink-soft);">Reviewed against <code>Into_The_Deep-master</code>: <code>Core/</code>, <code>Teleop/Monkeys_Limb/</code>, <code>Teleop/monkeypaw/</code>, <code>Teleop/Wrappers/</code>, the eight test classes and both gradle dependency files. FTC SDK 10.2.0, FTCLib 2.1.1, JUnit 5.10.3, Mockito 5.13.0 — verified against the repository rather than assumed.</p>
     </section>
   </div>
-  <footer><hr class="rule" style="margin-bottom:32px;"><p>Reviewed against <code>Into_The_Deep-master</code>: <code>Core/</code>, <code>Teleop/Monkeys_Limb/</code>, <code>Teleop/monkeypaw/</code>, <code>Teleop/Wrappers/</code>, the eight test classes and both gradle dependency files. FTC SDK 10.2.0, FTCLib 2.1.1, JUnit 5.10.3, Mockito 5.13.0 — verified against the repository rather than assumed. Every method named in the worked objective was confirmed to exist. Source of truth for this document is <code>src/teachers-guide.md</code>.</p></footer>
+  <footer><hr class="rule" style="margin-bottom:32px;"><p>Reviewed against <code>Into_The_Deep-master</code>: <code>Core/</code>, <code>Teleop/Monkeys_Limb/</code>, <code>Teleop/monkeypaw/</code>, <code>Teleop/Wrappers/</code>, the eight test classes and both gradle dependency files. FTC SDK 10.2.0, FTCLib 2.1.1, JUnit 5.10.3, Mockito 5.13.0 — verified against the repository rather than assumed. Every method named in the worked objective was confirmed to exist. Source of truth for this document is <code>src/answer-guide.md</code>.</p></footer>
 </article>
-</body></html>

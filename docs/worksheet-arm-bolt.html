@@ -23,6 +23,14 @@
     --good:#3f7a4e;
     --good-soft:#e2eee3;
     --shadow: 0 1px 2px rgba(30,30,20,0.06), 0 8px 24px -12px rgba(30,30,20,0.18);
+
+    /* One column width for every band of the page — masthead, quick-nav, body,
+       toolbar and footer all read from these, so they can never drift apart.
+       The column grows with the window and stops at --doc-max; --doc-min is the
+       floor below which the page scrolls sideways rather than crushing. */
+    --doc-max: 1040px;
+    --doc-min: 360px;
+    --doc-pad: 24px;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
@@ -45,7 +53,7 @@
 
   *{box-sizing:border-box;}
   body{
-    margin:0;
+    margin:0; min-width:var(--doc-min);
     background:
       linear-gradient(var(--paper),var(--paper)),
       repeating-linear-gradient(0deg, transparent, transparent 27px, var(--rule) 27px, var(--rule) 28px);
@@ -66,10 +74,10 @@
   a{ color:var(--accent); text-decoration-thickness:1px; text-underline-offset:2px; }
   a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
-  .wrap{ max-width:760px; margin:0 auto; padding:0 24px 40px; }
-  .wide{ max-width:1000px; margin:0 auto; padding:0 24px; }
+  .wrap{ max-width:var(--doc-max); margin:0 auto; padding:0 var(--doc-pad) 40px; }
+  .wide{ max-width:var(--doc-max); margin:0 auto; padding:0 var(--doc-pad); }
 
-  .masthead{ max-width:1000px; margin:0 auto; padding:56px 24px 32px; border-bottom:2px solid var(--ink); }
+  .masthead{ max-width:var(--doc-max); margin:0 auto; padding:56px var(--doc-pad) 32px; border-bottom:2px solid var(--ink); }
   .masthead .eyebrow{ margin-bottom:14px; display:block; }
   .masthead h1{ font-size:clamp(32px,5vw,50px); line-height:1.03; max-width:19ch; }
   .masthead p.dek{ font-family:"Source Serif 4", serif; font-size:18.5px; color:var(--ink-soft); max-width:56ch; margin-top:14px; }
@@ -88,7 +96,7 @@
   .doc-switch .inactive{ color:var(--ink-soft); }
 
   nav.quicknav{
-    max-width:1000px; margin:0 auto; padding:14px 24px; display:flex; flex-wrap:wrap; gap:4px 18px;
+    max-width:var(--doc-max); margin:0 auto; padding:14px var(--doc-pad); display:flex; flex-wrap:wrap; gap:4px 18px;
     border-bottom:1px solid var(--rule); font-family:"Barlow Condensed", sans-serif; font-weight:600; letter-spacing:0.02em; font-size:14px;
   }
   nav.quicknav a{ color:var(--ink-soft); text-decoration:none; white-space:nowrap; }
@@ -98,7 +106,7 @@
   section{ padding-top:52px; }
   section > .eyebrow{ display:block; margin-bottom:8px; }
   section h2{ font-size:29px; margin-bottom:14px; }
-  section h2 .phase-no{
+  section h2 .phase-no, section h3 .phase-no{
     display:inline-block; font-family:"JetBrains Mono",monospace; font-size:16px; font-weight:600; color:var(--accent);
     border:1px solid var(--accent); border-radius:50%; width:30px;height:30px; line-height:28px; text-align:center;
     margin-right:10px; vertical-align:middle;
@@ -117,8 +125,15 @@
   .seg.c1{ background:#3c5a6b; } .seg.c2{ background:#1c5f8a; } .seg.c3{ background:#2c7593; }
   .seg.c4{ background:#48505a; } .seg.c5{ background:#b8551c; } .seg.c6{ background:#1c5f8a; } .seg.c7{ background:#5b5d51;}
 
-  table.agenda{ width:100%; border-collapse:collapse; margin-top:18px; font-size:14.5px;}
-  table.agenda th, table.agenda td{ text-align:left; padding:9px 10px; border-bottom:1px solid var(--rule); vertical-align:top;}
+  table.agenda{ width:100%; table-layout:fixed; border-collapse:collapse; margin-top:18px; font-size:14.5px;}
+  /* Below this the columns stop being usable, so .table-scroll takes over.
+     Answer tables need a per-column floor wide enough to actually type in;
+     read-only tables only need to stay legible. */
+  .table-scroll > table.agenda{ min-width:520px; }
+  .table-scroll > table.agenda.ix{ min-width:calc(var(--ncol,2) * 180px); }
+  table.agenda th, table.agenda td{ text-align:left; padding:9px 10px; border-bottom:1px solid var(--rule); vertical-align:top; overflow-wrap:break-word;}
+  /* Fixed layout can't widen a column for a long method name, so let it wrap. */
+  table.agenda code{ overflow-wrap:anywhere; }
   table.agenda th{ font-family:"Barlow Condensed",sans-serif; text-transform:uppercase; font-size:11.5px; letter-spacing:0.08em; color:var(--ink-soft); font-weight:600;}
   table.agenda td.time{ font-family:"JetBrains Mono",monospace; font-size:13px; white-space:nowrap; color:var(--ink-soft);}
   .table-scroll{ overflow-x:auto; }
@@ -185,9 +200,15 @@
   .techcard p{ font-size:14px; margin:0; color:var(--ink-soft); }
 
   hr.rule{ border:none; border-top:1px solid var(--rule); margin:52px 0 0; }
-  footer{ max-width:1000px; margin:0 auto; padding:40px 24px 60px; color:var(--ink-soft); font-size:14px; }
+  footer{ max-width:var(--doc-max); margin:0 auto; padding:40px var(--doc-pad) 60px; color:var(--ink-soft); font-size:14px; }
   footer a{ color:var(--ink-soft); }
   footer h3{ font-size:15px; color:var(--ink); margin-bottom:10px; }
+  @media (max-width:620px){
+    :root{ --doc-pad:16px; }
+    body{ font-size:16px; }
+    .masthead{ padding-top:36px; }
+  }
+
   ::selection{ background:var(--accent); color:var(--surface); }
 </style>
 <style>
@@ -206,7 +227,7 @@ body { margin: 0; }
   box-shadow: 0 1px 12px rgba(16, 24, 40, .06);
 }
 .ws-bar-in {
-  max-width: 880px; margin: 0 auto; padding: 10px 24px;
+  max-width: var(--doc-max, 1040px); margin: 0 auto; padding: 10px var(--doc-pad, 24px);
   display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
   font: 500 13px/1.3 "Trebuchet MS", system-ui, sans-serif;
 }
@@ -221,13 +242,13 @@ body { margin: 0; }
 
 .ws-status { margin-left: auto; color: var(--ink-soft, #5c6675); font-size: 12px; white-space: nowrap; }
 .ws-status.ok { color: var(--accent, #1f5d4c); }
-.ws-status.warn { color: #8a5d10; font-weight: 700; }
+.ws-status.warn { color: var(--accent-warm, #8a5d10); font-weight: 700; }
 
 .ws-actions { display: flex; gap: 8px; }
 .ws-btn {
   font: 600 12px/1 "Trebuchet MS", system-ui, sans-serif;
   padding: 7px 12px; border-radius: 7px; cursor: pointer;
-  border: 1px solid var(--rule, #d5dae1); background: #fff; color: var(--ink, #1f2937);
+  border: 1px solid var(--rule, #d5dae1); background: var(--surface, #fff); color: var(--ink, #1f2937);
 }
 .ws-btn:hover { border-color: var(--accent, #1f5d4c); color: var(--accent, #1f5d4c); }
 .ws-btn.is-open { background: var(--accent-soft, #eaf2ee); border-color: var(--accent, #1f5d4c); color: var(--accent, #1f5d4c); }
@@ -238,17 +259,17 @@ body { margin: 0; }
 }
 
 .ws-panel, .ws-note {
-  max-width: 880px; margin: 0 auto; padding: 14px 24px 18px;
+  max-width: var(--doc-max, 1040px); margin: 0 auto; padding: 14px var(--doc-pad, 24px) 18px;
   border-top: 1px solid var(--rule, #d5dae1);
   font: 400 13px/1.5 "Trebuchet MS", system-ui, sans-serif; color: var(--ink, #1f2937);
 }
 .ws-note { background: var(--accent-soft, #eaf2ee); }
-.ws-note.warn { background: #fbf2df; color: #8a5d10; }
+.ws-note.warn { background: var(--accent-warm-soft, #fbf2df); color: var(--accent-warm, #8a5d10); }
 .ws-empty { margin: 0 0 10px; color: var(--ink-soft, #5c6675); }
 .ws-revs { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .ws-revs li {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  padding: 10px 12px; border: 1px solid var(--rule, #d5dae1); border-radius: 8px; background: #fff;
+  padding: 10px 12px; border: 1px solid var(--rule, #d5dae1); border-radius: 8px; background: var(--surface, #fff);
 }
 .r-n { font-weight: 700; }
 .r-m { color: var(--ink-soft, #5c6675); font-size: 12px; }
@@ -257,17 +278,19 @@ body { margin: 0; }
 /* ---------- fields ---------- */
 .ws-field {
   display: block; width: 100%; box-sizing: border-box;
-  min-height: 44px; padding: 8px 10px; resize: vertical;
+  min-height: 44px; padding: 8px 10px; resize: vertical; overflow-y: auto;
   font: 400 15px/1.45 Georgia, "Times New Roman", serif; color: var(--ink, #1f2937);
-  background: #fcfdfd; border: 1px solid var(--rule, #d5dae1); border-radius: 6px;
+  background: var(--surface, #fcfdfd); border: 1px solid var(--rule, #d5dae1); border-radius: 6px;
 }
-.ws-field:focus { background: #fff; border-color: var(--accent, #1f5d4c); }
+.ws-field:focus { background: var(--surface, #fff); border-color: var(--accent, #1f5d4c); }
 .ws-field::placeholder { color: #9aa3ae; }
 
 table.agenda.ix td { vertical-align: top; padding: 8px; }
-table.agenda.ix td:has(.ws-field) { width: 46%; }
 
-.checklist li.ix { list-style: none; margin-left: 0; }
+/* artifact.css draws a square via ::before for the printed checklist; the
+   interactive page has a real checkbox, so drop the drawn one. */
+.checklist li.ix { list-style: none; margin-left: 0; padding-left: 0; }
+.checklist li.ix::before { content: none; }
 .checklist li.ix label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
 .checklist li.ix input { margin-top: 4px; flex: none; width: 17px; height: 17px; accent-color: var(--accent, #1f5d4c); }
 .checklist li.ix input:checked + span { color: var(--ink-soft, #5c6675); }
@@ -290,11 +313,13 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
   .ws-bar { display: none !important; }
   .ws-field { border: none; border-bottom: 1px solid #bbb; border-radius: 0; background: none; min-height: 0; }
   .step-done { border: none; padding: 0; }
-  article { max-width: none; }
+  article, .wrap, .masthead, footer { max-width: none; }
+  .table-scroll { overflow-x: visible; }
+  .table-scroll > table.agenda { min-width: 0; }
 }
 
 @media (max-width: 620px) {
-  .ws-bar-in { padding: 10px 16px; gap: 10px; }
+  .ws-bar-in { gap: 10px; }
   .ws-status { margin-left: 0; width: 100%; order: 9; }
   .ws-progress .ws-meter { width: 56px; }
 }
@@ -320,14 +345,15 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
 </div>
 <article>
   <header class="masthead">
-    <span class="eyebrow">AI-DLC WORKING SESSION · STUDENT WORKSHEET</span>
+    <span class="eyebrow">AI-DLC WORKING SESSION · WORKSHEET</span>
     <h1>Give the Arm Something New to Do</h1>
   </header>
   <div class="wrap">
       <p>The arm is already built, wired, and running under closed-loop control. Your job is not to build a mechanism. It is to decide <b>what the arm should be able to do that it can't do yet</b> — and take that objective through the five phases of AI-DLC until it works on the bench.</p>
       <p><b>The objective is yours</b> — two teams working from this sheet should end up with two different behaviours on the robot. <b>YOU'RE DONE WHEN</b> closes every phase; don't move on until you can tick it.</p>
       <div class="table-scroll">
-      <table class="agenda ix">
+      <table class="agenda ix" style="--ncol:3">
+        <colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.33%"></colgroup>
         <tr><th>Your name</th><th>Teammates</th><th>Date</th></tr>
         <tr><td><textarea class="ws-field" data-field="s0-t1r0c0" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s0-t1r0c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s0-t1r0c2" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
       </table>
@@ -339,7 +365,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       <p>AI-DLC is how building with AI works when it works: <b>you do the deciding, then AI helps you execute it faster than you could alone.</b> Note the shape of this session — <b>four of the five phases happen before anyone writes code.</b> That isn't old-fashioned; it is what makes the fifth phase fast instead of expensive.</p>
       <p>Each phase below is one step of this worksheet. In every one AI does a real job, and something stays yours — that boundary is the interesting part.</p>
       <div class="table-scroll">
-      <table class="agenda ix">
+      <table class="agenda ix" style="--ncol:3">
+        <colgroup><col style="width:20.30%"><col style="width:41.67%"><col style="width:38.03%"></colgroup>
         <tr><th>Phase</th><th>What AI is good at here</th><th>What stays yours</th></tr>
         <tr><td><b>1 · Intent</b></td><td>Interviewing you. Asking what you left out. Turning a rambling explanation into a tight paragraph.</td><td>Deciding which problem is worth solving at all.</td></tr>
         <tr><td><b>2 · Elaborate</b></td><td>Proposing slices. Spotting acceptance criteria that can't actually be checked.</td><td>What's in scope, and what you're saying no to.</td></tr>
@@ -391,7 +418,7 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
         <h3><span class="phase-no">1</span>Phase 1: Plan Intent <span style="font-size:12px;color:var(--ink-soft);letter-spacing:.08em;">· 15 MIN · AI-DLC PHASE 1</span></h3>
         <label class="step-done"><input type="checkbox" class="ws-check ws-step" data-field="step-1-done"><span>Step complete</span></label>
       </div>
-      <p class="eyebrow" style="color:#8a6a22;">◆ Loop time</p>
+      <p class="eyebrow" style="color:var(--accent-warm);">◆ Loop time</p>
       <p class="eyebrow" style="color:var(--ink-soft);">How to think about this</p>
       <ul>
         <li>Objectives that work here <b>sequence motions the arm already has</b>: combine several driver actions into one, guard a motion until another part reports it's safe, or recover to a known pose. No new setpoints, no PID tuning.</li>
@@ -400,7 +427,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       </ul>
       <div class="prompt">Our arm can already do [paste your vocabulary list]. We want it to [your objective]. Ask me what you need to know, one question at a time, then draft a short intent with a problem statement, success criteria and non-goals.</div>
       <div class="table-scroll">
-      <table class="agenda ix">
+      <table class="agenda ix" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Question</th><th>Your answer</th></tr>
         <tr><td><b>Objective</b> — one sentence: what should the arm do when you're finished, and what's slow or error-prone about doing it today?</td><td><textarea class="ws-field" data-field="s1-t1r0c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
         <tr><td><b>Success criteria</b> — what will you demonstrate, visible from across the room?</td><td><textarea class="ws-field" data-field="s1-t1r1c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
@@ -420,7 +448,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       </ul>
       <div class="prompt">Break this intent into 3–4 small stories, each with an acceptance criterion I could check by hand on the bench. Include one about loop time and one about what we'd log.</div>
       <div class="table-scroll">
-      <table class="agenda ix">
+      <table class="agenda ix" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Story</th><th>Acceptance criterion — how you'd check it</th></tr>
         <tr><td><textarea class="ws-field" data-field="s2-t1r0c0" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s2-t1r0c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
         <tr><td><textarea class="ws-field" data-field="s2-t1r1c0" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s2-t1r1c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
@@ -432,7 +461,7 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
         <h3><span class="phase-no">3</span>Phase 3: Design <span style="font-size:12px;color:var(--ink-soft);letter-spacing:.08em;">· 20 MIN · AI-DLC PHASE 3</span></h3>
         <label class="step-done"><input type="checkbox" class="ws-check ws-step" data-field="step-3-done"><span>Step complete</span></label>
       </div>
-      <p class="eyebrow" style="color:#8a6a22;">◆ Separation of duties</p>
+      <p class="eyebrow" style="color:var(--accent-warm);">◆ Separation of duties</p>
       <p class="eyebrow" style="color:var(--ink-soft);">How to think about this</p>
       <ul>
         <li>Name each state for what is true while the arm is in it — <code>RETRACTING</code>, not <code>AFTER_B_PRESSED</code>. A name describing the trigger will mislead you an hour from now.</li>
@@ -440,7 +469,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       </ul>
       <div class="prompt">Here is our state table: [paste]. For each row, check whether the exit condition names a method that actually exists in the files I gave you, and list any that do not. Then list the transitions we have not defined at all. Do not design it for us.</div>
       <div class="table-scroll">
-      <table class="agenda ix">
+      <table class="agenda ix" style="--ncol:4">
+        <colgroup><col style="width:22.44%"><col style="width:27.78%"><col style="width:30.98%"><col style="width:18.80%"></colgroup>
         <tr><th>State</th><th>What it orders the arm to do</th><th>Existing boolean that ends it</th><th>Goes to</th></tr>
         <tr><td><textarea class="ws-field" data-field="s3-t1r0c0" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s3-t1r0c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s3-t1r0c2" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s3-t1r0c3" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
         <tr><td><textarea class="ws-field" data-field="s3-t1r1c0" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s3-t1r1c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s3-t1r1c2" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s3-t1r1c3" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
@@ -449,7 +479,8 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       </table>
       </div>
       <div class="table-scroll">
-      <table class="agenda ix">
+      <table class="agenda ix" style="--ncol:3">
+        <colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.33%"></colgroup>
         <tr><th>A decision you argued about</th><th>What else you considered</th><th>What it costs you later</th></tr>
         <tr><td><textarea class="ws-field" data-field="s3-t2r0c0" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s3-t2r0c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s3-t2r0c2" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
       </table>
@@ -469,21 +500,31 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
         <li class="ix"><label><input type="checkbox" class="ws-check" data-field="s4-chk5"><span>◆ <b>Data</b> — you know which values you'll log, including the ones decisions are made from.</span></label></li>
         <li class="ix"><label><input type="checkbox" class="ws-check" data-field="s4-chk6"><span>◆ <b>Loop time</b> — you have a plan to measure the cost, in nanoseconds. Nothing changes when your control isn't pressed, and the team agrees this is buildable in the time left.</span></label></li>
       </ul>
-      <h3>◆ Set your dial before you build</h3>
-      <p>Tenet 4. Choose how much typing you hand over: <b>1 · ask only</b> (you write every line), <b>2 · piece by piece</b> (one case at a time, checked against your table), or <b>3 · draft and review</b> (AI writes it from your table; you read every line and own it). None is cheating. This is a choice about <b>typing, not thinking</b>, and each assumes a table you believe in.</p>
-      <div class="table-scroll">
-      <table class="agenda ix">
-        <tr><th>Your dial position, and why it's right for this objective and the time left</th><th>Your answer</th></tr>
-        <tr><td><textarea class="ws-field" data-field="s4-t1r0c0" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s4-t1r0c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
-      </table>
-      </div>
-      <div class="callout good"><span class="label">You're done when</span>Every box ticked, your dial position written down, and anything you couldn't tick fixed or cut out loud.</div>
+      <div class="callout good"><span class="label">You're done when</span>Every box ticked, and anything you couldn't tick fixed or cut out loud.</div>
       <div class="step-head" data-step="5">
         <h3><span class="phase-no">5</span>Phase 5: Bolt <span style="font-size:12px;color:var(--ink-soft);letter-spacing:.08em;">· 40 MIN · AI-DLC PHASE 5</span></h3>
         <label class="step-done"><input type="checkbox" class="ws-check ws-step" data-field="step-5-done"><span>Step complete</span></label>
       </div>
-      <p class="eyebrow" style="color:#8a6a22;">◆ Data and logging</p>
-      <p>Four moves, in this order: <b>write, instrument, run, measure.</b> Teams that run before instrumenting spend the back half of the block guessing.</p>
+      <h3>◆ First decision of this phase: set your dial</h3>
+      <p>Tenet 4. Choose how much of the typing you hand over. All three are used in industry, by good engineers, on real code — none is cheating, and each assumes a state table you believe in. This is a choice about <b>typing, not thinking</b>.</p>
+      <div class="table-scroll">
+      <table class="agenda ix" style="--ncol:3">
+        <colgroup><col style="width:18.16%"><col style="width:45.51%"><col style="width:36.32%"></colgroup>
+        <tr><th>Position</th><th>What it looks like here</th><th>What it costs you</th></tr>
+        <tr><td><b>1 · Ask only</b></td><td>You write every line. AI answers questions about the codebase, about Java, about what a method does.</td><td>Slowest. You learn the most and finish the least.</td></tr>
+        <tr><td><b>2 · Piece by piece</b></td><td>You ask for one <code>case</code> or one method at a time, and check it against your state table before asking for the next.</td><td>Moderate. The common professional pattern, and the one this worksheet is built around.</td></tr>
+        <tr><td><b>3 · Draft and review</b></td><td>AI writes the class from your state table. You read every line and own what ships.</td><td>Fastest — safe only if your table is good and you actually read the output.</td></tr>
+      </table>
+      </div>
+      <div class="table-scroll">
+      <table class="agenda ix" style="--ncol:2">
+        <colgroup><col style="width:44.87%"><col style="width:55.13%"></colgroup>
+        <tr><th>Question</th><th>Your answer</th></tr>
+        <tr><td>Which position, and why is it right for this objective and the time you have left?</td><td><textarea class="ws-field" data-field="s5-t2r0c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
+      </table>
+      </div>
+      <p class="eyebrow" style="color:var(--accent-warm);">◆ Data and logging</p>
+      <p>Then four moves, in this order: <b>write, instrument, run, measure.</b> Teams that run before instrumenting spend the back half of the block guessing.</p>
       <p class="eyebrow" style="color:var(--ink-soft);">How to think about this</p>
       <ul>
         <li><b>Write.</b> Take the FSMs plus the <code>Logger</code> in the constructor. Make <code>updateState(...)</code> a <code>switch</code> where each case decides <b>only</b> whether to move on; after the switch, give the order belonging to the current state — in one place, so table and code can't disagree.</li>
@@ -493,26 +534,30 @@ table.agenda.ix td:has(.ws-field) { width: 46%; }
       </ul>
       <div class="callout warn"><span class="label">Three rules for this file</span><b>No hardware.</b> If you typed <code>DcMotor</code>, <code>Servo</code> or <code>hardwareMap</code>, it belongs elsewhere. • <b>Nothing that blocks.</b> Never <code>sleep()</code> — start a timer and check it on later loops. • <b>Ask, don't reach.</b> Call the other FSMs' boolean methods; don't read their state enums, and don't add a <code>telemetry.update()</code> — there is exactly one in the loop and it isn't yours.</div>
       <div class="prompt">Here is my state table and my class so far: [paste]. Add ONLY the [next] case, matching that row exactly. Do not add other cases, do not refactor what is there, and do not add fields I have not declared.</div>
+      <h2>Phase 5, continued: measure it, then wrap up</h2>
+      <p>Your control works. Now put a number on what it cost, and read your log before you say what happened.</p>
       <div class="table-scroll">
-      <table class="agenda ix">
+      <table class="agenda ix" style="--ncol:2">
+        <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
         <tr><th>Question</th><th>Your answer</th></tr>
-        <tr><td>What did the log tell you that watching it didn't?</td><td><textarea class="ws-field" data-field="s5-t1r0c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
-        <tr><td>Your cost per loop, beside the whole loop's time</td><td><textarea class="ws-field" data-field="s5-t1r1c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
-        <tr><td>Did you meet your Phase 1 budget? If not, where did it go?</td><td><textarea class="ws-field" data-field="s5-t1r2c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
+        <tr><td>What did the log tell you that watching it didn't?</td><td><textarea class="ws-field" data-field="s5-t3r0c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
+        <tr><td>Your cost per loop, beside the whole loop's time</td><td><textarea class="ws-field" data-field="s5-t3r1c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
+        <tr><td>Did you meet your Phase 1 budget? If not, where did it go?</td><td><textarea class="ws-field" data-field="s5-t3r2c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
       </table>
       </div>
       <div class="callout good"><span class="label">You're done when</span>Pressing your control does what Phase 1's success criteria said, and your cost is a measured number with units.</div>
       <h3>Wrap — demo on the bench, then fill this in as a team</h3>
       <p>Say what it does before you press anything. Then: your measured number, one thing the log showed that watching didn't, and whether your dial was set right.</p>
       <div class="table-scroll">
-      <table class="agenda ix">
+      <table class="agenda ix" style="--ncol:3">
+        <colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.33%"></colgroup>
         <tr><th>What worked</th><th>What you'd do differently</th><th>Parking lot</th></tr>
-        <tr><td><textarea class="ws-field" data-field="s5-t2r0c0" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s5-t2r0c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s5-t2r0c2" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
+        <tr><td><textarea class="ws-field" data-field="s5-t4r0c0" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s5-t4r0c1" rows="2" aria-label="answer" spellcheck="true"></textarea></td><td><textarea class="ws-field" data-field="s5-t4r0c2" rows="2" aria-label="answer" spellcheck="true"></textarea></td></tr>
       </table>
       </div>
     </section>
   </div>
 </article>
-<script>window.WS_CONFIG={"docId":"arm-bolt","title":"Give the Arm Something New to Do","schema":"4a8f20a54f58","fields":["s0-t1r0c0","s0-t1r0c1","s0-t1r0c2","step-1-done","s1-t1r0c1","s1-t1r1c1","s1-t1r2c1","s1-t1r3c1","step-2-done","s2-t1r0c0","s2-t1r0c1","s2-t1r1c0","s2-t1r1c1","s2-t1r2c0","s2-t1r2c1","step-3-done","s3-t1r0c0","s3-t1r0c1","s3-t1r0c2","s3-t1r0c3","s3-t1r1c0","s3-t1r1c1","s3-t1r1c2","s3-t1r1c3","s3-t1r2c0","s3-t1r2c1","s3-t1r2c2","s3-t1r2c3","s3-t1r3c0","s3-t1r3c1","s3-t1r3c2","s3-t1r3c3","s3-t2r0c0","s3-t2r0c1","s3-t2r0c2","step-4-done","s4-chk1","s4-chk2","s4-chk3","s4-chk4","s4-chk5","s4-chk6","s4-t1r0c0","s4-t1r0c1","step-5-done","s5-t1r0c1","s5-t1r1c1","s5-t1r2c1","s5-t2r0c0","s5-t2r0c1","s5-t2r0c2"],"keepRevisions":2};</script>
+<script>window.WS_CONFIG={"docId":"arm-bolt","title":"Give the Arm Something New to Do","schema":"77ae4a03700c","fields":["s0-t1r0c0","s0-t1r0c1","s0-t1r0c2","step-1-done","s1-t1r0c1","s1-t1r1c1","s1-t1r2c1","s1-t1r3c1","step-2-done","s2-t1r0c0","s2-t1r0c1","s2-t1r1c0","s2-t1r1c1","s2-t1r2c0","s2-t1r2c1","step-3-done","s3-t1r0c0","s3-t1r0c1","s3-t1r0c2","s3-t1r0c3","s3-t1r1c0","s3-t1r1c1","s3-t1r1c2","s3-t1r1c3","s3-t1r2c0","s3-t1r2c1","s3-t1r2c2","s3-t1r2c3","s3-t1r3c0","s3-t1r3c1","s3-t1r3c2","s3-t1r3c3","s3-t2r0c0","s3-t2r0c1","s3-t2r0c2","step-4-done","s4-chk1","s4-chk2","s4-chk3","s4-chk4","s4-chk5","s4-chk6","step-5-done","s5-t2r0c1","s5-t3r0c1","s5-t3r1c1","s5-t3r2c1","s5-t4r0c0","s5-t4r0c1","s5-t4r0c2"],"keepRevisions":2};</script>
 <script src="assets/worksheet.js"></script>
 </body></html>

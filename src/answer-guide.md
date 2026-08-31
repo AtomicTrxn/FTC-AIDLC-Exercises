@@ -1,16 +1,16 @@
 ---
 kind: guide
-kicker: AI-DLC × INTO THE DEEP · TEACHER'S GUIDE · 2-HOUR SESSION
+kicker: AI-DLC × INTO THE DEEP · ANSWER GUIDE · 2-HOUR SESSION
 title: Give the Arm Something
 title2: New to Do
 dek: "The arm arrives already built. Students don't construct a mechanism — they decide **what it should be able to do that it can't do yet**, and carry that objective through five phases of AI-DLC. Every team chooses a different objective; every team is held to the same four engineering tenets and the same guardrails."
 chips: "Session=120 min; Setup=+20 min; Walkthrough=20 min, live; Team=3–6 students; Bench OpMode=TeleopWithoutDriving"
-pairactive: Teacher's Guide
-pair: "→ Student Worksheet — 16 steps, separate handout"
-footer: "Reviewed against `Into_The_Deep-master`: `Core/`, `Teleop/Monkeys_Limb/`, `Teleop/monkeypaw/`, `Teleop/Wrappers/`, the eight test classes and both gradle dependency files. FTC SDK 10.2.0, FTCLib 2.1.1, JUnit 5.10.3, Mockito 5.13.0 — verified against the repository rather than assumed. Every method named in the worked objective was confirmed to exist. Source of truth for this document is `src/teachers-guide.md`."
+pairactive: Answer Guide
+pair: "→ Worksheet — five phases, separate handout"
+footer: "Reviewed against `Into_The_Deep-master`: `Core/`, `Teleop/Monkeys_Limb/`, `Teleop/monkeypaw/`, `Teleop/Wrappers/`, the eight test classes and both gradle dependency files. FTC SDK 10.2.0, FTCLib 2.1.1, JUnit 5.10.3, Mockito 5.13.0 — verified against the repository rather than assumed. Every method named in the worked objective was confirmed to exist. Source of truth for this document is `src/answer-guide.md`."
 ---
 
-@eyebrow AI-DLC × INTO THE DEEP · TEACHER'S GUIDE · 2-HOUR SESSION
+@eyebrow AI-DLC × INTO THE DEEP · ANSWER GUIDE · 2-HOUR SESSION
 
 @h1 Give the Arm Something New to Do
 
@@ -35,7 +35,7 @@ footer: "Reviewed against `Into_The_Deep-master`: `Core/`, `Teleop/Monkeys_Limb/
 @end
 
 @box Paired handout
-**Student Worksheet — Give the Arm Something New to Do.** Sixteen numbered steps. Steps 1–3 are setup and deliberately prescriptive. Between Step 3 and Step 4 sits a **capture sheet, not a step** — the page they fill in while someone walks the codebase from the front. Everything from Step 4 on gives them a lens and questions rather than instructions, and Steps 4–5 are where they choose an objective and pressure-test it against fixed guardrails.
+**Worksheet — Give the Arm Something New to Do.** Sixteen numbered steps. Steps 1–3 are setup and deliberately prescriptive. Between Step 3 and Step 4 sits a **capture sheet, not a step** — the page they fill in while someone walks the codebase from the front. Everything from Step 4 on gives them a lens and questions rather than instructions, and Steps 4–5 are where they choose an objective and pressure-test it against fixed guardrails.
 @end
 
 // HOW TO USE
@@ -117,7 +117,7 @@ Students working in the real competition repository can break the robot for ever
 @tline The idea | AI is a tool that accelerates the work. It does not replace the thinking. Point at the shape of the session when you teach this: **four of the five phases happen before anyone writes code**, and that is not nostalgia — it is what makes the fifth phase fast instead of expensive.
 @tline Say this plainly | Design and planning matter exactly as much when AI writes the code as when they write it by hand. Arguably more, because AI will produce a large amount of confident, plausible, wrong code very quickly — and fastest of all when nobody has told it what they actually want.
 @tline The failure mode | Code that compiles, looks reasonable, and nobody understands or intended. It comes from skipping the design and asking for the answer. It isn't fast; it moves the debugging to later, when there is less time and more of it to unpick.
-@tline Their moment | Step 10, at the Verify gate — design already done — they choose how much of the typing to hand over, and write down why. At the retro they say whether it was right.
+@tline Their moment | The first thing Phase 5 asks for — design already done, before a line is written — they choose how much of the typing to hand over, and write down why. At the wrap they say whether it was right.
 @tline What to watch for | Not which position they picked. Whether they can explain the code they shipped. That is the only signal that separates using AI well from generating something nobody owns.
 @end
 

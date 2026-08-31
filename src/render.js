@@ -622,7 +622,7 @@ function toHtml({ meta, nodes }, outPath, cssPath, opts = {}) {
         }
         break;
 
-      case "tenettag": h.push(`      <p class="eyebrow" style="color:#8a6a22;">◆ ${esc(nd.text)}</p>`); break;
+      case "tenettag": h.push(`      <p class="eyebrow" style="color:var(--accent-warm);">◆ ${esc(nd.text)}</p>`); break;
 
       case "tenet":
         h.push(`      <div class="panel">`);
@@ -694,8 +694,16 @@ function toHtml({ meta, nodes }, outPath, cssPath, opts = {}) {
           if (!IX) return "";
           return area(fid("t", `${tIdx}r${ri}c${ci}`), Math.max(2, parseInt(bm[1], 10)));
         };
+        // The DXA column widths are authored for the .docx text column; reuse
+        // them here as percentages so both renderings share one set of numbers.
+        const ncol = nd.head ? nd.head.length : (nd.rows[0] || []).length;
+        const cols = (nd.widths && nd.widths.length === ncol)
+          ? nd.widths
+          : Array.from({ length: ncol }, () => 1);
+        const colTotal = cols.reduce((a, b) => a + b, 0);
         h.push(`      <div class="table-scroll">`);
-        h.push(`      <table class="agenda${IX ? " ix" : ""}">`);
+        h.push(`      <table class="agenda${IX ? " ix" : ""}" style="--ncol:${ncol}">`);
+        if (colTotal > 0) h.push(`        <colgroup>${cols.map((w) => `<col style="width:${(w / colTotal * 100).toFixed(2)}%">`).join("")}</colgroup>`);
         if (nd.head) h.push(`        <tr>${nd.head.map((x) => `<th>${esc(x)}</th>`).join("")}</tr>`);
         nd.rows.forEach((r, ri) => h.push(`        <tr>${r.map((c, ci) => `<td>${cellHtml(c, ri, ci)}</td>`).join("")}</tr>`));
         h.push(`      </table>`);

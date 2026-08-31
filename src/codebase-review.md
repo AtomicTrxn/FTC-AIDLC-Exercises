@@ -61,7 +61,7 @@ The arm exists only inside this repository, as roughly two thousand lines of FSM
 
 @h2 2 · The reference test suite doesn't compile
 @p `ArmFSMTest` calls `updateState(0)` against a four-argument signature. `LimbFSMTest` passes twelve arguments to a fifteen-parameter method. `ShoulderFSMTest` calls a one-parameter method with none. Of 127 `@Test` methods, 46 are live and five of the eight classes are fully commented out.
-@p **Resolution:** both documents now warn about it. The teacher's guide asks for a decision before the session — fix the three signatures, or name it honestly as what happens when tests drift from the code they test.
+@p **Resolution:** both documents now warn about it. The answer guide asks for a decision before the session — fix the three signatures, or name it honestly as what happens when tests drift from the code they test.
 
 @h2 3 · Every class name was stale
 @p Nothing in the old architecture map survived verbatim. All names, packages and units are now updated against the real files.

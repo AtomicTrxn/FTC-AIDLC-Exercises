@@ -13,7 +13,7 @@
       "meta": ["2 hours", "Teams of 3–6", "Five phases, one page each"],
       "links": [
         { "href": "worksheet-arm-bolt.html", "label": "Open the worksheet", "kind": "primary", "note": "Interactive — saves as you type" },
-        { "href": "teachers-guide-arm-bolt.html", "label": "Teacher's guide", "kind": "secondary", "note": "Worked example, facilitation notes" }
+        { "href": "answer-guide-arm-bolt.html", "label": "Answer guide", "kind": "secondary", "note": "Worked example, facilitation notes" }
       ],
       "status": "ready"
     }

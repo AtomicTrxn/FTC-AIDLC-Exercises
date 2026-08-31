@@ -1,11 +1,11 @@
 ---
 kind: worksheet
-kicker: AI-DLC WORKING SESSION · STUDENT WORKSHEET
+kicker: AI-DLC WORKING SESSION · WORKSHEET
 title: Give the Arm Something
 title2: New to Do
 ---
 
-@eyebrow AI-DLC WORKING SESSION · STUDENT WORKSHEET
+@eyebrow AI-DLC WORKING SESSION · WORKSHEET
 
 @h1 Give the Arm Something New to Do
 
@@ -163,25 +163,32 @@ title2: New to Do
 @check ◆ **Data** — you know which values you'll log, including the ones decisions are made from.
 @check ◆ **Loop time** — you have a plan to measure the cost, in nanoseconds. Nothing changes when your control isn't pressed, and the team agrees this is buildable in the time left.
 
-@h3 ◆ Set your dial before you build
-
-@p Tenet 4. Choose how much typing you hand over: **1 · ask only** (you write every line), **2 · piece by piece** (one case at a time, checked against your table), or **3 · draft and review** (AI writes it from your table; you read every line and own it). None is cheating. This is a choice about **typing, not thinking**, and each assumes a table you believe in.
-
-@table
-@th Your dial position, and why it's right for this objective and the time left | Your answer
-@tr [blank:2] | [blank:2]
-@end
-
-@done Every box ticked, your dial position written down, and anything you couldn't tick fixed or cut out loud.
+@done Every box ticked, and anything you couldn't tick fixed or cut out loud.
 
 // PHASE 5
 @pagebreak
 
 @step 5 | Phase 5: Bolt | 40 MIN · AI-DLC PHASE 5
 
+@h3 ◆ First decision of this phase: set your dial
+
+@p Tenet 4. Choose how much of the typing you hand over. All three are used in industry, by good engineers, on real code — none is cheating, and each assumes a state table you believe in. This is a choice about **typing, not thinking**.
+
+@table 1700,4260,3400
+@th Position | What it looks like here | What it costs you
+@tr **1 · Ask only** | You write every line. AI answers questions about the codebase, about Java, about what a method does. | Slowest. You learn the most and finish the least.
+@tr **2 · Piece by piece** | You ask for one `case` or one method at a time, and check it against your state table before asking for the next. | Moderate. The common professional pattern, and the one this worksheet is built around.
+@tr **3 · Draft and review** | AI writes the class from your state table. You read every line and own what ships. | Fastest — safe only if your table is good and you actually read the output.
+@end
+
+@table 4200,5160
+@th Question | Your answer
+@tr Which position, and why is it right for this objective and the time you have left? | [blank:2]
+@end
+
 @tenettag Data and logging
 
-@p Four moves, in this order: **write, instrument, run, measure.** Teams that run before instrumenting spend the back half of the block guessing.
+@p Then four moves, in this order: **write, instrument, run, measure.** Teams that run before instrumenting spend the back half of the block guessing.
 
 @lens
 - **Write.** Take the FSMs plus the `Logger` in the constructor. Make `updateState(...)` a `switch` where each case decides **only** whether to move on; after the switch, give the order belonging to the current state — in one place, so table and code can't disagree.
@@ -194,6 +201,15 @@ title2: New to Do
 @end
 
 @prompt Here is my state table and my class so far: [paste]. Add ONLY the [next] case, matching that row exactly. Do not add other cases, do not refactor what is there, and do not add fields I have not declared.
+
+// PHASE 5, PAGE 2 — the build fills a page on its own, so measuring and the
+// wrap carry over. The seam is deliberate: building is 40 minutes at the
+// bench, measuring and the wrap are done together once it runs.
+@pagebreak
+
+@h2 Phase 5, continued: measure it, then wrap up
+
+@p Your control works. Now put a number on what it cost, and read your log before you say what happened.
 
 @table
 @th Question | Your answer
