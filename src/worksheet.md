@@ -75,6 +75,10 @@ title2: New to Do
 - Your vocabulary list from the walkthrough: the **questions** the arm answers (`AT_INTAKE()`, `FULLY_RETRACTED()`) and the **orders** it obeys (`retract()`, `moveToIntakeAngle()`). Everything you build is assembled from these.
 - A free control — `B`, the right bumper and `start` are unbound; everything else is taken.
 
+@p One more thing before Phase 1: your chat doesn't know FTC or this codebase's rules yet. Paste this once, first, so every prompt below inherits it.
+
+@prompt We're adding to a working FTC robot, so read these before you answer anything. Nothing may change how an existing mechanism behaves. This file touches no hardware. It only calls methods that already exist in the files I paste — if you need one that isn't there, say so instead of writing it. Answer from my files, not from what FTC code usually looks like.
+
 // PHASE 1
 @pagebreak
 
@@ -87,7 +91,7 @@ title2: New to Do
 - An intent says what will be true when you're finished and how you'd know — not how. If you're naming classes, you've skipped ahead.
 - Write the loop-time budget **now**: a number you commit to is a constraint you design against; one you measure at the end is just a number.
 
-@prompt Our arm can already do [paste your vocabulary list]. We want it to [your objective]. Ask me what you need to know, one question at a time, then draft a short intent with a problem statement, success criteria and non-goals.
+@prompt Our arm can already do [paste your vocabulary list]. We want it to [your objective]. Ask me what you need to know, one question at a time. Then draft a short intent under four headings: problem statement, success criteria, non-goals, and a loop-time budget in milliseconds. Everything shares one loop, so the budget is a constraint, not a footnote.
 
 @table
 @th Question | Your answer
@@ -108,7 +112,7 @@ title2: New to Do
 - An acceptance criterion is something you check by hand for a clear yes or no. "The arm stows properly" fails that; "pressing the control while extended retracts fully before the shoulder moves" passes.
 - If a story needs three other things built first, it isn't a slice — it's the whole objective in disguise. Split it. And one story must be about knowing it works **from the data**, not from watching — that's what makes Phase 5 quick instead of frantic.
 
-@prompt Break this intent into 3–4 small stories, each with an acceptance criterion I could check by hand on the bench. Include one about loop time and one about what we'd log.
+@prompt Here is our intent: [paste]. Break it into three small stories, each with one acceptance criterion I could check by hand on the bench — a clear yes or no, not "works properly." One story must be about loop time, one about what we'd log.
 
 @table
 @th Story | Acceptance criterion — how you'd check it
@@ -130,7 +134,7 @@ title2: New to Do
 - Name each state for what is true while the arm is in it — `RETRACTING`, not `AFTER_B_PRESSED`. A name describing the trigger will mislead you an hour from now.
 - The hard part isn't the states, it's **how you know one is finished**. Every arrow needs an existing boolean behind it; one without is a bug you haven't written yet. Decide too what happens if the driver interrupts halfway.
 
-@prompt Here is our state table: [paste]. For each row, check whether the exit condition names a method that actually exists in the files I gave you, and list any that do not. Then list the transitions we have not defined at all. Do not design it for us.
+@prompt Here is our state table: [paste], and here are the files it calls into: [paste]. For each row, quote the line where the exit-condition method is declared, or say plainly that it isn't there. Then list the transitions we have not defined at all. Stop there — the design stays ours.
 
 @table 2100,2600,2900,1760
 @th State | What it orders the arm to do | Existing boolean that ends it | Goes to
@@ -154,7 +158,7 @@ title2: New to Do
 
 @p Check the design against reality before writing code. Read each line out loud; tick it only if it's actually true. Three are the tenets as questions.
 
-@prompt Act as a reviewer, not an author. Here is our design: [paste]. What would break on real hardware, and what did we leave undefined? What happens if the driver interrupts halfway? List what is missing — do not fix anything.
+@prompt Act as a reviewer, not an author. Here is our design: [paste], and here is our checklist: [paste]. For each checklist line say pass, fail, or can't-tell-from-this, and why. Then add anything that would break on real hardware that the list doesn't ask about, including a driver interrupting halfway. Findings only; the fixing is ours.
 
 @check Every state has a way in **and** out. No state can trap the arm forever.
 @check Every exit condition names a method that exists — spelling checked against the file.
@@ -181,6 +185,10 @@ title2: New to Do
 @tr **3 · Draft and review** | AI writes the class from your state table. You read every line and own what ships. | Fastest — safe only if your table is good and you actually read the output.
 @end
 
+@p If you set your dial to position 3
+
+@prompt Here is our state table and the file it goes in: [paste]. Write the whole FSM class from the table — every case, nothing the table doesn't call for. Then list, line by line, anything you had to decide that the table didn't tell you.
+
 @table 4200,5160
 @th Question | Your answer
 @tr Which position, and why is it right for this objective and the time you have left? | [blank:2]
@@ -200,7 +208,7 @@ title2: New to Do
 **No hardware.** If you typed `DcMotor`, `Servo` or `hardwareMap`, it belongs elsewhere. • **Nothing that blocks.** Never `sleep()` — start a timer and check it on later loops. • **Ask, don't reach.** Call the other FSMs' boolean methods; don't read their state enums, and don't add a `telemetry.update()` — there is exactly one in the loop and it isn't yours.
 @end
 
-@prompt Here is my state table and my class so far: [paste]. Add ONLY the [next] case, matching that row exactly. Do not add other cases, do not refactor what is there, and do not add fields I have not declared.
+@prompt Here is my state table and my class so far: [paste]. Add ONLY the case for [name one state from your table], matching that row exactly. Do not add other cases, refactor what is there, or add fields I have not declared. If the row names a method that isn't in what I pasted, stop and say so rather than inventing one.
 
 // PHASE 5, PAGE 2 — the build fills a page on its own, so measuring and the
 // wrap carry over. The seam is deliberate: building is 40 minutes at the

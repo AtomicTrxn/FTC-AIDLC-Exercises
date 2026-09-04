@@ -12,8 +12,7 @@
       "blurb": "The arm is already built. Decide what it should be able to do that it can't yet, and take that objective through all five phases of AI-DLC until it works on the bench.",
       "meta": ["2 hours", "Teams of 3–6", "Five phases, one page each"],
       "links": [
-        { "href": "worksheet-arm-bolt.html", "label": "Open the worksheet", "kind": "primary", "note": "Interactive — saves as you type" },
-        { "href": "answer-guide-arm-bolt.html", "label": "Answer guide", "kind": "secondary", "note": "Worked example, facilitation notes" }
+        { "href": "worksheet-arm-bolt.html", "label": "Open the worksheet", "kind": "primary", "note": "Interactive — saves as you type" }
       ],
       "status": "ready"
     }

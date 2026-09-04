@@ -6,7 +6,6 @@ Everything in the parent folder is **generated**. Edit the markdown here, then r
 | File | What it is |
 |---|---|
 | `worksheet.md` | The five-phase handout. Source for the worksheet `.docx`. |
-| `answer-guide.md` | The answer guide. Source for the guide `.docx` **and** the published web version. |
 | `codebase-review.md` | The Into The Deep review — findings against the exercise. Reference; not part of the session materials. |
 | `render.js` | The generator. Parses the markdown, emits `.docx` and `.html`. |
 | `site.js` | Builds the landing page from `site-manifest.json`. |
@@ -144,7 +143,6 @@ The build prints the expected page count. Convert to PDF and confirm:
 |---|---|
 | `index.html` | Landing page, generated from `site-manifest.json`. |
 | `worksheet-arm-bolt.html` | The worksheet with answer fields that save to the reader's browser. |
-| `answer-guide-arm-bolt.html` | The answer guide, read-only. |
 | `assets/worksheet.js` | Copied from `src/assets/`. |
 
 Two renderer flags drive it: `--web` emits a standalone interactive page,
