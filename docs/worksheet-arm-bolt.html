@@ -414,6 +414,8 @@ table.agenda.ix td { vertical-align: top; padding: 8px; }
         <li>Your vocabulary list from the walkthrough: the <b>questions</b> the arm answers (<code>AT_INTAKE()</code>, <code>FULLY_RETRACTED()</code>) and the <b>orders</b> it obeys (<code>retract()</code>, <code>moveToIntakeAngle()</code>). Everything you build is assembled from these.</li>
         <li>A free control — <code>B</code>, the right bumper and <code>start</code> are unbound; everything else is taken.</li>
       </ul>
+      <p>One more thing before Phase 1: your chat doesn't know FTC or this codebase's rules yet. Paste this once, first, so every prompt below inherits it.</p>
+      <div class="prompt">We're adding to a working FTC robot, so read these before you answer anything. Nothing may change how an existing mechanism behaves. This file touches no hardware. It only calls methods that already exist in the files I paste — if you need one that isn't there, say so instead of writing it. Answer from my files, not from what FTC code usually looks like.</div>
       <div class="step-head" data-step="1">
         <h3><span class="phase-no">1</span>Phase 1: Plan Intent <span style="font-size:12px;color:var(--ink-soft);letter-spacing:.08em;">· 15 MIN · AI-DLC PHASE 1</span></h3>
         <label class="step-done"><input type="checkbox" class="ws-check ws-step" data-field="step-1-done"><span>Step complete</span></label>
@@ -425,7 +427,7 @@ table.agenda.ix td { vertical-align: top; padding: 8px; }
         <li>An intent says what will be true when you're finished and how you'd know — not how. If you're naming classes, you've skipped ahead.</li>
         <li>Write the loop-time budget <b>now</b>: a number you commit to is a constraint you design against; one you measure at the end is just a number.</li>
       </ul>
-      <div class="prompt">Our arm can already do [paste your vocabulary list]. We want it to [your objective]. Ask me what you need to know, one question at a time, then draft a short intent with a problem statement, success criteria and non-goals.</div>
+      <div class="prompt">Our arm can already do [paste your vocabulary list]. We want it to [your objective]. Ask me what you need to know, one question at a time. Then draft a short intent under four headings: problem statement, success criteria, non-goals, and a loop-time budget in milliseconds. Everything shares one loop, so the budget is a constraint, not a footnote.</div>
       <div class="table-scroll">
       <table class="agenda ix" style="--ncol:2">
         <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
@@ -446,7 +448,7 @@ table.agenda.ix td { vertical-align: top; padding: 8px; }
         <li>An acceptance criterion is something you check by hand for a clear yes or no. "The arm stows properly" fails that; "pressing the control while extended retracts fully before the shoulder moves" passes.</li>
         <li>If a story needs three other things built first, it isn't a slice — it's the whole objective in disguise. Split it. And one story must be about knowing it works <b>from the data</b>, not from watching — that's what makes Phase 5 quick instead of frantic.</li>
       </ul>
-      <div class="prompt">Break this intent into 3–4 small stories, each with an acceptance criterion I could check by hand on the bench. Include one about loop time and one about what we'd log.</div>
+      <div class="prompt">Here is our intent: [paste]. Break it into three small stories, each with one acceptance criterion I could check by hand on the bench — a clear yes or no, not "works properly." One story must be about loop time, one about what we'd log.</div>
       <div class="table-scroll">
       <table class="agenda ix" style="--ncol:2">
         <colgroup><col style="width:50.00%"><col style="width:50.00%"></colgroup>
@@ -467,7 +469,7 @@ table.agenda.ix td { vertical-align: top; padding: 8px; }
         <li>Name each state for what is true while the arm is in it — <code>RETRACTING</code>, not <code>AFTER_B_PRESSED</code>. A name describing the trigger will mislead you an hour from now.</li>
         <li>The hard part isn't the states, it's <b>how you know one is finished</b>. Every arrow needs an existing boolean behind it; one without is a bug you haven't written yet. Decide too what happens if the driver interrupts halfway.</li>
       </ul>
-      <div class="prompt">Here is our state table: [paste]. For each row, check whether the exit condition names a method that actually exists in the files I gave you, and list any that do not. Then list the transitions we have not defined at all. Do not design it for us.</div>
+      <div class="prompt">Here is our state table: [paste], and here are the files it calls into: [paste]. For each row, quote the line where the exit-condition method is declared, or say plainly that it isn't there. Then list the transitions we have not defined at all. Stop there — the design stays ours.</div>
       <div class="table-scroll">
       <table class="agenda ix" style="--ncol:4">
         <colgroup><col style="width:22.44%"><col style="width:27.78%"><col style="width:30.98%"><col style="width:18.80%"></colgroup>
@@ -491,7 +493,7 @@ table.agenda.ix td { vertical-align: top; padding: 8px; }
         <label class="step-done"><input type="checkbox" class="ws-check ws-step" data-field="step-4-done"><span>Step complete</span></label>
       </div>
       <p>Check the design against reality before writing code. Read each line out loud; tick it only if it's actually true. Three are the tenets as questions.</p>
-      <div class="prompt">Act as a reviewer, not an author. Here is our design: [paste]. What would break on real hardware, and what did we leave undefined? What happens if the driver interrupts halfway? List what is missing — do not fix anything.</div>
+      <div class="prompt">Act as a reviewer, not an author. Here is our design: [paste], and here is our checklist: [paste]. For each checklist line say pass, fail, or can't-tell-from-this, and why. Then add anything that would break on real hardware that the list doesn't ask about, including a driver interrupting halfway. Findings only; the fixing is ours.</div>
       <ul class="checklist">
         <li class="ix"><label><input type="checkbox" class="ws-check" data-field="s4-chk1"><span>Every state has a way in <b>and</b> out. No state can trap the arm forever.</span></label></li>
         <li class="ix"><label><input type="checkbox" class="ws-check" data-field="s4-chk2"><span>Every exit condition names a method that exists — spelling checked against the file.</span></label></li>
@@ -516,6 +518,8 @@ table.agenda.ix td { vertical-align: top; padding: 8px; }
         <tr><td><b>3 · Draft and review</b></td><td>AI writes the class from your state table. You read every line and own what ships.</td><td>Fastest — safe only if your table is good and you actually read the output.</td></tr>
       </table>
       </div>
+      <p class="eyebrow" style="color:var(--ink-soft);">If you set your dial to position 3</p>
+      <div class="prompt">Here is our state table and the file it goes in: [paste]. Write the whole FSM class from the table — every case, nothing the table doesn't call for. Then list, line by line, anything you had to decide that the table didn't tell you.</div>
       <div class="table-scroll">
       <table class="agenda ix" style="--ncol:2">
         <colgroup><col style="width:44.87%"><col style="width:55.13%"></colgroup>
@@ -533,7 +537,7 @@ table.agenda.ix td { vertical-align: top; padding: 8px; }
         <li><b>Measure.</b> <code>System.nanoTime()</code> either side of the call; subtract, divide by a million. <code>loopTimer</code> reports whole milliseconds, so it would show <code>0</code> and teach you nothing. <b>"0 ms" is not a measurement.</b></li>
       </ul>
       <div class="callout warn"><span class="label">Three rules for this file</span><b>No hardware.</b> If you typed <code>DcMotor</code>, <code>Servo</code> or <code>hardwareMap</code>, it belongs elsewhere. • <b>Nothing that blocks.</b> Never <code>sleep()</code> — start a timer and check it on later loops. • <b>Ask, don't reach.</b> Call the other FSMs' boolean methods; don't read their state enums, and don't add a <code>telemetry.update()</code> — there is exactly one in the loop and it isn't yours.</div>
-      <div class="prompt">Here is my state table and my class so far: [paste]. Add ONLY the [next] case, matching that row exactly. Do not add other cases, do not refactor what is there, and do not add fields I have not declared.</div>
+      <div class="prompt">Here is my state table and my class so far: [paste]. Add ONLY the case for [name one state from your table], matching that row exactly. Do not add other cases, refactor what is there, or add fields I have not declared. If the row names a method that isn't in what I pasted, stop and say so rather than inventing one.</div>
       <h2>Phase 5, continued: measure it, then wrap up</h2>
       <p>Your control works. Now put a number on what it cost, and read your log before you say what happened.</p>
       <div class="table-scroll">
